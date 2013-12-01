@@ -453,25 +453,15 @@ public class AuthMePlayerListener implements Listener {
 				}
 			}
 			// isent in session or session was ended correctly
-			if (Settings.isForceSurvivalModeEnabled
-					&& !Settings.forceOnlyAfterLogin) {
+			if (Settings.isForceSurvivalModeEnabled && !Settings.forceOnlyAfterLogin) {
 				this.causeByAuthMe = true;
 				Utils.forceGM(player);
 				this.causeByAuthMe = false;
 			}
-			if (Settings.isTeleportToSpawnEnabled
-					|| (Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds
-							.contains(player.getWorld().getName()))) {
-				SpawnTeleportEvent tpEvent = new SpawnTeleportEvent(player,
-						player.getLocation(), spawnLoc, PlayerCache
-								.getInstance().isAuthenticated(name));
+			if (Settings.isTeleportToSpawnEnabled || (Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds.contains(player.getWorld().getName()))) {
+				SpawnTeleportEvent tpEvent = new SpawnTeleportEvent(player, player.getLocation(), spawnLoc, PlayerCache.getInstance().isAuthenticated(name));
 				plugin.getServer().getPluginManager().callEvent(tpEvent);
 				if (!tpEvent.isCancelled()) {
-					if (!tpEvent.getTo().getWorld().getChunkAt(tpEvent.getTo())
-							.isLoaded()) {
-						tpEvent.getTo().getWorld().getChunkAt(tpEvent.getTo())
-								.load();
-					}
 					player.teleport(tpEvent.getTo());
 				}
 			}
