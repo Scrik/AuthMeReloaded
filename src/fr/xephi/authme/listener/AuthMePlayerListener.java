@@ -334,27 +334,6 @@ public class AuthMePlayerListener implements Listener {
     	}, 300);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLowestJoin(PlayerJoinEvent event) {
-     if (event.getPlayer() == null) return;
-     final Player player = event.getPlayer();
-
-        if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
-            return;
-        }
-
-        if (Settings.bungee) {
-            final ByteArrayOutputStream b = new ByteArrayOutputStream();
-            DataOutputStream out = new DataOutputStream(b);
-             
-            try {
-                out.writeUTF("IP");
-            } catch (IOException e) {
-            }
-            player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-        }
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer() == null) {
@@ -597,94 +576,6 @@ public class AuthMePlayerListener implements Listener {
         player.saveData();
     }
 
-	@EventHandler(priority=EventPriority.MONITOR)
-    public void onPlayerKick(PlayerKickEvent event) {
-      if (event.getPlayer() == null) {
-        return;
-      }
-      if (event.isCancelled()) {
-    	  return;
-      }
-
-      Player player = event.getPlayer();
-      Location loc = player.getLocation();
-      if (loc.getY() % 1 != 0)
-      	loc.add(0, 0.5, 0);
-
-      if ((plugin.getCitizensCommunicator().isNPC(player, plugin)) || (Utils.getInstance().isUnrestricted(player)) || (CombatTagComunicator.isNPC(player))) {
-        return;
-      }
-
-      if ((Settings.isForceSingleSessionEnabled) && 
-        (event.getReason().contains("You logged in from another location"))) {
-        event.setCancelled(true);
-        return;
-      }
-
-      String name = player.getName().toLowerCase();
-      if ((PlayerCache.getInstance().isAuthenticated(name)) && (!player.isDead()) && 
-        (Settings.isSaveQuitLocationEnabled)  && data.isAuthAvailable(name)) {
-        final PlayerAuth auth = new PlayerAuth(name, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),loc.getWorld().getName());
-		try {
-	        if (data instanceof Thread) {
-	        	data.updateQuitLoc(auth);
-	        } else {
-	            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-	    			@Override
-	    			public void run() {
-	    				data.updateQuitLoc(auth);
-	    			}
-	            });
-	        }
-		} catch (NullPointerException npe) { }
-      }
-
-      if (LimboCache.getInstance().hasLimboPlayer(name))
-      {
-        LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-        if (Settings.protectInventoryBeforeLogInEnabled) {
-        	try {
-            	RestoreInventoryEvent ev = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
-            	plugin.getServer().getPluginManager().callEvent(ev);
-            	if (!ev.isCancelled()) {
-            		API.setPlayerInventory(player, ev.getInventory(), ev.getArmor());
-            	}
-        	} catch (NullPointerException npe){
-        		ConsoleLogger.showError("Problem while restore " + name + "inventory after a kick");
-        	}
-        }
-        try {
-            AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, limbo.getLoc());
-            plugin.getServer().getPluginManager().callEvent(tpEvent);
-            if(!tpEvent.isCancelled()) {
-            	if (!tpEvent.getTo().getWorld().getChunkAt(tpEvent.getTo()).isLoaded()) {
-            		tpEvent.getTo().getWorld().getChunkAt(tpEvent.getTo()).load();
-            	}
-          	  player.teleport(tpEvent.getTo());
-            }
-        } catch (NullPointerException npe) {
-        }
-        this.utils.addNormal(player, limbo.getGroup());
-        player.setOp(limbo.getOperator());
-        if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
-            player.setAllowFlight(limbo.isFlying());
-            player.setFlying(limbo.isFlying());
-        }
-        this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
-        LimboCache.getInstance().deleteLimboPlayer(name);
-        if (this.playerBackup.doesCacheExist(name)) {
-          this.playerBackup.removeCache(name);
-        }
-      }
-      try {
-      	PlayerCache.getInstance().removePlayer(name);
-      	PlayersLogs.players.remove(player.getName());
-      	PlayersLogs.getInstance().save();
-      	if (gameMode.containsKey(name)) gameMode.remove(name);
-      	player.getVehicle().eject();
-      	player.saveData();
-      } catch (NullPointerException ex) {}
-    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
