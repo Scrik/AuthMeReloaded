@@ -38,7 +38,6 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.commands.AdminCommand;
@@ -46,7 +45,6 @@ import fr.xephi.authme.commands.CaptchaCommand;
 import fr.xephi.authme.commands.ChangePasswordCommand;
 import fr.xephi.authme.commands.EmailCommand;
 import fr.xephi.authme.commands.LoginCommand;
-import fr.xephi.authme.commands.LogoutCommand;
 import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
 import fr.xephi.authme.commands.UnregisterCommand;
@@ -86,7 +84,6 @@ public class AuthMe extends JavaPlugin {
 	private static AuthMe instance;
     private Utils utils = Utils.getInstance();
     private JavaPlugin plugin;
-    private FileCache playerBackup = new FileCache();
 	public CitizensCommunicator citizens;
 	public SendMailSSL mail = null;
 	public int CitizensVersion = 0;
@@ -281,7 +278,6 @@ public class AuthMe extends JavaPlugin {
         this.getCommand("register").setExecutor(new RegisterCommand(database, this));
         this.getCommand("login").setExecutor(new LoginCommand(this));
         this.getCommand("changepassword").setExecutor(new ChangePasswordCommand(database, this));
-        this.getCommand("logout").setExecutor(new LogoutCommand(this,database));
         this.getCommand("unregister").setExecutor(new UnregisterCommand(this, database));
         this.getCommand("passpartu").setExecutor(new PasspartuCommand(this));
         this.getCommand("email").setExecutor(new EmailCommand(this, database));
@@ -501,9 +497,6 @@ public class AuthMe extends JavaPlugin {
 	          player.setOp(limbo.getOperator());
 	          this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 	          LimboCache.getInstance().deleteLimboPlayer(name);
-	          if (this.playerBackup.doesCacheExist(name)) {
-	            this.playerBackup.removeCache(name);
-	          }
 	        }
 	        PlayerCache.getInstance().removePlayer(name);
 	        player.saveData();

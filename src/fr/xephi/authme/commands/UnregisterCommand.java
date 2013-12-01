@@ -17,7 +17,6 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.events.SpawnTeleportEvent;
@@ -35,7 +34,6 @@ public class UnregisterCommand implements CommandExecutor {
     private PlayersLogs pllog = PlayersLogs.getInstance();
     public AuthMe plugin;
     private DataSource database;
-    private FileCache playerCache = new FileCache();
 
     public UnregisterCommand(AuthMe plugin, DataSource database) {
         this.plugin = plugin;
@@ -99,10 +97,6 @@ public class UnregisterCommand implements CommandExecutor {
                      Utils.getInstance().setGroup(player, Utils.groupType.UNREGISTERED);
                   }
                  PlayerCache.getInstance().removePlayer(player.getName().toLowerCase());
-                // check if Player cache File Exist and delete it, preventing duplication of items
-                 if(playerCache.doesCacheExist(name)) {
-                        playerCache.removeCache(name);
-                 }
                  if (PlayersLogs.players.contains(player.getName())) {
                 	 PlayersLogs.players.remove(player.getName());
                 	 pllog.save();

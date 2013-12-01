@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.events.ResetInventoryEvent;
 import fr.xephi.authme.events.StoreInventoryEvent;
 import fr.xephi.authme.settings.Settings;
@@ -19,7 +18,6 @@ public class LimboCache {
 
     private static LimboCache singleton = null;
     public HashMap<String, LimboPlayer> cache;
-    private FileCache playerData = new FileCache();
     public AuthMe plugin;
 
     private LimboCache(AuthMe plugin) {
@@ -32,41 +30,17 @@ public class LimboCache {
         Location loc = player.getLocation();
         loc.setY(loc.getY() + 0.4D);
         GameMode gameMode = player.getGameMode();
-        ItemStack[] arm;
-        ItemStack[] inv;
-        boolean operator;
+        ItemStack[] arm = null;
+        ItemStack[] inv = null;
+        boolean operator = player.isOp();
         String playerGroup = "";
-        boolean flying;
+        boolean flying = player.isFlying();
 
-        if (playerData.doesCacheExist(name)) {
-        	StoreInventoryEvent event = new StoreInventoryEvent(player, playerData);
-        	Bukkit.getServer().getPluginManager().callEvent(event);
-        	if (!event.isCancelled() && event.getInventory() != null && event.getArmor() != null) {
-                inv =  event.getInventory();
-                arm =  event.getArmor();
-        	} else {
-        		inv = null;
-        		arm = null;
-        	}
-             playerGroup = playerData.readCache(name).getGroup();
-             operator = playerData.readCache(name).getOperator();
-             flying = playerData.readCache(name).isFlying();
-        } else {
-        	StoreInventoryEvent event = new StoreInventoryEvent(player);
-        	Bukkit.getServer().getPluginManager().callEvent(event);
-        	if (!event.isCancelled() && event.getInventory() != null && event.getArmor() != null) {
-                inv =  event.getInventory();
-                arm =  event.getArmor();
-        	} else {
-        		inv = null;
-        		arm = null;
-        	}
-            if(player.isOp())
-                operator = true;
-            else operator = false;
-            if(player.isFlying())
-            	flying = true;
-            else flying = false;
+        StoreInventoryEvent storeevent = new StoreInventoryEvent(player);
+        Bukkit.getServer().getPluginManager().callEvent(storeevent);
+        if (!storeevent.isCancelled()) {
+        	inv =  storeevent.getInventory();
+        	arm =  storeevent.getArmor();
         }
 
         if(Settings.isForceSurvivalModeEnabled) {
@@ -117,9 +91,6 @@ public class LimboCache {
     }
 
 	public void updateLimboPlayer(Player player) {
-		if (this.hasLimboPlayer(player.getName().toLowerCase())) {
-			this.deleteLimboPlayer(player.getName().toLowerCase());
-		}
 		this.addLimboPlayer(player);
 	}
 

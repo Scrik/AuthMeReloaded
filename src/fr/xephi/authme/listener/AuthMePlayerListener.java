@@ -39,8 +39,6 @@ import fr.xephi.authme.Utils;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.backup.DataFileCache;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
@@ -465,8 +463,7 @@ public class AuthMePlayerListener implements Listener {
 			}
 			LimboCache.getInstance().updateLimboPlayer(player);
 		} else {
-			if (Settings.isForceSurvivalModeEnabled
-					&& !Settings.forceOnlyAfterLogin) {
+			if (Settings.isForceSurvivalModeEnabled && !Settings.forceOnlyAfterLogin) {
 				this.causeByAuthMe = true;
 				Utils.forceGM(player);
 				this.causeByAuthMe = false;

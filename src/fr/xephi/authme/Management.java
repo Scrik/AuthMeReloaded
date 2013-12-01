@@ -14,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
@@ -38,7 +37,6 @@ public class Management {
     private Messages m = Messages.getInstance();
     private PlayersLogs pllog = PlayersLogs.getInstance();
     private Utils utils = Utils.getInstance();
-    private FileCache playerCache = new FileCache();
     private DataSource database;
     public AuthMe plugin;
     public static RandomString rdm = new RandomString(Settings.captchaLength);
@@ -394,9 +392,6 @@ public class Management {
                 
                 // Cleanup no longer used temporary data
                 LimboCache.getInstance().deleteLimboPlayer(name);
-                if (playerCache.doesCacheExist(name)) {
-                    playerCache.removeCache(name);
-                }
             }
             
             // We can now display the join message

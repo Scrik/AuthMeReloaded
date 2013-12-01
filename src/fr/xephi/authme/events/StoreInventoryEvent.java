@@ -3,9 +3,6 @@ package fr.xephi.authme.events;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.xephi.authme.cache.backup.FileCache;
-
-
 /**
 *
 * @author Xephi59
@@ -20,12 +17,6 @@ public class StoreInventoryEvent extends CustomEvent {
 		this.player = player;
 		this.inventory = player.getInventory().getContents();
 		this.armor = player.getInventory().getArmorContents();
-	}
-
-	public StoreInventoryEvent(Player player, FileCache fileCache) {
-		this.player = player;
-		this.inventory = fileCache.readCache(player.getName().toLowerCase()).getInventory();
-		this.armor = fileCache.readCache(player.getName().toLowerCase()).getArmour();
 	}
 
 	public ItemStack[] getInventory() {

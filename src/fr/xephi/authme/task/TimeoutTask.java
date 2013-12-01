@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.backup.FileCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.listener.AuthMePlayerListener;
@@ -19,7 +18,6 @@ public class TimeoutTask implements Runnable {
     private JavaPlugin plugin;
     private String name;
     private Messages m = Messages.getInstance();
-    private FileCache playerCache = new FileCache();
 
     public TimeoutTask(JavaPlugin plugin, String name) {
         this.plugin = plugin;
@@ -41,9 +39,6 @@ public class TimeoutTask implements Runnable {
                     LimboPlayer inv = LimboCache.getInstance().getLimboPlayer(name);
                     player.getServer().getScheduler().cancelTask(inv.getMessageTaskId());
                     player.getServer().getScheduler().cancelTask(inv.getTimeoutTaskId());
-                    if(playerCache.doesCacheExist(name)) {
-                        playerCache.removeCache(name);
-                    } 
                 } 
                 GameMode gm = AuthMePlayerListener.gameMode.get(name);
             	player.setGameMode(gm);
