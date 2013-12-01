@@ -432,8 +432,7 @@ public class AuthMePlayerListener implements Listener {
 						}
 						// Player change his IP between 2 relog-in
 						PlayerCache.getInstance().removePlayer(name);
-						LimboCache.getInstance().addLimboPlayer(player,
-								utils.removeAll(player));
+						LimboCache.getInstance().addLimboPlayer(player, utils.removeAll(player));
 					} else {
 						this.causeByAuthMe = true;
 						player.setGameMode(gameMode.get(name));
@@ -444,8 +443,7 @@ public class AuthMePlayerListener implements Listener {
 				} else {
 					// Session is ended correctly
 					PlayerCache.getInstance().removePlayer(name);
-					LimboCache.getInstance().addLimboPlayer(player,
-							utils.removeAll(player));
+					LimboCache.getInstance().addLimboPlayer(player,utils.removeAll(player));
 				}
 			}
 			// isent in session or session was ended correctly
@@ -477,57 +475,50 @@ public class AuthMePlayerListener implements Listener {
 		}
 		if (Settings.protectInventoryBeforeLogInEnabled) {
 			try {
-				LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(
-						player.getName().toLowerCase());
-				ProtectInventoryEvent ev = new ProtectInventoryEvent(player,
-						limbo.getInventory(), limbo.getArmour());
+				LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(player.getName().toLowerCase());
+				ProtectInventoryEvent ev = new ProtectInventoryEvent(player,limbo.getInventory(), limbo.getArmour());
 				plugin.getServer().getPluginManager().callEvent(ev);
 				if (ev.isCancelled()) {
-					if (!Settings.noConsoleSpam)
-						ConsoleLogger
-								.info("ProtectInventoryEvent has been cancelled for "
-										+ player.getName() + " ...");
+					if (!Settings.noConsoleSpam) {
+						ConsoleLogger.info("ProtectInventoryEvent has been cancelled for "+ player.getName() + " ...");
+					}
 				} else {
-					API.setPlayerInventory(player, ev.getEmptyInventory(),
-							ev.getEmptyArmor());
+					API.setPlayerInventory(player, ev.getEmptyInventory(), ev.getEmptyArmor());
 				}
 			} catch (NullPointerException ex) {
 			}
 		}
 		String msg = "";
 		if (Settings.emailRegistration) {
-			msg = data.isAuthAvailable(name) ? m._("login_msg") : m
-					._("reg_email_msg");
+			msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_email_msg");
 		} else {
-			msg = data.isAuthAvailable(name) ? m._("login_msg") : m
-					._("reg_msg");
+			msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_msg");
 		}
 		int time = Settings.getRegistrationTimeout * 20;
 		int msgInterval = Settings.getWarnMessageInterval;
 		if (time != 0) {
-			BukkitTask id = sched.runTaskLater(plugin, new TimeoutTask(plugin,
-					name), time);
-			if (!LimboCache.getInstance().hasLimboPlayer(name))
+			BukkitTask id = sched.runTaskLater(plugin, new TimeoutTask(plugin, name), time);
+			if (!LimboCache.getInstance().hasLimboPlayer(name)) {
 				LimboCache.getInstance().addLimboPlayer(player);
-			LimboCache.getInstance().getLimboPlayer(name)
-					.setTimeoutTaskId(id.getTaskId());
+			}
+			LimboCache.getInstance().getLimboPlayer(name).setTimeoutTaskId(id.getTaskId());
 		}
-		if (!LimboCache.getInstance().hasLimboPlayer(name))
+		if (!LimboCache.getInstance().hasLimboPlayer(name)) {
 			LimboCache.getInstance().addLimboPlayer(player);
-		if (player.isOp())
+		}
+		if (player.isOp()) {
 			player.setOp(false);
+		}
 		if (!Settings.isMovementAllowed) {
 			player.setAllowFlight(true);
 			player.setFlying(true);
 		}
-		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, name,
-				msg, msgInterval));
-		LimboCache.getInstance().getLimboPlayer(name)
-				.setMessageTaskId(msgT.getTaskId());
+		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, name, msg, msgInterval));
+		LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(msgT.getTaskId());
 		player.setNoDamageTicks(Settings.getRegistrationTimeout * 20);
-		if (Settings.useEssentialsMotd)
+		if (Settings.useEssentialsMotd) {
 			player.performCommand("motd");
-
+		}
 		// Remove the join message while the player isn't logging in
 		joinMessage.put(name, event.getJoinMessage());
 		event.setJoinMessage(null);
