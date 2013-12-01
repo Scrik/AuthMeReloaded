@@ -357,7 +357,7 @@ public class Management {
                  * Also it's the current world inventory !
                  */
                 if (!Settings.forceOnlyAfterLogin) {
-                	player.setGameMode(GameMode.getByValue(limbo.getGameMode()));
+                	player.setGameMode(limbo.getGameMode());
                     // Inventory - Make it after restore GameMode , cause we need to restore the
                     // right inventory in the right gamemode
                     if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {

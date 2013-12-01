@@ -227,7 +227,7 @@ public class RegisterCommand implements CommandExecutor {
                 PlayerCache.getInstance().addPlayer(auth);
                 LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
                 if (limbo != null) {
-                    player.setGameMode(GameMode.getByValue(limbo.getGameMode()));      
+                    player.setGameMode(limbo.getGameMode());      
                     if (Settings.isTeleportToSpawnEnabled) {
                     	World world = player.getWorld();
                     	Location loca = plugin.getSpawnLocation(world);
