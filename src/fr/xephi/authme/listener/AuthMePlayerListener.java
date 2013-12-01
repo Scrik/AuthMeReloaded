@@ -63,7 +63,6 @@ public class AuthMePlayerListener implements Listener {
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
-	private FileCache playerBackup = new FileCache();
 	public boolean causeByAuthMe = false;
 	private HashMap<String, PlayerLoginEvent> antibot = new HashMap<String, PlayerLoginEvent>();
 
@@ -465,13 +464,6 @@ public class AuthMePlayerListener implements Listener {
 				}
 			}
 			LimboCache.getInstance().updateLimboPlayer(player);
-			DataFileCache dataFile = new DataFileCache(LimboCache.getInstance()
-					.getLimboPlayer(name).getInventory(), LimboCache
-					.getInstance().getLimboPlayer(name).getArmour());
-			playerBackup.createCache(name, dataFile, LimboCache.getInstance()
-					.getLimboPlayer(name).getGroup(), LimboCache.getInstance()
-					.getLimboPlayer(name).getOperator(), LimboCache
-					.getInstance().getLimboPlayer(name).isFlying());
 		} else {
 			if (Settings.isForceSurvivalModeEnabled
 					&& !Settings.forceOnlyAfterLogin) {
@@ -604,12 +596,8 @@ public class AuthMePlayerListener implements Listener {
 				player.setAllowFlight(limbo.isFlying());
 				player.setFlying(limbo.isFlying());
 			}
-			this.plugin.getServer().getScheduler()
-					.cancelTask(limbo.getTimeoutTaskId());
+			this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(name);
-			if (playerBackup.doesCacheExist(name)) {
-				playerBackup.removeCache(name);
-			}
 		}
 		try {
 			PlayerCache.getInstance().removePlayer(name);
