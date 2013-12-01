@@ -205,7 +205,7 @@ public class Management {
                         @Override
                         public void run() {
                             if (AuthMePlayerListener.gameMode != null && AuthMePlayerListener.gameMode.containsKey(name)) {
-                                player.setGameMode(GameMode.getByValue(AuthMePlayerListener.gameMode.get(name)));
+                                player.setGameMode(AuthMePlayerListener.gameMode.get(name));
                             }
                             player.kickPlayer(m._("wrong_pwd"));
                         }

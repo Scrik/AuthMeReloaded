@@ -64,8 +64,8 @@ import fr.xephi.authme.task.TimeoutTask;
 
 public class AuthMePlayerListener implements Listener {
 
-    public static int gm = 0;
-    public static HashMap<String, Integer> gameMode = new HashMap<String, Integer>();
+
+    public static HashMap<String, GameMode> gameMode = new HashMap<String, GameMode>();
     public static HashMap<String, String> joinMessage = new HashMap<String, String>();
 	private Utils utils = Utils.getInstance();
     private Messages m = Messages.getInstance();
@@ -343,9 +343,8 @@ public class AuthMePlayerListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
         Location spawnLoc = plugin.getSpawnLocation(world);
-        gm = player.getGameMode().getValue();
         final String name = player.getName().toLowerCase();
-        gameMode.put(name, gm);
+        gameMode.put(name, player.getGameMode());
         BukkitScheduler sched = plugin.getServer().getScheduler();
 
         if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
@@ -364,9 +363,8 @@ public class AuthMePlayerListener implements Listener {
         		ip = plugin.realIp.get(name);
         }
             if(Settings.isAllowRestrictedIp && !Settings.getRestrictedIp(name, ip)) {
-                int gM = gameMode.get(name);
                 this.causeByAuthMe = true;
-            	player.setGameMode(GameMode.getByValue(gM));
+            	player.setGameMode(gameMode.get(name));
             	this.causeByAuthMe = false;
                 player.kickPlayer("You are not the Owner of this account, please try another name!");
                 if (Settings.banUnsafeIp)
@@ -390,9 +388,8 @@ public class AuthMePlayerListener implements Listener {
                          player.sendMessage(m._("valid_session"));
                          return;
                      } else if (!Settings.sessionExpireOnIpChange){
-                     	int gM = gameMode.get(name);
                      	this.causeByAuthMe = true;
-                     	player.setGameMode(GameMode.getByValue(gM));
+                     	player.setGameMode(gameMode.get(name));
                      	this.causeByAuthMe = false;
                      	player.kickPlayer(m._("unvalid_session"));
                      	return;
@@ -406,9 +403,8 @@ public class AuthMePlayerListener implements Listener {
                          PlayerCache.getInstance().removePlayer(name);
                          LimboCache.getInstance().addLimboPlayer(player , utils.removeAll(player));
                 	 } else {
-                      	int gM = gameMode.get(name);
                       	this.causeByAuthMe = true;
-                     	player.setGameMode(GameMode.getByValue(gM));
+                     	player.setGameMode(gameMode.get(name));
                      	this.causeByAuthMe = false;
                      	player.kickPlayer(m._("unvalid_session"));
                      	return;
