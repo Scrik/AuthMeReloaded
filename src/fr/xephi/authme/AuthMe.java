@@ -173,7 +173,7 @@ public class AuthMe extends JavaPlugin {
             case FILE:
             	if (Settings.useMultiThreading) {
                     FlatFileThread fileThread = new FlatFileThread();
-                    fileThread.run();
+                    fileThread.start();
                     database = fileThread;
                     databaseThread = fileThread;
                     break;
@@ -194,7 +194,7 @@ public class AuthMe extends JavaPlugin {
             case MYSQL:
             	if (Settings.useMultiThreading) {
                     MySQLThread sqlThread = new MySQLThread();
-                    sqlThread.run();
+                    sqlThread.start();
                     database = sqlThread;
                     databaseThread = sqlThread;
                     break;
@@ -215,7 +215,7 @@ public class AuthMe extends JavaPlugin {
             case SQLITE:
             	if (Settings.useMultiThreading) {
                     SQLiteThread sqliteThread = new SQLiteThread();
-                    sqliteThread.run();
+                    sqliteThread.start();
                     database = sqliteThread;
                     databaseThread = sqliteThread;
                     break;
