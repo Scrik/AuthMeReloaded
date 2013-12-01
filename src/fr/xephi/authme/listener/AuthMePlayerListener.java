@@ -9,7 +9,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -465,7 +464,6 @@ public class AuthMePlayerListener implements Listener {
 					player.teleport(tpEvent.getTo());
 				}
 			}
-			placePlayerSafely(player, spawnLoc);
 			LimboCache.getInstance().updateLimboPlayer(player);
 			DataFileCache dataFile = new DataFileCache(LimboCache.getInstance()
 					.getLimboPlayer(name).getInventory(), LimboCache
@@ -544,22 +542,6 @@ public class AuthMePlayerListener implements Listener {
 		// Remove the join message while the player isn't logging in
 		joinMessage.put(name, event.getJoinMessage());
 		event.setJoinMessage(null);
-	}
-
-	private void placePlayerSafely(Player player, Location spawnLoc) {
-		if (Settings.isTeleportToSpawnEnabled
-				|| (Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds
-						.contains(player.getWorld().getName())))
-			return;
-		Block b = player.getLocation().getBlock();
-		if (b.getType() == Material.PORTAL
-				|| b.getType() == Material.ENDER_PORTAL
-				|| b.getType() == Material.LAVA
-				|| b.getType() == Material.STATIONARY_LAVA) {
-			player.sendMessage(m._("unsafe_spawn"));
-			player.teleport(spawnLoc);
-			return;
-		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
