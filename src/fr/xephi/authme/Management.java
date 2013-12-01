@@ -394,13 +394,6 @@ public class Management {
                 LimboCache.getInstance().deleteLimboPlayer(name);
             }
             
-            // We can now display the join message
-            if (AuthMePlayerListener.joinMessage.containsKey(name)) {
-            	for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-            		p.sendMessage(AuthMePlayerListener.joinMessage.get(name));
-            	}
-            }
-            
             // The Loginevent now fires (as intended) after everything is processed
             Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
             player.saveData();
