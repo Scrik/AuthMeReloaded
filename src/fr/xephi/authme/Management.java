@@ -315,9 +315,6 @@ public class Management {
             pm.callEvent(tpEvent);
             if (!tpEvent.isCancelled()) {
                 Location fLoc = tpEvent.getTo();
-                if (!fLoc.getChunk().isLoaded()) {
-                    fLoc.getChunk().load();
-                }
                 player.teleport(fLoc);
             }
         }
