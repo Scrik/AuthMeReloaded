@@ -374,13 +374,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.ess != null && Settings.disableSocialSpy) {
-			try {
-				plugin.ess.getUser(player.getName()).setSocialSpyEnabled(false);
-			} catch (Exception e) {
-			}
-		}
-
 		String ip = player.getAddress().getAddress().getHostAddress();
 		if (Settings.bungee) {
 			if (plugin.realIp.containsKey(name))
