@@ -282,11 +282,9 @@ public class AuthMe extends JavaPlugin {
         if(!Settings.isForceSingleSessionEnabled) {
             ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
         }
-        
-        
-
-        if (Settings.enableProtection)
+        if (Settings.enableProtection) {
         	enableProtection();
+        }
         ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " enabled");
     }
 
