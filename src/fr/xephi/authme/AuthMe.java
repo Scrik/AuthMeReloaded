@@ -10,7 +10,6 @@ import java.net.URLConnection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
 import com.earth2me.essentials.Essentials;
@@ -474,28 +473,6 @@ public class AuthMe extends JavaPlugin {
 
 	public Messages getMessages() {
 		return m;
-	}
-
-	public Player generateKickPlayer(Player[] players) {
-		Player player = null;
-		int i;
-		for (i = 0 ; i <= players.length ; i++) {
-			Random rdm = new Random();
-			int a = rdm.nextInt(players.length);
-			if (!(authmePermissible(players[a], "authme.vip"))) {
-				player = players[a];
-				break;
-			}
-		}
-		if (player == null) {
-			for (Player p : players) {
-				if (!(authmePermissible(p, "authme.vip"))) {
-					player = p;
-					break;
-				}
-			}
-		}
-		return player;
 	}
 
 	public boolean authmePermissible(Player player, String perm) {
