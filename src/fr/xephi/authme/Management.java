@@ -351,21 +351,11 @@ public class Management {
                  * Cause in AuthMePlayerListener, we call ProtectInventoryEvent after Teleporting
                  * Also it's the current world inventory !
                  */
-                if (!Settings.forceOnlyAfterLogin) {
-                	player.setGameMode(limbo.getGameMode());
-                    // Inventory - Make it after restore GameMode , cause we need to restore the
-                    // right inventory in the right gamemode
-                    if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
-                        restoreInventory();
-                    }
-                }
-                else {
-                    // Inventory - Make it before force the survival GameMode to cancel all
-                	// inventory problem
-                    if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
-                        restoreInventory();
-                    }
-                    player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(limbo.getGameMode());
+                // Inventory - Make it after restore GameMode , cause we need to restore the
+                // right inventory in the right gamemode
+                if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
+                	restoreInventory();
                 }
 
                 // Teleport
@@ -375,11 +365,6 @@ public class Management {
                     } else {
                         teleportBackFromSpawn();
                     }
-                }
-                
-                // Re-Force Survival GameMode if we need due to world change specification
-                if (Settings.isForceSurvivalModeEnabled) {
-                	Utils.forceGM(player);
                 }
                 // Cleanup no longer used temporary data
                 LimboCache.getInstance().deleteLimboPlayer(name);

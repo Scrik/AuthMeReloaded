@@ -226,20 +226,8 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (data.isAuthAvailable(name)
-				&& !LimboCache.getInstance().hasLimboPlayer(name)) {
-			if (!Settings.isSessionsEnabled) {
-				LimboCache.getInstance().addLimboPlayer(player,
-						utils.removeAll(player));
-			} else if (PlayerCache.getInstance().isAuthenticated(name)) {
-				if (!Settings.sessionExpireOnIpChange)
-					if (LimboCache.getInstance().hasLimboPlayer(
-							player.getName().toLowerCase())) {
-						LimboCache.getInstance().deleteLimboPlayer(name);
-					}
-				LimboCache.getInstance().addLimboPlayer(player,
-						utils.removeAll(player));
-			}
+		if (data.isAuthAvailable(name) && !LimboCache.getInstance().hasLimboPlayer(name)) {
+				LimboCache.getInstance().addLimboPlayer(player, utils.removeAll(player));
 		}
 		// Check if forceSingleSession is set to true, so kick player that has
 		// joined with same nick of online player
@@ -392,73 +380,15 @@ public class AuthMePlayerListener implements Listener {
 		}
 
 		if (data.isAuthAvailable(name)) {
-			if (Settings.isSessionsEnabled) {
-				PlayerAuth auth = data.getAuth(name);
-				long timeout = Settings.getSessionTimeout * 60000;
-				long lastLogin = auth.getLastLogin();
-				long cur = new Date().getTime();
-				if ((cur - lastLogin < timeout || timeout == 0)
-						&& !auth.getIp().equals("198.18.0.1")) {
-					if (auth.getNickname().equalsIgnoreCase(name)
-							&& auth.getIp().equals(ip)) {
-						plugin.getServer().getPluginManager()
-								.callEvent(new SessionEvent(auth, true));
-						if (PlayerCache.getInstance().getAuth(name) != null) {
-							PlayerCache.getInstance().updatePlayer(auth);
-						} else {
-							PlayerCache.getInstance().addPlayer(auth);
-						}
-						player.sendMessage(m._("valid_session"));
-						return;
-					} else if (!Settings.sessionExpireOnIpChange) {
-						this.causeByAuthMe = true;
-						player.setGameMode(gameMode.get(name));
-						this.causeByAuthMe = false;
-						player.kickPlayer(m._("unvalid_session"));
-						return;
-					} else if (auth.getNickname().equalsIgnoreCase(name)) {
-						if (Settings.isForceSurvivalModeEnabled
-								&& !Settings.forceOnlyAfterLogin) {
-							this.causeByAuthMe = true;
-							Utils.forceGM(player);
-							this.causeByAuthMe = false;
-						}
-						// Player change his IP between 2 relog-in
-						PlayerCache.getInstance().removePlayer(name);
-						LimboCache.getInstance().addLimboPlayer(player, utils.removeAll(player));
-					} else {
-						this.causeByAuthMe = true;
-						player.setGameMode(gameMode.get(name));
-						this.causeByAuthMe = false;
-						player.kickPlayer(m._("unvalid_session"));
-						return;
-					}
-				} else {
-					// Session is ended correctly
-					PlayerCache.getInstance().removePlayer(name);
-					LimboCache.getInstance().addLimboPlayer(player,utils.removeAll(player));
-				}
-			}
-			// isent in session or session was ended correctly
-			if (Settings.isForceSurvivalModeEnabled && !Settings.forceOnlyAfterLogin) {
-				this.causeByAuthMe = true;
-				Utils.forceGM(player);
-				this.causeByAuthMe = false;
-			}
-			if (Settings.isTeleportToSpawnEnabled || (Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds.contains(player.getWorld().getName()))) {
+			LimboCache.getInstance().updateLimboPlayer(player);
+			if (Settings.isTeleportToSpawnEnabled) {
 				SpawnTeleportEvent tpEvent = new SpawnTeleportEvent(player, player.getLocation(), spawnLoc, PlayerCache.getInstance().isAuthenticated(name));
 				plugin.getServer().getPluginManager().callEvent(tpEvent);
 				if (!tpEvent.isCancelled()) {
 					player.teleport(tpEvent.getTo());
 				}
 			}
-			LimboCache.getInstance().updateLimboPlayer(player);
 		} else {
-			if (Settings.isForceSurvivalModeEnabled && !Settings.forceOnlyAfterLogin) {
-				this.causeByAuthMe = true;
-				Utils.forceGM(player);
-				this.causeByAuthMe = false;
-			}
 			if (!Settings.unRegisteredGroup.isEmpty()) {
 				utils.setGroup(player, Utils.groupType.UNREGISTERED);
 			}
@@ -839,8 +769,7 @@ public class AuthMePlayerListener implements Listener {
 			if (!Settings.isForcedRegistrationEnabled)
 				return;
 
-		if (!Settings.isTeleportToSpawnEnabled
-				&& !Settings.isForceSpawnLocOnJoinEnabled)
+		if (!Settings.isTeleportToSpawnEnabled)
 			return;
 
 		Location spawn = plugin.getSpawnLocation(player.getWorld());
@@ -852,8 +781,6 @@ public class AuthMePlayerListener implements Listener {
 		if (event.isCancelled())
 			return;
 		if (event.getPlayer() == null || event == null)
-			return;
-		if (!Settings.isForceSurvivalModeEnabled)
 			return;
 
 		Player player = event.getPlayer();

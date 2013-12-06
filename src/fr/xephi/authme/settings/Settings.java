@@ -28,7 +28,6 @@ public final class Settings extends YamlConfiguration {
     public static List<String> getUnrestrictedName = null;
     private static List<String> getRestrictedIp;
     public static List<String> getMySQLOtherUsernameColumn = null;
-    public static List<String> getForcedWorlds = null;
     public static List<String> countries = null;
     public final Plugin plugin;
     private final File file;
@@ -38,14 +37,14 @@ public final class Settings extends YamlConfiguration {
     public static Boolean useLogging = false;
 
     public static Boolean isPermissionCheckEnabled, isRegistrationEnabled, isForcedRegistrationEnabled,
-            isTeleportToSpawnEnabled, isSessionsEnabled, isChatAllowed, isAllowRestrictedIp, 
+            isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp, 
             isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
-            isForceSpawnLocOnJoinEnabled, isSaveQuitLocationEnabled,
-            isForceSurvivalModeEnabled, isResetInventoryIfCreative, isCachingEnabled, isKickOnWrongPasswordEnabled,
+            isSaveQuitLocationEnabled,
+            isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
             isBackupOnStop, enablePasspartu, isStopEnabled, reloadSupport, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
             useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck, sessionExpireOnIpChange,
-            disableSocialSpy, useMultiThreading, forceOnlyAfterLogin, useEssentialsMotd,
+            disableSocialSpy, useMultiThreading, useEssentialsMotd,
             usePurge, purgePlayerDat, purgeEssentialsFile, supportOldPassword, purgeLimitedCreative,
             purgeAntiXray, purgePermissions, enableProtection, enableAntiBot;
  
@@ -58,7 +57,7 @@ public final class Settings extends YamlConfiguration {
             getMailSubject, getMailText, getMySQLlastlocWorld, defaultWorld,
             getPhpbbPrefix, getWordPressPrefix;
 
-    public static int getWarnMessageInterval, getSessionTimeout, getRegistrationTimeout, getMaxNickLength,
+    public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
             getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
             passwordMaxLength, getRecoveryPassLength, getMailPort, maxLoginTry, captchaLength, saltLength, getmaxRegPerEmail,
             bCryptLog2Rounds, purgeDelay, getPhpbbGroup, antiBotSensibility, antiBotDuration;
@@ -89,8 +88,6 @@ public void loadConfigOptions() {
         isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
         isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
         getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval",5);
-        isSessionsEnabled = configFile.getBoolean("settings.sessions.enabled",false);
-        getSessionTimeout = configFile.getInt("settings.sessions.timeout",10);
         getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout",30);
         isChatAllowed = configFile.getBoolean("settings.restrictions.allowChat",false);
         getMaxNickLength = configFile.getInt("settings.restrictions.maxNicknameLength",20);
@@ -105,10 +102,7 @@ public void loadConfigOptions() {
         isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
         isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
         isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
-        isForceSpawnLocOnJoinEnabled = configFile.getBoolean("settings.restrictions.ForceSpawnLocOnJoinEnabled",false);
         isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation", false);
-        isForceSurvivalModeEnabled = configFile.getBoolean("settings.GameMode.ForceSurvivalMode", false);
-        isResetInventoryIfCreative = configFile.getBoolean("settings.GameMode.ResetInventoryIfCreative",false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
         getUnloggedinGroup = configFile.getString("settings.security.unLoggedinGroup","unLoggedInGroup");
@@ -189,7 +183,6 @@ public void loadConfigOptions() {
         chestshop = configFile.getBoolean("Hooks.chestshop", true);
         notifications = configFile.getBoolean("Hooks.notifications", true);
         bungee = configFile.getBoolean("Hooks.bungeecord", false);
-        getForcedWorlds = (List<String>) configFile.getList("settings.restrictions.ForceSpawnOnTheseWorlds");
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         sessionExpireOnIpChange = configFile.getBoolean("settings.sessions.sessionExpireOnIpChange", false);
@@ -197,7 +190,6 @@ public void loadConfigOptions() {
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
-        forceOnlyAfterLogin = configFile.getBoolean("settings.GameMode.ForceOnlyAfterLogin", false);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
         usePurge = configFile.getBoolean("Purge.useAutoPurge", false);
         purgeDelay = configFile.getInt("Purge.daysBeforeRemovePlayer", 60);
@@ -230,8 +222,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
         isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
         getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval",5);
-        isSessionsEnabled = configFile.getBoolean("settings.sessions.enabled",false);
-        getSessionTimeout = configFile.getInt("settings.sessions.timeout",10);
         getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout",30);
         isChatAllowed = configFile.getBoolean("settings.restrictions.allowChat",false);
         getMaxNickLength = configFile.getInt("settings.restrictions.maxNicknameLength",20);
@@ -245,11 +235,7 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getJoinPermissions = configFile.getStringList("GroupOptions.Permissions.PermissionsOnJoin");
         isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
         isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
-        isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
-        isForceSpawnLocOnJoinEnabled = configFile.getBoolean("settings.restrictions.ForceSpawnLocOnJoinEnabled",false);     
         isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation",false);
-        isForceSurvivalModeEnabled = configFile.getBoolean("settings.GameMode.ForceSurvivalMode",false);
-        isResetInventoryIfCreative = configFile.getBoolean("settings.GameMode.ResetInventoryIfCreative",false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
         getUnloggedinGroup = configFile.getString("settings.security.unLoggedinGroup","unLoggedInGroup");
@@ -330,7 +316,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         chestshop = configFile.getBoolean("Hooks.chestshop", true);
         notifications = configFile.getBoolean("Hooks.notifications", true);
         bungee = configFile.getBoolean("Hooks.bungeecord", false);
-        getForcedWorlds = (List<String>) configFile.getList("settings.restrictions.ForceSpawnOnTheseWorlds");
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         sessionExpireOnIpChange = configFile.getBoolean("settings.sessions.sessionExpireOnIpChange", false);
@@ -338,7 +323,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
-        forceOnlyAfterLogin = configFile.getBoolean("settings.GameMode.ForceOnlyAfterLogin", false);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
         usePurge = configFile.getBoolean("Purge.useAutoPurge", false);
         purgeDelay = configFile.getInt("Purge.daysBeforeRemovePlayer", 60);

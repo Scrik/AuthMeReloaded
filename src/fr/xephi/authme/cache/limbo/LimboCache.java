@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.events.ResetInventoryEvent;
 import fr.xephi.authme.events.StoreInventoryEvent;
-import fr.xephi.authme.settings.Settings;
 
 
 public class LimboCache {
@@ -43,17 +41,6 @@ public class LimboCache {
         	arm =  storeevent.getArmor();
         }
 
-        if(Settings.isForceSurvivalModeEnabled) {
-            if(Settings.isResetInventoryIfCreative && player.getGameMode() == GameMode.CREATIVE ) {
-            	ResetInventoryEvent event = new ResetInventoryEvent(player);
-            	Bukkit.getServer().getPluginManager().callEvent(event);
-            	if (!event.isCancelled()) {
-            		player.getInventory().clear();
-            		player.sendMessage("Your inventory has been cleaned!");
-            	}
-            }
-            gameMode = GameMode.SURVIVAL;
-        }
         if(player.isDead()) {
         	loc = plugin.getSpawnLocation(player.getWorld());
         }
