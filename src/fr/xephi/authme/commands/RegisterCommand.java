@@ -17,7 +17,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
-import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
@@ -144,9 +143,6 @@ public class RegisterCommand implements CommandExecutor {
     					}
                 	});
 
-                    if(!Settings.getRegisteredGroup.isEmpty()){
-                        Utils.getInstance().setGroup(player, Utils.groupType.REGISTERED);
-                    }
                 	player.sendMessage(m._("vb_nonActiv"));
                 	String msg = m._("login_msg");
                 	int time = Settings.getRegistrationTimeout * 20;
@@ -240,9 +236,6 @@ public class RegisterCommand implements CommandExecutor {
                     LimboCache.getInstance().deleteLimboPlayer(name);
                 }
 
-                if(!Settings.getRegisteredGroup.isEmpty()){
-                    Utils.getInstance().setGroup(player, Utils.groupType.REGISTERED);
-                }
                 player.sendMessage(m._("registered"));
                 if (!Settings.getmailAccount.isEmpty())
                 player.sendMessage(m._("add_email"));

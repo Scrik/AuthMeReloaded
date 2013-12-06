@@ -53,7 +53,6 @@ public class AuthMePlayerListener implements Listener {
 
 	public static HashMap<String, GameMode> gameMode = new HashMap<String, GameMode>();
 	public static HashMap<String, String> joinMessage = new HashMap<String, String>();
-	private Utils utils = Utils.getInstance();
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
@@ -222,10 +221,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (data.isAuthAvailable(name) && !LimboCache.getInstance().hasLimboPlayer(name)) {
-				LimboCache.getInstance().addLimboPlayer(player, utils.removeAll(player));
-		}
-
 		int min = Settings.getMinNickLength;
 		int max = Settings.getMaxNickLength;
 		String regex = Settings.getNickRegex;
@@ -344,9 +339,6 @@ public class AuthMePlayerListener implements Listener {
 				}
 			}
 		} else {
-			if (!Settings.unRegisteredGroup.isEmpty()) {
-				utils.setGroup(player, Utils.groupType.UNREGISTERED);
-			}
 			if (!Settings.isForcedRegistrationEnabled) {
 				return;
 			}
@@ -455,7 +447,6 @@ public class AuthMePlayerListener implements Listener {
 							limbo.getArmour());
 				}
 			}
-			utils.addNormal(player, limbo.getGroup());
 			player.setOp(limbo.getOperator());
 			if (player.getGameMode() != GameMode.CREATIVE
 					&& !Settings.isMovementAllowed) {

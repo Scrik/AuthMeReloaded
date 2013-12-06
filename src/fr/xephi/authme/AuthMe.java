@@ -446,11 +446,7 @@ public class AuthMe extends JavaPlugin {
 	            player.getInventory().setArmorContents(limbo.getArmour());
 	            player.getInventory().setContents(limbo.getInventory());
 	          }
-	          if (!limbo.getLoc().getChunk().isLoaded()) {
-	        	  limbo.getLoc().getChunk().load();
-	          }
 	          player.teleport(limbo.getLoc());
-	          this.utils.addNormal(player, limbo.getGroup());
 	          player.setOp(limbo.getOperator());
 	          this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 	          LimboCache.getInstance().deleteLimboPlayer(name);

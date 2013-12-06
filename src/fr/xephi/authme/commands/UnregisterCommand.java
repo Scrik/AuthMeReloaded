@@ -15,7 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
-import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.datasource.DataSource;
@@ -81,9 +80,6 @@ public class UnregisterCommand implements CommandExecutor {
                         LimboCache.getInstance().getLimboPlayer(name).setTimeoutTaskId(id.getTaskId());
                     }
                     sched.scheduleSyncDelayedTask(plugin, new MessageTask(plugin, name, m._("reg_msg"), interval));
-                        if(!Settings.unRegisteredGroup.isEmpty()){
-                            Utils.getInstance().setGroup(player, Utils.groupType.UNREGISTERED);
-                        }
                         player.sendMessage("unregistered");
                         ConsoleLogger.info(player.getDisplayName() + " unregistered himself");
                         if(plugin.notifications != null) {
@@ -91,9 +87,6 @@ public class UnregisterCommand implements CommandExecutor {
                         }
                     return true;
                 }
-                if(!Settings.unRegisteredGroup.isEmpty()){
-                     Utils.getInstance().setGroup(player, Utils.groupType.UNREGISTERED);
-                  }
                  PlayerCache.getInstance().removePlayer(player.getName().toLowerCase());
                  player.sendMessage("unregistered");
                  ConsoleLogger.info(player.getDisplayName() + " unregistered himself");

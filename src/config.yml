@@ -35,26 +35,6 @@ DataSource:
     mySQLColumnEmail: email
     # Column of IDs to sort data
     mySQLColumnId: id
-GroupOptions:
-    # if you want to set up a particulary Permission Group for
-    # users that arent registered yet. Pay attention this option
-    # is casesensitive!
-    # Example: UnregisteredPlayerGroup: GuestUser
-    UnregisteredPlayerGroup: ''
-    # Same as UnregisteredGroup if u want to set a switch 
-    # between unregistered and registered player group
-    # set the group name below
-    RegisteredPlayerGroup: ''
-    # with this option you can add specified permission onJoin
-    # like for example LoginBonus from another plugins, AuthMe
-    # will check onJoin if player has that permissions in his Group
-    # if true it add a temporany permissions to that user. This Field
-    # is needed beacuse AuthMe switch all unlogged players on a
-    # specified restricted Permission Group, so plugins that will use
-    # some particolary permissions on join doesnt work, without
-    # compiling option below!
-    Permissions:
-        PermissionsOnJoin: []
 settings:
     restrictions:
         # Can unregistered players chat, care , that block all commands except followers
@@ -130,28 +110,6 @@ settings:
     security:
         # minimum Length of password
         minPasswordLength: 4
-        # this is very important options, 
-        # every time player join the server,
-        # if they are registered, AuthMe will switch him 
-        # to unLoggedInGroup, this
-        # should prevent all major exploit. 
-        # So you can set up on your Permission Plugin
-        # this special group with 0 permissions, or permissions to chat, 
-        # or permission to
-        # send private message or all other perms that you want, 
-        # the better way is to set up
-        # this group with few permissions,
-        # so if player try to exploit some account,
-        # they can
-        # do anything except what you set in perm Group.
-        # After a correct logged-in player will be 
-        # moved to his correct permissions group!
-        # Pay attention group name is case sensitive, 
-        # so Admin is different from admin, 
-        # otherwise your group will be wiped, 
-        # and player join in default group []!
-        # Example unLoggedinGroup: NotLogged
-        unLoggedinGroup: unLoggedinGroup
         # possible values: MD5, SHA1, SHA256, WHIRLPOOL, XAUTH, MD5VB, PHPBB,
         # PLAINTEXT ( unhashed password),
         # MYBB, IPB3, PHPFUSION, SMF, XENFORO, SALTED2MD5, JOOMLA, BCRYPT, WBB3, SHA512,

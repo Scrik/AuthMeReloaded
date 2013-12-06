@@ -147,18 +147,6 @@ public class Management {
                 PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email, realName);
                 database.updateSession(auth);
 
-                /*
-                 * Little Work Around under Registration Group Switching for
-                 * admins that add Registration thru a web Scripts.
-                 */
-                if (Settings.isPermissionCheckEnabled
-                        && AuthMe.permission.playerInGroup(player, Settings.unRegisteredGroup)
-                        && !Settings.unRegisteredGroup.isEmpty()) {
-                    AuthMe.permission
-                            .playerRemoveGroup(player.getWorld(), player.getName(), Settings.unRegisteredGroup);
-                    AuthMe.permission.playerAddGroup(player.getWorld(), player.getName(), Settings.getRegisteredGroup);
-                }
-
                 if (Settings.useCaptcha) {
                     if (plugin.captcha.containsKey(name)) {
                         plugin.captcha.remove(name);
@@ -230,18 +218,6 @@ public class Management {
 
             PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email, realName);
             database.updateSession(auth);
-
-            /*
-             * Little Work Around under Registration Group Switching for
-             * admins that add Registration thru a web Scripts.
-             */
-            if (Settings.isPermissionCheckEnabled
-                    && AuthMe.permission.playerInGroup(player, Settings.unRegisteredGroup)
-                    && !Settings.unRegisteredGroup.isEmpty()) {
-                AuthMe.permission
-                        .playerRemoveGroup(player.getWorld(), player.getName(), Settings.unRegisteredGroup);
-                AuthMe.permission.playerAddGroup(player.getWorld(), player.getName(), Settings.getRegisteredGroup);
-            }
 
             if (Settings.useCaptcha) {
                 if (plugin.captcha.containsKey(name)) {

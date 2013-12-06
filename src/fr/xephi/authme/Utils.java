@@ -2,7 +2,6 @@ package fr.xephi.authme;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -18,68 +17,8 @@ import fr.xephi.authme.events.AuthMeTeleportEvent;
 import fr.xephi.authme.settings.Settings;
 
 public class Utils {
-     private String currentGroup;
      private static Utils singleton;
-     private String unLoggedGroup = Settings.getUnloggedinGroup;
      int id;
-
-  public void setGroup(Player player, groupType group) {
-    if (!player.isOnline())
-        return;
-    if(!Settings.isPermissionCheckEnabled)
-        return;
-
-        switch(group) {
-            case UNREGISTERED: {
-                currentGroup = AuthMe.permission.getPrimaryGroup(player);
-                AuthMe.permission.playerRemoveGroup(player, currentGroup);
-                AuthMe.permission.playerAddGroup(player, Settings.unRegisteredGroup);
-                break;
-            }
-            case REGISTERED: {
-                currentGroup = AuthMe.permission.getPrimaryGroup(player);
-                AuthMe.permission.playerRemoveGroup(player, currentGroup);
-                AuthMe.permission.playerAddGroup(player, Settings.getRegisteredGroup);
-                break;
-            }
-        }
-        return;
-    }
-
-    public String removeAll(Player player) {
-        if(!Utils.getInstance().useGroupSystem()){
-            return null;
-        }
-        if( !Settings.getJoinPermissions.isEmpty() ) {
-            hasPermOnJoin(player);
-        }
-        this.currentGroup = AuthMe.permission.getPrimaryGroup(player.getWorld(),player.getName().toString());
-        if(AuthMe.permission.playerRemoveGroup(player.getWorld(),player.getName().toString(), currentGroup) && AuthMe.permission.playerAddGroup(player.getWorld(),player.getName().toString(),this.unLoggedGroup)) {
-            return currentGroup;
-        }
-        return null;
-    }
-
-    public boolean addNormal(Player player, String group) {
-    	if(!Utils.getInstance().useGroupSystem()){
-            return false;
-        }
-        if(AuthMe.permission.playerRemoveGroup(player.getWorld(),player.getName().toString(),this.unLoggedGroup) && AuthMe.permission.playerAddGroup(player.getWorld(),player.getName().toString(),group)) {
-            return true;
-        }
-        return false;
-    }
-
-    private String hasPermOnJoin(Player player) {
-    	Iterator<String> iter = Settings.getJoinPermissions.iterator();
-    	while (iter.hasNext()) {
-    		String permission = iter.next();
-    		if(AuthMe.permission.playerHas(player, permission)){
-    			AuthMe.permission.playerAddTransient(player, permission);
-    		}
-    	}
-    	return null;
-    }
 
     public boolean isUnrestricted(Player player) {
         if(Settings.getUnrestrictedName == null || Settings.getUnrestrictedName.isEmpty())
@@ -92,12 +31,6 @@ public class Utils {
      public static Utils getInstance() {
     	 singleton = new Utils();
     	 return singleton;
-    }
-
-    private boolean useGroupSystem() {
-        if(Settings.isPermissionCheckEnabled && !Settings.getUnloggedinGroup.isEmpty()) {
-            return true;
-        } return false;
     }
 
     public void packCoords(int x, int y, int z, String w, final Player pl)

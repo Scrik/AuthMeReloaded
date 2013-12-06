@@ -36,7 +36,7 @@ public final class Settings extends YamlConfiguration {
     public static HashAlgorithm rakamakHash;
     public static Boolean useLogging = false;
 
-    public static Boolean isPermissionCheckEnabled, isRegistrationEnabled, isForcedRegistrationEnabled,
+    public static Boolean isRegistrationEnabled, isForcedRegistrationEnabled,
             isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp, 
             isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
             isSaveQuitLocationEnabled,
@@ -48,11 +48,11 @@ public final class Settings extends YamlConfiguration {
             supportOldPassword,
             enableProtection, enableAntiBot;
  
-    public static String getNickRegex, getUnloggedinGroup, getMySQLHost, getMySQLPort, 
+    public static String getNickRegex, getMySQLHost, getMySQLPort, 
             getMySQLUsername, getMySQLPassword, getMySQLDatabase, getMySQLTablename, 
             getMySQLColumnName, getMySQLColumnPassword, getMySQLColumnIp, getMySQLColumnLastLogin,
-            getMySQLColumnSalt, getMySQLColumnGroup, getMySQLColumnEmail, unRegisteredGroup, backupWindowsPath,
-            getcUnrestrictedName, getRegisteredGroup, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
+            getMySQLColumnSalt, getMySQLColumnGroup, getMySQLColumnEmail, backupWindowsPath,
+            getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
             rakamakUsers, rakamakUsersIp, getmailAccount, getmailPassword, getmailSMTP, getMySQLColumnId, getmailSenderName, 
             getMailSubject, getMailText, getMySQLlastlocWorld, defaultWorld,
             getPhpbbPrefix, getWordPressPrefix;
@@ -83,7 +83,6 @@ public void loadConfigOptions() {
         mergeConfig();
 
         messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
-        isPermissionCheckEnabled = configFile.getBoolean("permission.EnablePermissionCheck", false);
         isForcedRegistrationEnabled  = configFile.getBoolean("settings.registration.force", true);
         isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
         isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
@@ -105,7 +104,6 @@ public void loadConfigOptions() {
         isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation", false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
-        getUnloggedinGroup = configFile.getString("settings.security.unLoggedinGroup","unLoggedInGroup");
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
@@ -126,9 +124,7 @@ public void loadConfigOptions() {
         getMySQLlastlocZ = configFile.getString("DataSource.mySQLlastlocZ","z");
         getMySQLlastlocWorld = configFile.getString("DataSource.mySQLlastlocWorld", "world");
         getNonActivatedGroup = configFile.getInt("ExternalBoardOptions.nonActivedUserGroup", -1);
-        unRegisteredGroup = configFile.getString("GroupOptions.UnregisteredPlayerGroup","");
         getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
-        getRegisteredGroup = configFile.getString("GroupOptions.RegisteredPlayerGroup","");
         getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
         protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
         passwordMaxLength = configFile.getInt("settings.security.passwordMaxLength", 20);
@@ -209,7 +205,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
        configFile = newConfig;
 
         messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
-        isPermissionCheckEnabled = configFile.getBoolean("permission.EnablePermissionCheck", false);
         isForcedRegistrationEnabled = configFile.getBoolean("settings.registration.force", true);
         isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
         isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
@@ -230,7 +225,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation",false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
-        getUnloggedinGroup = configFile.getString("settings.security.unLoggedinGroup","unLoggedInGroup");
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
@@ -251,9 +245,7 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt","");
         getMySQLColumnGroup = configFile.getString("ExternalBoardOptions.mySQLColumnGroup","");
         getNonActivatedGroup = configFile.getInt("ExternalBoardOptions.nonActivedUserGroup", -1);
-        unRegisteredGroup = configFile.getString("GroupOptions.UnregisteredPlayerGroup","");
         getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
-        getRegisteredGroup = configFile.getString("GroupOptions.RegisteredPlayerGroup",""); 
         getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
         protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
         passwordMaxLength = configFile.getInt("settings.security.passwordMaxLength", 20);
