@@ -33,9 +33,6 @@ public class API {
 	 */
     public static AuthMe hookAuthMe() {
     	Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("AuthMe");
-        if (plugin == null && !(plugin instanceof AuthMe)) {
-        	return null;
-         }
     	return (AuthMe) plugin;
     }
 
