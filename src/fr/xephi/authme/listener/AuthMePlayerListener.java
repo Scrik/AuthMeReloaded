@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -226,30 +225,16 @@ public class AuthMePlayerListener implements Listener {
 		if (data.isAuthAvailable(name) && !LimboCache.getInstance().hasLimboPlayer(name)) {
 				LimboCache.getInstance().addLimboPlayer(player, utils.removeAll(player));
 		}
-		// Check if forceSingleSession is set to true, so kick player that has
-		// joined with same nick of online player
-		if (player.isOnline() && Settings.isForceSingleSessionEnabled) {
-			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(
-					player.getName().toLowerCase());
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
-			if (PlayerCache.getInstance().isAuthenticated(
-					player.getName().toLowerCase())) {
-				utils.addNormal(player, limbo.getGroup());
-				LimboCache.getInstance().deleteLimboPlayer(
-						player.getName().toLowerCase());
-			}
-			return;
-		}
 
 		int min = Settings.getMinNickLength;
 		int max = Settings.getMaxNickLength;
 		String regex = Settings.getNickRegex;
 
 		if (name.length() > max || name.length() < min) {
-
 			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("name_len"));
 			return;
 		}
+
 		try {
 			if (!player.getName().matches(regex) || name.equals("Player")) {
 				try {
@@ -280,33 +265,6 @@ public class AuthMePlayerListener implements Listener {
 		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
 			checkAntiBotMod(event);
 			return;
-		}
-		if (event.getResult() != PlayerLoginEvent.Result.KICK_FULL)
-			return;
-		if (player.isBanned())
-			return;
-		if (!plugin.authmePermissible(player, "authme.vip")) {
-			event.disallow(Result.KICK_FULL, m._("kick_fullserver"));
-			return;
-		}
-
-		if (plugin.getServer().getOnlinePlayers().length > plugin.getServer()
-				.getMaxPlayers()) {
-			event.allow();
-			return;
-		} else {
-			final Player pl = plugin.generateKickPlayer(plugin.getServer()
-					.getOnlinePlayers());
-			if (pl != null) {
-				pl.kickPlayer(m._("kick_forvip"));
-				event.allow();
-				return;
-			} else {
-				ConsoleLogger.info("The player " + player.getName()
-						+ " wants to join, but the server is full");
-				event.disallow(Result.KICK_FULL, m._("kick_fullserver"));
-				return;
-			}
 		}
 	}
 
