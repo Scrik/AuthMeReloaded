@@ -61,7 +61,7 @@ public class Spawn extends CustomConfiguration {
 
 	public Location getLocation() {
 		try {
-			if (this.getString("spawn.world").isEmpty() || this.getString("spawn.world") == "") return null;
+			if (this.getString("spawn.world").isEmpty()) return null;
 			Location location = new Location(Bukkit.getWorld(this.getString("spawn.world")), this.getDouble("spawn.x"), this.getDouble("spawn.y"), this.getDouble("spawn.z"), Float.parseFloat(this.getString("spawn.yaw")), Float.parseFloat(this.getString("spawn.pitch")));
 			return location;
 		} catch (NullPointerException npe) {

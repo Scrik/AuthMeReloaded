@@ -198,7 +198,7 @@ public class AdminCommand implements CommandExecutor {
     		        	}
     		        	if (pAuth != null) {
     		        		List<String> accountList = database.getAllAuthsByName(pAuth);
-    		        		if (accountList.isEmpty() || accountList == null) {
+    		        		if (accountList == null || accountList.isEmpty()) {
     		            		fSender.sendMessage("[AuthMe] This player is unknown");
     		            		return;
     		        		}
@@ -315,12 +315,12 @@ public class AdminCommand implements CommandExecutor {
         	try {
         		Class.forName("com.cypherx.xauth.xAuth");
             	oldxAuthToFlat converter = new oldxAuthToFlat(plugin, database, sender);
-            	converter.run();
+            	converter.convert();
         	} catch (ClassNotFoundException e) {
         		try {
         			Class.forName("de.luricos.bukkit.xAuth.xAuth");
         			newxAuthToFlat converter = new newxAuthToFlat(plugin, database, sender);
-        			converter.run();
+        			converter.convert();
         		} catch (ClassNotFoundException ce) {
         			sender.sendMessage("[AuthMe] No version of xAuth found or xAuth isn't enable! ");
         		}

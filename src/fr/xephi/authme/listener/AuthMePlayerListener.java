@@ -679,7 +679,7 @@ public class AuthMePlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onSignChange(SignChangeEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null || event == null) {
+		if (event.isCancelled() || event.getPlayer() == null) {
 			return;
 		}
 		Player player = event.getPlayer();

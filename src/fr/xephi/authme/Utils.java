@@ -82,7 +82,7 @@ public class Utils {
     }
 
     public boolean isUnrestricted(Player player) {
-        if(Settings.getUnrestrictedName.isEmpty() || Settings.getUnrestrictedName == null)
+        if(Settings.getUnrestrictedName == null || Settings.getUnrestrictedName.isEmpty())
             return false;
         if(Settings.getUnrestrictedName.contains(player.getName()))
             return true;
@@ -136,7 +136,7 @@ public class Utils {
         			if (!PlayerCache.getInstance().isAuthenticated(pl.getName().toLowerCase())) {
             			int current = (int)pl.getLocation().getY();
             			World currentWorld = pl.getWorld();
-            			if (current != fY && world.getName() == currentWorld.getName()) {
+            			if (current != fY && world.getName().equals(currentWorld.getName())) {
             				pl.teleport(loc);
             			}
         			}
