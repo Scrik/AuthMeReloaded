@@ -298,21 +298,6 @@ Performances:
     # HIGHLY recommended to use this! This will increase database performance
     # Default is false due to little servers
     useMultiThreading: false
-Purge:
-    # On Enable , does AuthMe need to purge automatically old accounts unused ?
-    useAutoPurge: false
-    # Number of Days an account become Unused
-    daysBeforeRemovePlayer: 60
-    # Do we need to remove the player.dat file during purge process ?
-    removePlayerDat: false
-    # Do we need to remove the Essentials/users/player.yml file during purge process ?
-    removeEssentialsFile: false
-    # World where are players.dat stores
-    defaultWorld: 'world'
-    # Do we need to remove LimitedCreative/inventories/player.yml , player_creative.yml files during purge process ?
-    removeLimitedCreativesInventories: false
-    # Do we need to remove the AntiXRayData/PlayerData/player file during purge process ?
-    removeAntiXRayFile: false
 Protection:
     # Enable some servers protection ( country based login, antibot )
     enableProtection: false
