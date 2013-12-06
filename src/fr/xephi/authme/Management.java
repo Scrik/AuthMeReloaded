@@ -369,31 +369,24 @@ public class Management {
                 }
 
                 // Teleport
-                if (Settings.isTeleportToSpawnEnabled && !Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds.contains(player.getWorld().getName())) {
+                if (Settings.isTeleportToSpawnEnabled) {
                     if (Settings.isSaveQuitLocationEnabled && auth.getQuitLocY() != 0) {
                         packQuitLocation();
                     } else {
                         teleportBackFromSpawn();
                     }
-                } else if (Settings.isForceSpawnLocOnJoinEnabled && Settings.getForcedWorlds.contains(player.getWorld().getName())) {
-                    teleportToSpawn();
-                } else if (Settings.isSaveQuitLocationEnabled && auth.getQuitLocY() != 0) {
-                    packQuitLocation();
-                } else {
-                    teleportBackFromSpawn();
                 }
                 
                 // Re-Force Survival GameMode if we need due to world change specification
-                if (Settings.isForceSurvivalModeEnabled)
+                if (Settings.isForceSurvivalModeEnabled) {
                 	Utils.forceGM(player);
-                
+                }
                 // Cleanup no longer used temporary data
                 LimboCache.getInstance().deleteLimboPlayer(name);
             }
             
             // The Loginevent now fires (as intended) after everything is processed
             Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
-            player.saveData();
         }
     }
 
