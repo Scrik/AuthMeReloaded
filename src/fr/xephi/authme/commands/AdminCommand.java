@@ -106,14 +106,6 @@ public class AdminCommand implements CommandExecutor {
                 long until = new Date().getTime() - days;
                 List<String> purged = database.autoPurgeDatabase(until);
                 sender.sendMessage("Deleted " + purged.size() + " user accounts");
-        		if (Settings.purgeEssentialsFile && plugin.ess != null)
-        			plugin.purgeEssentials(purged);
-        		if (Settings.purgePlayerDat)
-        			plugin.purgeDat(purged);
-        		if (Settings.purgeLimitedCreative)
-        			plugin.purgeLimitedCreative(purged);
-        		if (Settings.purgeAntiXray)
-        			plugin.purgeAntiXray(purged);
                 return true;
             } catch (NumberFormatException e) {
                 sender.sendMessage("Usage: /authme purge <DAYS>");
@@ -398,14 +390,6 @@ public class AdminCommand implements CommandExecutor {
     				}
             	});
         	}
-    		if (Settings.purgeEssentialsFile && plugin.ess != null)
-    			plugin.purgeEssentials(bannedPlayers);
-    		if (Settings.purgePlayerDat)
-    			plugin.purgeDat(bannedPlayers);
-    		if (Settings.purgeLimitedCreative)
-    			plugin.purgeLimitedCreative(bannedPlayers);
-    		if (Settings.purgeAntiXray)
-    			plugin.purgeAntiXray(bannedPlayers);
     		return true;
         } else if (args[0].equalsIgnoreCase("spawn")) {
     		try {

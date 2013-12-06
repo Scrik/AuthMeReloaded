@@ -282,11 +282,11 @@ public class AuthMe extends JavaPlugin {
         if(!Settings.isForceSingleSessionEnabled) {
             ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
         }
+        
+        
 
         if (Settings.enableProtection)
         	enableProtection();
-        if (Settings.usePurge)
-        	autoPurge();
         ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " enabled");
     }
 
@@ -492,107 +492,6 @@ public class AuthMe extends JavaPlugin {
 		return false;
 	}
 
-	private void autoPurge() {
-		if (!Settings.usePurge) {
-			return;
-		}
-        long days = Settings.purgeDelay * 86400000;
-        long until = new Date().getTime() - days;
-		List<String> cleared = this.database.autoPurgeDatabase(until);
-		ConsoleLogger.info("AutoPurgeDatabase : " + cleared.size() + " accounts removed.");
-		if (cleared.isEmpty())
-			return;
-		if (Settings.purgeEssentialsFile && this.ess != null)
-			purgeEssentials(cleared);
-		if (Settings.purgePlayerDat)
-			purgeDat(cleared);
-		if (Settings.purgeLimitedCreative)
-			purgeLimitedCreative(cleared);
-		if (Settings.purgeAntiXray)
-			purgeAntiXray(cleared);
-		//if (Settings.purgePermissions && permission != null)
-			//purgePerms(cleared);
-	}
-
-/*	private void purgePerms(List<String> cleared) {
-		int i = 0;
-		for (String name : cleared) {
-			org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-			if (player == null) continue;
-			String playerName = player.getName();
-			for (String group : permission.getPlayerGroups((String) null, playerName)) {
-				permission.playerRemoveGroup((String) null, playerName, group);
-			}
-		}
-		ConsoleLogger.info("AutoPurgeDatabase : Remove " + i + " players permissions");
-	} */
-
-	public void purgeAntiXray(List<String> cleared) {
-		int i = 0;
-		for (String name : cleared) {
-			org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-			if (player == null) continue;
-			String playerName = player.getName();
-			File playerFile = new File("." + File.separator + "plugins" + File.separator + "AntiXRayData" + File.separator + "PlayerData" + File.separator + playerName);
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-		}
-		ConsoleLogger.info("AutoPurgeDatabase : Remove " + i + " AntiXRayData Files");
-	}
-
-	public void purgeLimitedCreative(List<String> cleared) {
-		int i = 0;
-		for (String name : cleared) {
-			org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-			if (player == null) continue;
-			String playerName = player.getName();
-			File playerFile = new File("." + File.separator + "plugins" + File.separator + "LimitedCreative" + File.separator + "inventories" + File.separator + playerName + ".yml");
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-			playerFile = new File("." + File.separator + "plugins" + File.separator + "LimitedCreative" + File.separator + "inventories" + File.separator +  playerName + "_creative.yml");
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-			playerFile = new File("." + File.separator + "plugins" + File.separator + "LimitedCreative" + File.separator + "inventories" + File.separator +  playerName + "_adventure.yml");
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-		}
-		ConsoleLogger.info("AutoPurgeDatabase : Remove " + i + " LimitedCreative Survival, Creative and Adventure files");
-	}
-
-	public void purgeDat(List<String> cleared) {
-		int i = 0;
-		for (String name : cleared) {
-			org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(name);
-			if (player == null) continue;
-			String playerName = player.getName();
-			File playerFile = new File (this.getServer().getWorldContainer() + File.separator + Settings.defaultWorld + File.separator + "players" + File.separator + playerName + ".dat");
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-		}
-		ConsoleLogger.info("AutoPurgeDatabase : Remove " + i + " .dat Files");
-	}
-
-	public void purgeEssentials(List<String> cleared) {
-		int i = 0;
-		for (String name : cleared) {
-			File playerFile = new File(this.ess.getDataFolder() + File.separator + "userdata" + File.separator + name + ".yml");
-			if (playerFile.exists()) {
-				playerFile.delete();
-				i++;
-			}
-		}
-		ConsoleLogger.info("AutoPurgeDatabase : Remove " + i + " EssentialsFiles");
-	}
 
     public Location getSpawnLocation(World world) {
         Location spawnLoc = world.getSpawnLocation();

@@ -45,8 +45,8 @@ public final class Settings extends YamlConfiguration {
             isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
             useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
             disableSocialSpy, useMultiThreading, useEssentialsMotd,
-            usePurge, purgePlayerDat, purgeEssentialsFile, supportOldPassword, purgeLimitedCreative,
-            purgeAntiXray, purgePermissions, enableProtection, enableAntiBot;
+            supportOldPassword,
+            enableProtection, enableAntiBot;
  
     public static String getNickRegex, getUnloggedinGroup, getMySQLHost, getMySQLPort, 
             getMySQLUsername, getMySQLPassword, getMySQLDatabase, getMySQLTablename, 
@@ -60,7 +60,7 @@ public final class Settings extends YamlConfiguration {
     public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
             getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
             passwordMaxLength, getRecoveryPassLength, getMailPort, maxLoginTry, captchaLength, saltLength, getmaxRegPerEmail,
-            bCryptLog2Rounds, purgeDelay, getPhpbbGroup, antiBotSensibility, antiBotDuration;
+            bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
 
     protected static YamlConfiguration configFile;
 
@@ -189,17 +189,11 @@ public void loadConfigOptions() {
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
-        usePurge = configFile.getBoolean("Purge.useAutoPurge", false);
-        purgeDelay = configFile.getInt("Purge.daysBeforeRemovePlayer", 60);
-        purgePlayerDat = configFile.getBoolean("Purge.removePlayerDat", false);
-        purgeEssentialsFile = configFile.getBoolean("Purge.removeEssentialsFile", false);
         defaultWorld = configFile.getString("Purge.defaultWorld", "world");
         getPhpbbPrefix = configFile.getString("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
         getPhpbbGroup = configFile.getInt("ExternalBoardOptions.phpbbActivatedGroupId", 2);
         supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
         getWordPressPrefix = configFile.getString("ExternalBoardOptions.wordpressTablePrefix", "wp_");
-        purgeLimitedCreative = configFile.getBoolean("Purge.removeLimitedCreativesInventories", false);
-        purgeAntiXray = configFile.getBoolean("Purge.removeAntiXRayFile", false);
         //purgePermissions = configFile.getBoolean("Purge.removePermissions", false);
         enableProtection = configFile.getBoolean("Protection.enableProtection", false);
         countries = (List<String>) configFile.getList("Protection.countries");
@@ -320,17 +314,11 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
-        usePurge = configFile.getBoolean("Purge.useAutoPurge", false);
-        purgeDelay = configFile.getInt("Purge.daysBeforeRemovePlayer", 60);
-        purgePlayerDat = configFile.getBoolean("Purge.removePlayerDat", false);
-        purgeEssentialsFile = configFile.getBoolean("Purge.removeEssentialsFile", false);
         defaultWorld = configFile.getString("Purge.defaultWorld", "world");
         getPhpbbPrefix = configFile.getString("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
         getPhpbbGroup = configFile.getInt("ExternalBoardOptions.phpbbActivatedGroupId", 2);
         supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
         getWordPressPrefix = configFile.getString("ExternalBoardOptions.wordpressTablePrefix", "wp_");
-        purgeLimitedCreative = configFile.getBoolean("Purge.removeLimitedCreativesInventories", false);
-        purgeAntiXray = configFile.getBoolean("Purge.removeAntiXRayFile", false);
         //purgePermissions = configFile.getBoolean("Purge.removePermissions", false);
         enableProtection = configFile.getBoolean("Protection.enableProtection", false);
         countries = (List<String>) configFile.getList("Protection.countries");
