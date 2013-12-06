@@ -56,21 +56,6 @@ GroupOptions:
     Permissions:
         PermissionsOnJoin: []
 settings:
-    sessions:
-        # Do you want to enable session? When enabled 
-        # the ip of a player will be bound to the nickname
-        # of the player on login. As long as neither of those
-        # two change players don't have to login on a reconnect
-        enabled: false
-        # After how many minutes a session should timeout?
-        # 0 for unlimitted sessions, use 0 at your own risk!
-        # consider that session will end only after timeout, and
-        # if player's ip is changed but the timeout treshould isent
-        # ended, player will kick out of sever for unvalidSession!
-        timeout: 10
-        # Do we need to timeout the session if the player is offline
-        # And try to login with an another IP Address?
-        sessionExpireOnIpChange: false
     restrictions:
         # Can unregistered players chat, care , that block all commands except followers
         allowChat: false
@@ -95,14 +80,6 @@ settings:
         # Location", this options will prevent players that would exploit
         # your account when you are playing
         ForceSingleSession: true
-        # Teleport every time player join at World Spawn location, 
-        # even if they loggedin successfully,
-        #  all quit and previus location will
-        # overwrite with World Spawn. Different From
-        #  "teleportUnAuthedToSpawn"
-        # that teleport player back to his quit or kick position, 
-        # when he loggedin
-        ForceSpawnLocOnJoinEnabled: false
         # This will prevent all lost of quit position, when player
         # isent loggedin
         SaveQuitLocation: false
@@ -148,10 +125,6 @@ settings:
         # permission: /authme.admin.accounts
         displayOtherAccounts: true
         # WorldNames where we need to force the spawn location for ForceSpawnLocOnJoinEnabled
-        ForceSpawnOnTheseWorlds:
-        - world
-        - world_nether
-        - world_the_end
         # Ban ip when the ip is not the ip registered in database
         banUnsafedIP: false
     GameMode:

@@ -1,6 +1,5 @@
 package fr.xephi.authme.listener;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.PatternSyntaxException;
 
@@ -44,7 +43,6 @@ import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.events.ProtectInventoryEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
-import fr.xephi.authme.events.SessionEvent;
 import fr.xephi.authme.events.SpawnTeleportEvent;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.settings.Messages;

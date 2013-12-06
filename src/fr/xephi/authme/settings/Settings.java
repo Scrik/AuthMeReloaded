@@ -43,7 +43,7 @@ public final class Settings extends YamlConfiguration {
             isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
             isBackupOnStop, enablePasspartu, isStopEnabled, reloadSupport, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
-            useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck, sessionExpireOnIpChange,
+            useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
             disableSocialSpy, useMultiThreading, useEssentialsMotd,
             usePurge, purgePlayerDat, purgeEssentialsFile, supportOldPassword, purgeLimitedCreative,
             purgeAntiXray, purgePermissions, enableProtection, enableAntiBot;
@@ -185,7 +185,6 @@ public void loadConfigOptions() {
         bungee = configFile.getBoolean("Hooks.bungeecord", false);
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
-        sessionExpireOnIpChange = configFile.getBoolean("settings.sessions.sessionExpireOnIpChange", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
@@ -318,7 +317,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         bungee = configFile.getBoolean("Hooks.bungeecord", false);
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
-        sessionExpireOnIpChange = configFile.getBoolean("settings.sessions.sessionExpireOnIpChange", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
@@ -394,14 +392,10 @@ public void mergeConfig() {
            set("Hooks.notifications", true);
            set("Hooks.bungeecord", false);
        }
-       if(!contains("settings.restrictions.ForceSpawnOnTheseWorlds"))
-    	   set("settings.restrictions.ForceSpawnOnTheseWorlds", new ArrayList<String>());
        if(!contains("settings.restrictions.banUnsafedIP"))
     	   set("settings.restrictions.banUnsafedIP", false);
        if(!contains("settings.registration.doubleEmailCheck"))
     	   set("settings.registration.doubleEmailCheck", false);
-       if(!contains("settings.sessions.sessionExpireOnIpChange"))
-    	   set("settings.sessions.sessionExpireOnIpChange", false);
        if(!contains("Security.console.logConsole"))
     	   set("Security.console.logConsole", false);
        if(!contains("Hooks.disableSocialSpy"))
