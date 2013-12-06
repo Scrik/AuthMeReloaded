@@ -42,7 +42,7 @@ public final class Settings extends YamlConfiguration {
             isSaveQuitLocationEnabled,
             isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
-            isBackupOnStop, enablePasspartu, isStopEnabled, reloadSupport, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
+            isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
             useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
             disableSocialSpy, useMultiThreading, useEssentialsMotd,
             usePurge, purgePlayerDat, purgeEssentialsFile, supportOldPassword, purgeLimitedCreative,
@@ -138,7 +138,6 @@ public void loadConfigOptions() {
         backupWindowsPath = configFile.getString("BackupSystem.MysqlWindowsPath", "C:\\Program Files\\MySQL\\MySQL Server 5.1\\");
         enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu",false);
         isStopEnabled = configFile.getBoolean("Security.SQLProblem.stopServer", true);
-        reloadSupport = configFile.getBoolean("Security.ReloadCommand.useReloadCommandSupport", true);
         allowCommands = (List<String>) configFile.getList("settings.restrictions.allowCommands");        
         if (configFile.contains("allowCommands")) {
             if (!allowCommands.contains("/login"))
@@ -270,7 +269,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         backupWindowsPath = configFile.getString("BackupSystem.MysqlWindowsPath", "C:\\Program Files\\MySQL\\MySQL Server 5.1\\");
         enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu",false);
         isStopEnabled = configFile.getBoolean("Security.SQLProblem.stopServer", true);
-        reloadSupport = configFile.getBoolean("Security.ReloadCommand.useReloadCommandSupport", true);
         allowCommands = (List<String>) configFile.getList("settings.restrictions.allowCommands");
         if (configFile.contains("allowCommands")) {
             if (!allowCommands.contains("/login"))

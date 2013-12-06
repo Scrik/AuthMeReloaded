@@ -27,7 +27,6 @@ import fr.xephi.authme.events.RegisterTeleportEvent;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
-import fr.xephi.authme.settings.PlayersLogs;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.task.MessageTask;
 import fr.xephi.authme.task.TimeoutTask;
@@ -36,7 +35,6 @@ import fr.xephi.authme.task.TimeoutTask;
 public class RegisterCommand implements CommandExecutor {
 
     private Messages m = Messages.getInstance();
-    private PlayersLogs pllog = PlayersLogs.getInstance();
     private DataSource database;
     public boolean isFirstTimeJoin;
 	public PlayerAuth auth;
@@ -82,9 +80,6 @@ public class RegisterCommand implements CommandExecutor {
 
             if (database.isAuthAvailable(player.getName().toLowerCase())) {
                 player.sendMessage(m._("user_regged"));
-                if (pllog.getStringList("players").contains(player.getName())) {
-               	 pllog.getStringList("players").remove(player.getName());
-                }
                 return true;
             }
 

@@ -22,7 +22,6 @@ import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.events.SpawnTeleportEvent;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
-import fr.xephi.authme.settings.PlayersLogs;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.task.MessageTask;
 import fr.xephi.authme.task.TimeoutTask;
@@ -31,7 +30,6 @@ import fr.xephi.authme.task.TimeoutTask;
 public class UnregisterCommand implements CommandExecutor {
 
     private Messages m = Messages.getInstance();
-    private PlayersLogs pllog = PlayersLogs.getInstance();
     public AuthMe plugin;
     private DataSource database;
 
@@ -97,10 +95,6 @@ public class UnregisterCommand implements CommandExecutor {
                      Utils.getInstance().setGroup(player, Utils.groupType.UNREGISTERED);
                   }
                  PlayerCache.getInstance().removePlayer(player.getName().toLowerCase());
-                 if (PlayersLogs.players.contains(player.getName())) {
-                	 PlayersLogs.players.remove(player.getName());
-                	 pllog.save();
-                 }
                  player.sendMessage("unregistered");
                  ConsoleLogger.info(player.getDisplayName() + " unregistered himself");
                  if(plugin.notifications != null) {

@@ -64,7 +64,6 @@ import fr.xephi.authme.plugin.manager.CitizensCommunicator;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.plugin.manager.EssSpawn;
 import fr.xephi.authme.settings.Messages;
-import fr.xephi.authme.settings.PlayersLogs;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.settings.Spawn;
 import fr.xephi.authme.threads.FlatFileThread;
@@ -77,7 +76,6 @@ public class AuthMe extends JavaPlugin {
     public DataSource database = null;
     private Settings settings;
 	private Messages m;
-    private PlayersLogs pllog;
     public static Server server;
     public static Plugin authme;
     public static Permission permission;
@@ -124,7 +122,6 @@ public class AuthMe extends JavaPlugin {
         }
 
         setMessages(Messages.getInstance());
-        pllog = PlayersLogs.getInstance();
 
         server = getServer();
 
@@ -287,21 +284,6 @@ public class AuthMe extends JavaPlugin {
             ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
         }
 
-        if (Settings.reloadSupport)
-        	try {
-                if (!new File(getDataFolder() + File.separator + "players.yml").exists()) {
-                	pllog = new PlayersLogs();
-                }
-                onReload();
-                if (server.getOnlinePlayers().length < 1) {
-                	try {
-                    	PlayersLogs.players.clear();
-                    	pllog.save();
-                	} catch (NullPointerException npe) {
-                	}
-                }
-        	} catch (NullPointerException ex) {
-        	}
         if (Settings.enableProtection)
         	enableProtection();
         if (Settings.usePurge)
@@ -421,7 +403,6 @@ public class AuthMe extends JavaPlugin {
         for(Player player : Bukkit.getOnlinePlayers()) {
         		this.savePlayer(player);
         }
-        pllog.save();
 
         if (database != null) {
             database.close();
@@ -437,27 +418,6 @@ public class AuthMe extends JavaPlugin {
             else ConsoleLogger.showError("Error while making Backup");
         }
         ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " disabled");
-    }
-
-	private void onReload() {
-		try {
-	    	if (Bukkit.getServer().getOnlinePlayers() != null && !PlayersLogs.players.isEmpty()) {
-	    		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-	    			if (PlayersLogs.players.contains(player.getName())) {
-	    				String name = player.getName().toLowerCase();
-	    		        PlayerAuth pAuth = database.getAuth(name);
-	    	            if(pAuth == null)
-	    	                break;
-	    	            PlayerAuth auth = new PlayerAuth(name, pAuth.getHash(), pAuth.getIp(), new Date().getTime(), pAuth.getEmail(), player.getName());
-	    	            database.updateSession(auth);
-	    				PlayerCache.getInstance().addPlayer(auth); 
-	    			}
-	    		}
-	    	}
-	    	return;
-		} catch (NullPointerException ex) {
-			return;
-		}
     }
 
 	public static AuthMe getInstance() {

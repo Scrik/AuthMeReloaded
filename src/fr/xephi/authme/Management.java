@@ -25,7 +25,6 @@ import fr.xephi.authme.listener.AuthMePlayerListener;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
-import fr.xephi.authme.settings.PlayersLogs;
 import fr.xephi.authme.settings.Settings;
 
 /**
@@ -35,7 +34,6 @@ import fr.xephi.authme.settings.Settings;
  */
 public class Management {
     private Messages m = Messages.getInstance();
-    private PlayersLogs pllog = PlayersLogs.getInstance();
     private Utils utils = Utils.getInstance();
     private DataSource database;
     public AuthMe plugin;
@@ -161,8 +159,6 @@ public class Management {
                     AuthMe.permission.playerAddGroup(player.getWorld(), player.getName(), Settings.getRegisteredGroup);
                 }
 
-                pllog.addPlayer(player);
-
                 if (Settings.useCaptcha) {
                     if (plugin.captcha.containsKey(name)) {
                         plugin.captcha.remove(name);
@@ -246,8 +242,6 @@ public class Management {
                         .playerRemoveGroup(player.getWorld(), player.getName(), Settings.unRegisteredGroup);
                 AuthMe.permission.playerAddGroup(player.getWorld(), player.getName(), Settings.getRegisteredGroup);
             }
-
-            pllog.addPlayer(player);
 
             if (Settings.useCaptcha) {
                 if (plugin.captcha.containsKey(name)) {

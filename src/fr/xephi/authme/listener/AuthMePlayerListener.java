@@ -46,7 +46,6 @@ import fr.xephi.authme.events.RestoreInventoryEvent;
 import fr.xephi.authme.events.SpawnTeleportEvent;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.settings.Messages;
-import fr.xephi.authme.settings.PlayersLogs;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.task.MessageTask;
 import fr.xephi.authme.task.TimeoutTask;
@@ -510,14 +509,11 @@ public class AuthMePlayerListener implements Listener {
 		}
 		try {
 			PlayerCache.getInstance().removePlayer(name);
-			PlayersLogs.players.remove(player.getName());
-			PlayersLogs.getInstance().save();
 			player.getVehicle().eject();
 		} catch (NullPointerException ex) {
 		}
 		if (gameMode.containsKey(name))
 			gameMode.remove(name);
-		player.saveData();
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
