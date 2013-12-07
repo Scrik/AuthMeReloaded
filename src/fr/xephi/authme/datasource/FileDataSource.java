@@ -631,5 +631,33 @@ public class FileDataSource implements DataSource {
         }
         return;
 	}
+	
+	
+	public void preload(int size) {
+        BufferedReader br = null;
+        try {
+        	int cached = 0;
+            br = new BufferedReader(new FileReader(source));
+            String line;
+            while ((line = br.readLine()) != null && cached < size) {
+                String[] args = line.split(":");
+                String user = args[0];
+                AuthMe.getInstance().database.getAuth(user);
+                cached++;
+            }
+            ConsoleLogger.info("Precached "+cached+" players auth");
+        } catch (FileNotFoundException ex) {
+            ConsoleLogger.showError(ex.getMessage());
+        } catch (IOException ex) {
+            ConsoleLogger.showError(ex.getMessage());
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
+	}
 
 }

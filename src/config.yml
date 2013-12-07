@@ -1,12 +1,16 @@
 DataSource:
+    # Can be set to : file, sqlite, mysql
+    backend: file
+    # Do we need to cache all things ?
+    caching: true
+    # Preloads cache with this number of auths
+    fileCachePreloadSize: 3000
     # Column for storing or checking players nickname
     mySQLColumnName: username
     # Table of the database
     mySQLTablename: authme
     # Username about Database Connection Infos
     mySQLUsername: authme
-    # Can be set to : file, sqlite, mysql
-    backend: file
     # Column for storing players lastlogins
     mySQLColumnLastLogin: lastlogin
     # Database Name, use with converters or as SQLITE database name
@@ -21,8 +25,6 @@ DataSource:
     mySQLColumnPassword: password
     # Password about Database Connection Infos
     mySQLPassword: '12345'
-    # Do we need to cache all things ? Not Recommanded with multiThreading enable
-    caching: true
     # Column for SaveQuitLocation - X
     mySQLlastlocX: x
     # Column for SaveQuitLocation - Y
@@ -246,12 +248,6 @@ Hooks:
     disableSocialSpy: true
     # Do we need to force /motd Essentials command on join ?
     useEssentialsMotd: false
-Performances:
-    # HIGHLY recommended to use this! This will increase database performance
-    # Default is false due to little servers
-    useMultiThreading: false
-    # Preloads cache with this number of auths
-    fileCachePreloadSize: 3000
 Protection:
     # Enable some servers protection ( country based login, antibot )
     enableProtection: false

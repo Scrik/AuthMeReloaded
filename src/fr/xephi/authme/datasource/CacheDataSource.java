@@ -180,5 +180,11 @@ public class CacheDataSource implements DataSource {
 			}
 		}
 	}
+	
+	public void preload(int size) {
+		if (source instanceof FileDataSource) {
+			FileDataSource.class.cast(source).preload(size);
+		}
+	}
 
 }

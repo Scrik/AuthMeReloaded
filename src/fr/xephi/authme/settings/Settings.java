@@ -44,7 +44,7 @@ public final class Settings extends YamlConfiguration {
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
             isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
             useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
-            disableSocialSpy, useMultiThreading, useEssentialsMotd,
+            disableSocialSpy, useEssentialsMotd,
             supportOldPassword,
             enableProtection, enableAntiBot;
  
@@ -106,6 +106,7 @@ public void loadConfigOptions() {
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
+        authcachepreload = configFile.getInt("DataSource.fileCachePreloadSize", 4000);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
         getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
         getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");
@@ -182,8 +183,6 @@ public void loadConfigOptions() {
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
-        useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
-        authcachepreload = configFile.getInt("Performances.fileCachePreloadSize", 4000);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
         defaultWorld = configFile.getString("Purge.defaultWorld", "world");
@@ -228,6 +227,7 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
+        authcachepreload = configFile.getInt("DataSource.fileCachePreloadSize", 4000);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
         getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
         getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");
@@ -304,7 +304,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
-        useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
         defaultWorld = configFile.getString("Purge.defaultWorld", "world");
@@ -378,8 +377,6 @@ public void mergeConfig() {
     	   set("Security.console.logConsole", false);
        if(!contains("Hooks.disableSocialSpy"))
     	   set("Hooks.disableSocialSpy", true);
-       if(!contains("Performances.useMultiThreading"))
-    	   set("Performances.useMultiThreading", true);
        if(!contains("ExternalBoardOptions.bCryptLog2Round"))
     	   set("ExternalBoardOptions.bCryptLog2Round", 10);
        if(!contains("DataSource.mySQLlastlocWorld"))

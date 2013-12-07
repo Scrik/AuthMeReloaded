@@ -63,10 +63,6 @@ import fr.xephi.authme.plugin.manager.EssSpawn;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.settings.Spawn;
-import fr.xephi.authme.threads.FlatFileThread;
-import fr.xephi.authme.threads.MySQLThread;
-import fr.xephi.authme.threads.SQLiteThread;
-
 
 public class AuthMe extends JavaPlugin {
 
@@ -93,7 +89,6 @@ public class AuthMe extends JavaPlugin {
     public HashMap<String, String> realIp = new HashMap<String, String>();
 	public MultiverseCore multiverse = null;
 	public Location essentialsSpawn;
-	public Thread databaseThread = null;
 	public LookupService ls = null;
 	public boolean antibotMod = false;
 	public boolean delayedAntiBot = true;
@@ -161,13 +156,6 @@ public class AuthMe extends JavaPlugin {
          */
         switch (Settings.getDataSource) {
             case FILE:
-            	if (Settings.useMultiThreading) {
-                    FlatFileThread fileThread = new FlatFileThread();
-                    fileThread.start();
-                    database = fileThread;
-                    databaseThread = fileThread;
-                    break;
-            	}
                 try {
                     database = new FileDataSource();
                 } catch (Exception ex) {
@@ -182,13 +170,6 @@ public class AuthMe extends JavaPlugin {
                 }
                 break;
             case MYSQL:
-            	if (Settings.useMultiThreading) {
-                    MySQLThread sqlThread = new MySQLThread();
-                    sqlThread.start();
-                    database = sqlThread;
-                    databaseThread = sqlThread;
-                    break;
-            	}
                 try {
                     database = new MySQLDataSource();
                 } catch (Exception ex) {
@@ -203,13 +184,6 @@ public class AuthMe extends JavaPlugin {
                 }
                 break;
             case SQLITE:
-            	if (Settings.useMultiThreading) {
-                    SQLiteThread sqliteThread = new SQLiteThread();
-                    sqliteThread.start();
-                    database = sqliteThread;
-                    databaseThread = sqliteThread;
-                    break;
-            	}
                 try {
                      database = new SqliteDataSource();
                 } catch (Exception ex) {
@@ -226,13 +200,8 @@ public class AuthMe extends JavaPlugin {
         }
 
         if (Settings.isCachingEnabled) {
-        	DataSource oldinst = database;
             database = new CacheDataSource(this, database);
-            if (Settings.useMultiThreading) {
-            	if (oldinst instanceof FlatFileThread) {
-            		FlatFileThread.class.cast(oldinst).preload(Settings.authcachepreload);
-            	}
-            }
+            CacheDataSource.class.cast(database).preload(Settings.authcachepreload);
         }
 
         // Setup API
@@ -406,10 +375,6 @@ public class AuthMe extends JavaPlugin {
 
         if (database != null) {
             database.close();
-        }
-
-        if (databaseThread != null) {
-        	databaseThread.interrupt();
         }
 
         if(Settings.isBackupActivated && Settings.isBackupOnStop) {
