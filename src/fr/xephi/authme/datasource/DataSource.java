@@ -11,7 +11,7 @@ public interface DataSource {
 
         MYSQL, FILE, SQLITE
     }
-
+    
     boolean isAuthAvailable(String user);
 
     PlayerAuth getAuth(String user);

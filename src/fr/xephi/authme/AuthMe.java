@@ -7,9 +7,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import com.earth2me.essentials.Essentials;
@@ -79,7 +77,6 @@ public class AuthMe extends JavaPlugin {
     public static Plugin authme;
     public static Permission permission;
 	private static AuthMe instance;
-    private Utils utils = Utils.getInstance();
     private JavaPlugin plugin;
 	public CitizensCommunicator citizens;
 	public SendMailSSL mail = null;
@@ -173,6 +170,7 @@ public class AuthMe extends JavaPlugin {
             	}
                 try {
                     database = new FileDataSource();
+                    ((FileDataSource) database).preload(Settings.authcachepreload); 
                 } catch (Exception ex) {
                     ConsoleLogger.showError(ex.getMessage());
                     if (Settings.isStopEnabled) {

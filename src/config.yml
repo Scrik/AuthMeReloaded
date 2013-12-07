@@ -250,6 +250,8 @@ Performances:
     # HIGHLY recommended to use this! This will increase database performance
     # Default is false due to little servers
     useMultiThreading: false
+    # Preloads cache with this number of auths
+    fileCachePreloadSize: 3000
 Protection:
     # Enable some servers protection ( country based login, antibot )
     enableProtection: false

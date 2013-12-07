@@ -60,7 +60,7 @@ public final class Settings extends YamlConfiguration {
     public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
             getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
             passwordMaxLength, getRecoveryPassLength, getMailPort, maxLoginTry, captchaLength, saltLength, getmaxRegPerEmail,
-            bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
+            bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration, authcachepreload;
 
     protected static YamlConfiguration configFile;
 
@@ -183,6 +183,7 @@ public void loadConfigOptions() {
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
         disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
         useMultiThreading = configFile.getBoolean("Performances.useMultiThreading", true);
+        authcachepreload = configFile.getInt("Performances.fileCachePreloadSize", 4000);
         bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
         useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
         defaultWorld = configFile.getString("Purge.defaultWorld", "world");
