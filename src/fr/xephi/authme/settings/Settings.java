@@ -312,7 +312,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getPhpbbGroup = configFile.getInt("ExternalBoardOptions.phpbbActivatedGroupId", 2);
         supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
         getWordPressPrefix = configFile.getString("ExternalBoardOptions.wordpressTablePrefix", "wp_");
-        //purgePermissions = configFile.getBoolean("Purge.removePermissions", false);
         enableProtection = configFile.getBoolean("Protection.enableProtection", false);
         countries = (List<String>) configFile.getList("Protection.countries");
         enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
@@ -387,13 +386,6 @@ public void mergeConfig() {
     	   set("DataSource.mySQLlastlocWorld", "world");
        if(!contains("Hooks.useEssentialsMotd"))
     	   set("Hooks.useEssentialsMotd", false);
-       if(!contains("Purge.useAutoPurge")) {
-    	   set("Purge.useAutoPurge", false);
-    	   set("Purge.daysBeforeRemovePlayer", 60);
-    	   set("Purge.removePlayerDat", false);
-    	   set("Purge.removeEssentialsFile", false);
-    	   set("Purge.defaultWorld", "world");
-       }
        if(!contains("ExternalBoardOptions.phpbbTablePrefix")) {
     	   set("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
     	   set("ExternalBoardOptions.phpbbActivatedGroupId", 2);
@@ -406,12 +398,6 @@ public void mergeConfig() {
     	   set("Xenoforo.predefinedSalt", null);
        if(configFile.getString("settings.security.passwordHash","SHA256").toUpperCase().equals("XFSHA1") || configFile.getString("settings.security.passwordHash","SHA256").toUpperCase().equals("XFSHA256"))
     	   set("settings.security.passwordHash", "XENFORO");
-       if(!contains("Purge.removeLimitedCreativesInventories"))
-    	   set("Purge.removeLimitedCreativesInventories", false);
-       if(!contains("Purge.removeAntiXRayFile"))
-    	   set("Purge.removeAntiXRayFile", false);
-       /*if(!contains("Purge.removePermissions"))
-    	   set("Purge.removePermissions", false);*/
        if(!contains("Protection.enableProtection"))
     	   set("Protection.enableProtection", false);
        if(!contains("Protection.countries")) {
