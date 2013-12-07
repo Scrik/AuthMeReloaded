@@ -170,7 +170,6 @@ public class AuthMe extends JavaPlugin {
             	}
                 try {
                     database = new FileDataSource();
-                    ((FileDataSource) database).preload(Settings.authcachepreload); 
                 } catch (Exception ex) {
                     ConsoleLogger.showError(ex.getMessage());
                     if (Settings.isStopEnabled) {
@@ -227,7 +226,13 @@ public class AuthMe extends JavaPlugin {
         }
 
         if (Settings.isCachingEnabled) {
+        	DataSource oldinst = database;
             database = new CacheDataSource(this, database);
+            if (Settings.useMultiThreading) {
+            	if (oldinst instanceof FlatFileThread) {
+            		FlatFileThread.class.cast(oldinst).preload(Settings.authcachepreload);
+            	}
+            }
         }
 
         // Setup API
