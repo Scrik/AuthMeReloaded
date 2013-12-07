@@ -385,8 +385,6 @@ public void mergeConfig() {
     	   set("ExternalBoardOptions.bCryptLog2Round", 10);
        if(!contains("DataSource.mySQLlastlocWorld"))
     	   set("DataSource.mySQLlastlocWorld", "world");
-       if(!contains("settings.GameMode.ForceOnlyAfterLogin"))
-    	   set("settings.GameMode.ForceOnlyAfterLogin", false);
        if(!contains("Hooks.useEssentialsMotd"))
     	   set("Hooks.useEssentialsMotd", false);
        if(!contains("Purge.useAutoPurge")) {
