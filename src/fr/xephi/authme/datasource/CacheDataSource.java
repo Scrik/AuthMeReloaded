@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
+import fr.xephi.authme.settings.Settings;
 
 
 public class CacheDataSource implements DataSource {
@@ -21,9 +22,16 @@ public class CacheDataSource implements DataSource {
         this.source = source;
     }
 
+    private HashMap<String, Boolean> isAuthAvailableCache = new HashMap<String, Boolean>();
     @Override
     public synchronized boolean isAuthAvailable(String user) {
-        return cache.containsKey(user) ? true : source.isAuthAvailable(user);
+    	if (isAuthAvailableCache.containsKey(user)) {
+    		return isAuthAvailableCache.get(user);
+    	} else {
+    		boolean available = cache.containsKey(user) ? true : source.isAuthAvailable(user);
+    		isAuthAvailableCache.put(user, available);
+    		return available;
+    	}
     }
 
     @Override
@@ -33,6 +41,7 @@ public class CacheDataSource implements DataSource {
         } else {
             PlayerAuth auth = source.getAuth(user);
             cache.put(user, auth);
+            isAuthAvailableCache.put(user, true);
             return auth;
         }
     }
@@ -41,6 +50,7 @@ public class CacheDataSource implements DataSource {
     public synchronized boolean saveAuth(PlayerAuth auth) {
         if (source.saveAuth(auth)) {
             cache.put(auth.getNickname(), auth);
+            isAuthAvailableCache.put(auth.getNickname(), true);
             return true;
         }
         return false;
@@ -89,6 +99,7 @@ public class CacheDataSource implements DataSource {
             for (PlayerAuth auth : cache.values()) {
                 if(auth.getLastLogin() < until) {
                     cache.remove(auth.getNickname());
+                    isAuthAvailableCache.remove(auth.getNickname());
                 }
             }
         }
@@ -102,6 +113,7 @@ public class CacheDataSource implements DataSource {
             for (PlayerAuth auth : cache.values()) {
                 if(auth.getLastLogin() < until) {
                     cache.remove(auth.getNickname());
+                    isAuthAvailableCache.remove(auth.getNickname());
                 }
             }
         }
@@ -112,6 +124,7 @@ public class CacheDataSource implements DataSource {
     public synchronized boolean removeAuth(String user) {
         if (source.removeAuth(user)) {
             cache.remove(user);
+            isAuthAvailableCache.remove(user);
             return true;
         }
         return false;
@@ -125,6 +138,7 @@ public class CacheDataSource implements DataSource {
     @Override
     public void reload() {
     	cache.clear();
+    	isAuthAvailableCache.clear();
     	for (Player player : plugin.getServer().getOnlinePlayers()) {
     		String user = player.getName().toLowerCase();
     		if (PlayerCache.getInstance().isAuthenticated(user)) {
@@ -133,9 +147,9 @@ public class CacheDataSource implements DataSource {
                     cache.put(user, auth);
     			} catch (NullPointerException npe) {
     			}
-
     		}
     	}
+    	this.preload(Settings.authcachepreload);
     }
 
 	@Override
@@ -177,6 +191,7 @@ public class CacheDataSource implements DataSource {
 		for (PlayerAuth auth : cache.values()) {
 			if (banned.contains(auth.getNickname())) {
 				cache.remove(auth.getNickname());
+				isAuthAvailableCache.remove(auth.getNickname());
 			}
 		}
 	}
