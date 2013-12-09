@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
@@ -633,7 +632,8 @@ public class FileDataSource implements DataSource {
 	}
 	
 	
-	public void preload(int size) {
+	public List<PlayerAuth> getAuths(int size) {
+    	List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
         BufferedReader br = null;
         try {
         	int cached = 0;
@@ -657,7 +657,7 @@ public class FileDataSource implements DataSource {
                 	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
                 }
                 if (auth != null) {
-                	AuthMe.getInstance().database.saveAuth(auth);
+                	auths.add(auth);
                     cached++;
                 }
             }
@@ -674,6 +674,7 @@ public class FileDataSource implements DataSource {
                 }
             }
         }
+        return auths;
 	}
 
 }

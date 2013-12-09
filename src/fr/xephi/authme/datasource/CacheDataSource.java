@@ -40,8 +40,7 @@ public class CacheDataSource implements DataSource {
             return cache.get(user);
         } else {
             PlayerAuth auth = source.getAuth(user);
-            cache.put(user, auth);
-            isAuthAvailableCache.put(user, true);
+            cacheAuth(auth);
             return auth;
         }
     }
@@ -49,8 +48,7 @@ public class CacheDataSource implements DataSource {
     @Override
     public synchronized boolean saveAuth(PlayerAuth auth) {
         if (source.saveAuth(auth)) {
-            cache.put(auth.getNickname(), auth);
-            isAuthAvailableCache.put(auth.getNickname(), true);
+            cacheAuth(auth);
             return true;
         }
         return false;
@@ -143,8 +141,7 @@ public class CacheDataSource implements DataSource {
     		String user = player.getName().toLowerCase();
     		if (PlayerCache.getInstance().isAuthenticated(user)) {
     			try {
-                    PlayerAuth auth = source.getAuth(user);
-                    cache.put(user, auth);
+                    getAuth(user);
     			} catch (NullPointerException npe) {
     			}
     		}
@@ -198,8 +195,16 @@ public class CacheDataSource implements DataSource {
 	
 	public void preload(int size) {
 		if (source instanceof FileDataSource) {
-			FileDataSource.class.cast(source).preload(size);
+			List<PlayerAuth> auths = FileDataSource.class.cast(source).getAuths(size);
+			for (PlayerAuth auth : auths) {
+				cacheAuth(auth);
+			}
 		}
+	}
+
+	private void cacheAuth(PlayerAuth auth) {
+		cache.put(auth.getNickname(), auth);
+		isAuthAvailableCache.put(auth.getNickname(), true);
 	}
 
 }
