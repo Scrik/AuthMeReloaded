@@ -15,20 +15,21 @@ public class CacheDataSource implements DataSource {
 
     private DataSource source;
     public AuthMe plugin;
-    private final HashMap<String, PlayerAuth> cache = new HashMap<String, PlayerAuth>();
-
+    private final HashMap<String, PlayerAuth> getAuthCache = new HashMap<String, PlayerAuth>();
+    private HashMap<String, Boolean> isAuthAvailableCache = new HashMap<String, Boolean>();
+    
     public CacheDataSource(AuthMe plugin, DataSource source) {
     	this.plugin = plugin;
         this.source = source;
     }
 
-    private HashMap<String, Boolean> isAuthAvailableCache = new HashMap<String, Boolean>();
+
     @Override
     public synchronized boolean isAuthAvailable(String user) {
     	if (isAuthAvailableCache.containsKey(user)) {
     		return isAuthAvailableCache.get(user);
     	} else {
-    		boolean available = cache.containsKey(user) ? true : source.isAuthAvailable(user);
+    		boolean available = getAuthCache.containsKey(user) ? true : source.isAuthAvailable(user);
     		isAuthAvailableCache.put(user, available);
     		return available;
     	}
@@ -36,8 +37,8 @@ public class CacheDataSource implements DataSource {
 
     @Override
     public synchronized PlayerAuth getAuth(String user) {
-        if(cache.containsKey(user)) {
-            return cache.get(user);
+        if(getAuthCache.containsKey(user)) {
+            return getAuthCache.get(user);
         } else {
             PlayerAuth auth = source.getAuth(user);
             cacheAuth(auth);
@@ -57,7 +58,7 @@ public class CacheDataSource implements DataSource {
     @Override
     public synchronized boolean updatePassword(PlayerAuth auth) {
         if (source.updatePassword(auth)) {
-            cache.get(auth.getNickname()).setHash(auth.getHash());
+            getAuthCache.get(auth.getNickname()).setHash(auth.getHash());
             return true;
         }
         return false;
@@ -66,8 +67,8 @@ public class CacheDataSource implements DataSource {
     @Override
     public boolean updateSession(PlayerAuth auth) {
         if (source.updateSession(auth)) {
-            cache.get(auth.getNickname()).setIp(auth.getIp());
-            cache.get(auth.getNickname()).setLastLogin(auth.getLastLogin());
+            getAuthCache.get(auth.getNickname()).setIp(auth.getIp());
+            getAuthCache.get(auth.getNickname()).setLastLogin(auth.getLastLogin());
             return true;
         }
         return false;
@@ -76,10 +77,10 @@ public class CacheDataSource implements DataSource {
     @Override
     public boolean updateQuitLoc(PlayerAuth auth) {
         if (source.updateQuitLoc(auth)) {
-            cache.get(auth.getNickname()).setQuitLocX(auth.getQuitLocX());
-            cache.get(auth.getNickname()).setQuitLocY(auth.getQuitLocY());
-            cache.get(auth.getNickname()).setQuitLocZ(auth.getQuitLocZ());
-            cache.get(auth.getNickname()).setWorld(auth.getWorld());
+            getAuthCache.get(auth.getNickname()).setQuitLocX(auth.getQuitLocX());
+            getAuthCache.get(auth.getNickname()).setQuitLocY(auth.getQuitLocY());
+            getAuthCache.get(auth.getNickname()).setQuitLocZ(auth.getQuitLocZ());
+            getAuthCache.get(auth.getNickname()).setWorld(auth.getWorld());
             return true;
         }
         return false;
@@ -94,9 +95,9 @@ public class CacheDataSource implements DataSource {
     public List<String> autoPurgeDatabase(long until) {
         List<String> cleared = source.autoPurgeDatabase(until);
         if (cleared.size() > 0) {
-            for (PlayerAuth auth : cache.values()) {
+            for (PlayerAuth auth : getAuthCache.values()) {
                 if(auth.getLastLogin() < until) {
-                    cache.remove(auth.getNickname());
+                    getAuthCache.remove(auth.getNickname());
                     isAuthAvailableCache.remove(auth.getNickname());
                 }
             }
@@ -107,7 +108,7 @@ public class CacheDataSource implements DataSource {
     @Override
     public synchronized boolean removeAuth(String user) {
         if (source.removeAuth(user)) {
-            cache.remove(user);
+            getAuthCache.remove(user);
             isAuthAvailableCache.remove(user);
             return true;
         }
@@ -121,24 +122,24 @@ public class CacheDataSource implements DataSource {
 
     @Override
     public void reload() {
-    	cache.clear();
+    	getAuthCache.clear();
     	isAuthAvailableCache.clear();
     	for (Player player : plugin.getServer().getOnlinePlayers()) {
     		String user = player.getName().toLowerCase();
     		if (PlayerCache.getInstance().isAuthenticated(user)) {
     			try {
-                    getAuth(user);
+    				getAuth(user);
     			} catch (NullPointerException npe) {
     			}
     		}
     	}
-    	this.preload(Settings.authcachepreload);
+    	preload(Settings.authcachepreload);
     }
 
 	@Override
 	public synchronized boolean updateEmail(PlayerAuth auth) {
 		if(source.updateEmail(auth)) {
-			cache.get(auth.getNickname()).setEmail(auth.getEmail());
+			getAuthCache.get(auth.getNickname()).setEmail(auth.getEmail());
 			return true;
 		}
 		return false;
@@ -147,7 +148,7 @@ public class CacheDataSource implements DataSource {
 	@Override
 	public synchronized boolean updateSalt(PlayerAuth auth) {
 		if(source.updateSalt(auth)) {
-			cache.get(auth.getNickname()).setSalt(auth.getSalt());
+			getAuthCache.get(auth.getNickname()).setSalt(auth.getSalt());
 			return true;
 		}
 		return false;
@@ -171,9 +172,9 @@ public class CacheDataSource implements DataSource {
 	@Override
 	public synchronized void purgeBanned(List<String> banned) {
 		source.purgeBanned(banned);
-		for (PlayerAuth auth : cache.values()) {
+		for (PlayerAuth auth : getAuthCache.values()) {
 			if (banned.contains(auth.getNickname())) {
-				cache.remove(auth.getNickname());
+				getAuthCache.remove(auth.getNickname());
 				isAuthAvailableCache.remove(auth.getNickname());
 			}
 		}
@@ -189,7 +190,7 @@ public class CacheDataSource implements DataSource {
 	}
 
 	private void cacheAuth(PlayerAuth auth) {
-		cache.put(auth.getNickname(), auth);
+		getAuthCache.put(auth.getNickname(), auth);
 		isAuthAvailableCache.put(auth.getNickname(), true);
 	}
 
