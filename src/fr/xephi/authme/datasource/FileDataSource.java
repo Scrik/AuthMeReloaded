@@ -641,9 +641,25 @@ public class FileDataSource implements DataSource {
             String line;
             while ((line = br.readLine()) != null && cached < size) {
                 String[] args = line.split(":");
-                String user = args[0];
-                AuthMe.getInstance().database.getAuth(user);
-                cached++;
+                PlayerAuth auth = null;
+                switch (args.length) {
+                case 2:
+                	auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com", API.getPlayerRealName(args[0]));
+                case 3:
+                	auth = new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com",  API.getPlayerRealName(args[0]));
+                case 4:
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com",  API.getPlayerRealName(args[0]));
+                case 7:
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com", API.getPlayerRealName(args[0]));
+                case 8:
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com", API.getPlayerRealName(args[0]));
+                case 9:
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
+                }
+                if (auth != null) {
+                	AuthMe.getInstance().database.saveAuth(auth);
+                    cached++;
+                }
             }
             ConsoleLogger.info("Precached "+cached+" players auth");
         } catch (FileNotFoundException ex) {
