@@ -45,6 +45,7 @@ public class RegisterCommand implements CommandExecutor {
         this.plugin = plugin;
     }
 
+    //TODO: Rewrite this, it is too slow
     @Override
     public boolean onCommand(CommandSender sender, Command cmnd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -82,6 +83,7 @@ public class RegisterCommand implements CommandExecutor {
                 return true;
             }
 
+            /////////////this is too slow!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if(Settings.getmaxRegPerIp > 0 ){
             	if(!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ipA).size() >= Settings.getmaxRegPerIp) {
             		player.sendMessage(m._("max_reg"));
