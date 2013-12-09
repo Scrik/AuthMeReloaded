@@ -22,9 +22,16 @@ public class CacheDataSource implements DataSource {
         this.source = source;
     }
 
+    private HashMap<String, Boolean> isAuthAvailableCache = new HashMap<String, Boolean>();
     @Override
     public synchronized boolean isAuthAvailable(String user) {
-    	return cache.containsKey(user) ? true : source.isAuthAvailable(user);
+    	if (isAuthAvailableCache.containsKey(user)) {
+    		return isAuthAvailableCache.get(user);
+    	} else {
+    		boolean available = cache.containsKey(user) ? true : source.isAuthAvailable(user);
+    		isAuthAvailableCache.put(user, available);
+    		return available;
+    	}
     }
 
     @Override
@@ -90,6 +97,7 @@ public class CacheDataSource implements DataSource {
             for (PlayerAuth auth : cache.values()) {
                 if(auth.getLastLogin() < until) {
                     cache.remove(auth.getNickname());
+                    isAuthAvailableCache.remove(auth.getNickname());
                 }
             }
         }
@@ -100,6 +108,7 @@ public class CacheDataSource implements DataSource {
     public synchronized boolean removeAuth(String user) {
         if (source.removeAuth(user)) {
             cache.remove(user);
+            isAuthAvailableCache.remove(user);
             return true;
         }
         return false;
@@ -113,6 +122,7 @@ public class CacheDataSource implements DataSource {
     @Override
     public void reload() {
     	cache.clear();
+    	isAuthAvailableCache.clear();
     	for (Player player : plugin.getServer().getOnlinePlayers()) {
     		String user = player.getName().toLowerCase();
     		if (PlayerCache.getInstance().isAuthenticated(user)) {
@@ -164,6 +174,7 @@ public class CacheDataSource implements DataSource {
 		for (PlayerAuth auth : cache.values()) {
 			if (banned.contains(auth.getNickname())) {
 				cache.remove(auth.getNickname());
+				isAuthAvailableCache.remove(auth.getNickname());
 			}
 		}
 	}
@@ -179,6 +190,7 @@ public class CacheDataSource implements DataSource {
 
 	private void cacheAuth(PlayerAuth auth) {
 		cache.put(auth.getNickname(), auth);
+		isAuthAvailableCache.put(auth.getNickname(), true);
 	}
 
 }
