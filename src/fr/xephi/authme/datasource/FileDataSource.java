@@ -269,52 +269,6 @@ public class FileDataSource implements DataSource {
     }
 
     @Override
-    public int purgeDatabase(long until) {
-        BufferedReader br = null;
-        BufferedWriter bw = null;
-        ArrayList<String> lines = new ArrayList<String>();
-        int cleared = 0;
-        try {
-            br = new BufferedReader(new FileReader(source));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] args = line.split(":");
-                if (args.length >= 4) {
-                    if (Long.parseLong(args[3]) >= until) {
-                        lines.add(line);
-                        continue;
-                    }
-                }
-                cleared++;
-            }
-            bw = new BufferedWriter(new FileWriter(source));
-            for (String l : lines) {
-                bw.write(l + "\n");
-            }
-        } catch (FileNotFoundException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return cleared;
-        } catch (IOException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return cleared;
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ex) {
-                }
-            }
-            if (bw != null) {
-                try {
-                    bw.close();
-                } catch (IOException ex) {
-                }
-            }
-        }
-        return cleared;
-    }
-
-    @Override
     public List<String> autoPurgeDatabase(long until) {
         BufferedReader br = null;
         BufferedWriter bw = null;

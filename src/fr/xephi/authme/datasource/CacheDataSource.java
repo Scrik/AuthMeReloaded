@@ -91,20 +91,6 @@ public class CacheDataSource implements DataSource {
     }
 
     @Override
-    public int purgeDatabase(long until) {
-        int cleared = source.purgeDatabase(until);
-        if (cleared > 0) {
-            for (PlayerAuth auth : cache.values()) {
-                if(auth.getLastLogin() < until) {
-                    cache.remove(auth.getNickname());
-                    isAuthAvailableCache.remove(auth.getNickname());
-                }
-            }
-        }
-        return cleared;
-    }
-
-    @Override
     public List<String> autoPurgeDatabase(long until) {
         List<String> cleared = source.autoPurgeDatabase(until);
         if (cleared.size() > 0) {

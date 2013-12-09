@@ -21,8 +21,6 @@ public interface DataSource {
     boolean updateSession(PlayerAuth auth);
 
     boolean updatePassword(PlayerAuth auth);
-
-    int purgeDatabase(long until);
     
     List<String> autoPurgeDatabase(long until);
 

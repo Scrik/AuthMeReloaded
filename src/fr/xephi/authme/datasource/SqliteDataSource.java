@@ -231,22 +231,6 @@ public class SqliteDataSource implements DataSource {
     }
 
     @Override
-    public int purgeDatabase(long until) {
-        PreparedStatement pst = null;
-        try {
-           
-            pst = con.prepareStatement("DELETE FROM " + tableName + " WHERE " + columnLastLogin + "<?;");
-            pst.setLong(1, until);
-            return pst.executeUpdate();
-        } catch (SQLException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return 0;
-        } finally {
-            close(pst);
-        }
-    }
-
-    @Override
     public List<String> autoPurgeDatabase(long until) {
         PreparedStatement pst = null;
         ResultSet rs = null;
