@@ -2,6 +2,7 @@ package fr.xephi.authme.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -23,11 +24,8 @@ public class AuthMeBlockListener implements Listener {
         this.instance = instance;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.isCancelled() || event.getPlayer() == null) {
-            return;
-        }
 
         Player player = event.getPlayer();
         String name = player.getName().toLowerCase();
@@ -48,11 +46,8 @@ public class AuthMeBlockListener implements Listener {
         event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.isCancelled() || event.getPlayer() == null) {
-            return;
-        }
 
         Player player = event.getPlayer();
         String name = player.getName().toLowerCase();
