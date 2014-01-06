@@ -408,14 +408,11 @@ public class AuthMePlayerListener implements Listener {
 
 		if (LimboCache.getInstance().hasLimboPlayer(name)) {
 			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-			if (Settings.protectInventoryBeforeLogInEnabled
-					&& player.hasPlayedBefore()) {
-				RestoreInventoryEvent ev = new RestoreInventoryEvent(player,
-						limbo.getInventory(), limbo.getArmour());
+			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
+				RestoreInventoryEvent ev = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
 				plugin.getServer().getPluginManager().callEvent(ev);
 				if (!ev.isCancelled()) {
-					API.setPlayerInventory(player, limbo.getInventory(),
-							limbo.getArmour());
+					API.setPlayerInventory(player, limbo.getInventory(), limbo.getArmour());
 				}
 			}
 			player.setOp(limbo.getOperator());
@@ -431,9 +428,7 @@ public class AuthMePlayerListener implements Listener {
 			player.getVehicle().eject();
 		} catch (NullPointerException ex) {
 		}
-		if (gameMode.containsKey(name)) {
-			gameMode.remove(name);
-		}
+		gameMode.remove(name);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
