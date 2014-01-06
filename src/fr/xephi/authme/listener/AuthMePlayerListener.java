@@ -66,32 +66,44 @@ public class AuthMePlayerListener implements Listener {
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
-		if (Utils.getInstance().isUnrestricted(player))
+		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
+		}
 
-		if (PlayerCache.getInstance().isAuthenticated(name))
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			return;
+		}
 
-		if (!data.isAuthAvailable(name))
-			if (!Settings.isForcedRegistrationEnabled)
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
 				return;
+			}
+		}
 
 		String msg = event.getMessage();
 		// WorldEdit GUI Shit
-		if (msg.equalsIgnoreCase("/worldedit cui"))
+		if (msg.equalsIgnoreCase("/worldedit cui")) {
 			return;
+		}
 
 		String cmd = msg.split(" ")[0];
-		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register")
+		if (
+				cmd.equalsIgnoreCase("/login") 
+				|| cmd.equalsIgnoreCase("/register")
 				|| cmd.equalsIgnoreCase("/passpartu")
-				|| cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg")
+				|| cmd.equalsIgnoreCase("/l") 
+				|| cmd.equalsIgnoreCase("/reg")
 				|| cmd.equalsIgnoreCase("/email")
-				|| cmd.equalsIgnoreCase("/captcha"))
+				|| cmd.equalsIgnoreCase("/captcha")
+			) {
 			return;
-		if (Settings.useEssentialsMotd && cmd.equalsIgnoreCase("/motd"))
+		}
+		if (Settings.useEssentialsMotd && cmd.equalsIgnoreCase("/motd")) {
 			return;
-		if (Settings.allowCommands.contains(cmd))
+		}
+		if (Settings.allowCommands.contains(cmd)) {
 			return;
+		}
 
 		event.setMessage("/notloggedin");
 		event.setCancelled(true);
@@ -103,11 +115,13 @@ public class AuthMePlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		final String name = player.getName().toLowerCase();
 
-		if (Utils.getInstance().isUnrestricted(player))
+		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
+		}
 
-		if (PlayerCache.getInstance().isAuthenticated(name))
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			return;
+		}
 
 		String cmd = event.getMessage().split(" ")[0];
 
