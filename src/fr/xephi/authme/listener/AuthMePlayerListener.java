@@ -6,7 +6,6 @@ import java.util.regex.PatternSyntaxException;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +18,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -55,7 +53,6 @@ public class AuthMePlayerListener implements Listener {
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
-	public boolean causeByAuthMe = false;
 	private HashMap<String, PlayerLoginEvent> antibot = new HashMap<String, PlayerLoginEvent>();
 
 	public AuthMePlayerListener(AuthMe plugin, DataSource data) {
@@ -63,10 +60,8 @@ public class AuthMePlayerListener implements Listener {
 		this.data = data;
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null)
-			return;
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -102,10 +97,8 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null)
-			return;
 
 		final Player player = event.getPlayer();
 		final String name = player.getName().toLowerCase();
@@ -139,11 +132,8 @@ public class AuthMePlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -184,7 +174,7 @@ public class AuthMePlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 
 		final Player player = event.getPlayer();
@@ -263,8 +253,9 @@ public class AuthMePlayerListener implements Listener {
 	}
 
 	private void checkAntiBotMod(final PlayerLoginEvent event) {
-		if (plugin.delayedAntiBot || plugin.antibotMod)
+		if (plugin.delayedAntiBot || plugin.antibotMod) {
 			return;
+		}
 		if (antibot.keySet().size() > Settings.antiBotSensibility) {
 			plugin.switchAntiBotMod(true);
 			Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically enabled due to massive connections! ");
@@ -292,11 +283,8 @@ public class AuthMePlayerListener implements Listener {
 		}, 300);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		if (event.getPlayer() == null) {
-			return;
-		}
 
 		Player player = event.getPlayer();
 		
@@ -391,11 +379,8 @@ public class AuthMePlayerListener implements Listener {
 		event.setJoinMessage(null);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		if (event.getPlayer() == null) {
-			return;
-		}
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -431,12 +416,8 @@ public class AuthMePlayerListener implements Listener {
 		gameMode.remove(name);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
-
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -444,11 +425,11 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
+		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
 			return;
 		}
 
@@ -461,10 +442,8 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null)
-			return;
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -486,19 +465,13 @@ public class AuthMePlayerListener implements Listener {
 				return;
 			}
 		}
-		if (event.getClickedBlock() != null
-				&& event.getClickedBlock().getType() != Material.AIR)
-			event.setUseInteractedBlock(org.bukkit.event.Event.Result.DENY);
-		event.setUseItemInHand(org.bukkit.event.Event.Result.DENY);
+		
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null)
-			return;
-		if (!(event.getPlayer() instanceof Player))
-			return;
+		
 		Player player = (Player) event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -509,8 +482,7 @@ public class AuthMePlayerListener implements Listener {
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
 			return;
 
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
+		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
 			return;
 		}
 
@@ -522,12 +494,9 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerInventoryClick(InventoryClickEvent event) {
-		if (event.isCancelled() || event.getWhoClicked() == null)
-			return;
-		if (!(event.getWhoClicked() instanceof Player))
-			return;
+
 		Player player = (Player) event.getWhoClicked();
 		String name = player.getName().toLowerCase();
 
@@ -552,11 +521,8 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -580,11 +546,9 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
+		
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -609,11 +573,9 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
 	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
+
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -634,11 +596,9 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onSignChange(SignChangeEvent event) {
-		if (event.isCancelled() || event.getPlayer() == null) {
-			return;
-		}
+
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 		if (Utils.getInstance().isUnrestricted(player)) {
@@ -655,66 +615,36 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (event.getPlayer() == null || event == null) {
-			return;
-		}
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
-		if (Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player))
+		if (Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
+		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
-		if (PlayerCache.getInstance().isAuthenticated(name))
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			return;
+		}
 
-		if (!data.isAuthAvailable(name))
-			if (!Settings.isForcedRegistrationEnabled)
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
 				return;
+			}
+		}
 
-		if (!Settings.isTeleportToSpawnEnabled)
+		if (!Settings.isTeleportToSpawnEnabled) {
 			return;
+		}
 
 		Location spawn = plugin.getSpawnLocation(player.getWorld());
 		event.setRespawnLocation(spawn);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
-		if (event.isCancelled())
-			return;
-		if (event.getPlayer() == null || event == null)
-			return;
-
-		Player player = event.getPlayer();
-
-		if (plugin.authmePermissible(player, "authme.bypassforcesurvival"))
-			return;
-
-		String name = player.getName().toLowerCase();
-
-		if (Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player))
-			return;
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
-			return;
-
-		if (PlayerCache.getInstance().isAuthenticated(name))
-			return;
-
-		if (!data.isAuthAvailable(name))
-			if (!Settings.isForcedRegistrationEnabled)
-				return;
-
-		if (this.causeByAuthMe)
-			return;
-		event.setCancelled(true);
-	}
 }
