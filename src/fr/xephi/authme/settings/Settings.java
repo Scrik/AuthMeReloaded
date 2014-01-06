@@ -36,10 +36,9 @@ public final class Settings extends YamlConfiguration {
     public static HashAlgorithm rakamakHash;
     public static Boolean useLogging = false;
 
-    public static Boolean isRegistrationEnabled, isForcedRegistrationEnabled,
+    public static boolean isRegistrationEnabled, isForcedRegistrationEnabled,
             isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp, 
             isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
-            isSaveQuitLocationEnabled,
             isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
             isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
@@ -101,7 +100,6 @@ public void loadConfigOptions() {
         isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
         isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
         isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
-        isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation", false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();
@@ -222,7 +220,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getJoinPermissions = configFile.getStringList("GroupOptions.Permissions.PermissionsOnJoin");
         isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
         isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
-        isSaveQuitLocationEnabled = configFile.getBoolean("settings.restrictions.SaveQuitLocation",false);
         getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();

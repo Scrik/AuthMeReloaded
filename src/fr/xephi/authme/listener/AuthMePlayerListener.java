@@ -35,7 +35,6 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.api.API;
-import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
@@ -300,17 +299,18 @@ public class AuthMePlayerListener implements Listener {
 		}
 
 		Player player = event.getPlayer();
-		World world = player.getWorld();
-		Location spawnLoc = plugin.getSpawnLocation(world);
-		final String name = player.getName().toLowerCase();
-		gameMode.put(name, player.getGameMode());
-		BukkitScheduler sched = plugin.getServer().getScheduler();
-
+		
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
 				|| Utils.getInstance().isUnrestricted(player)
 				|| CombatTagComunicator.isNPC(player)) {
 			return;
 		}
+		
+		World world = player.getWorld();
+		Location spawnLoc = plugin.getSpawnLocation(world);
+		final String name = player.getName().toLowerCase();
+		gameMode.put(name, player.getGameMode());
+		BukkitScheduler sched = plugin.getServer().getScheduler();
 
 		String ip = player.getAddress().getAddress().getHostAddress();
 		if (Settings.bungee) {
@@ -319,9 +319,6 @@ public class AuthMePlayerListener implements Listener {
 		}
 
 		if (Settings.isAllowRestrictedIp && !Settings.getRestrictedIp(name, ip)) {
-			this.causeByAuthMe = true;
-			player.setGameMode(gameMode.get(name));
-			this.causeByAuthMe = false;
 			player.kickPlayer("You are not the Owner of this account, please try another name!");
 			if (Settings.banUnsafeIp) {
 				plugin.getServer().banIP(ip);
@@ -330,7 +327,7 @@ public class AuthMePlayerListener implements Listener {
 		}
 
 		if (data.isAuthAvailable(name)) {
-			LimboCache.getInstance().updateLimboPlayer(player);
+			LimboCache.getInstance().addLimboPlayer(player);
 			if (Settings.isTeleportToSpawnEnabled) {
 				SpawnTeleportEvent tpEvent = new SpawnTeleportEvent(player, player.getLocation(), spawnLoc, PlayerCache.getInstance().isAuthenticated(name));
 				plugin.getServer().getPluginManager().callEvent(tpEvent);
@@ -402,37 +399,11 @@ public class AuthMePlayerListener implements Listener {
 
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
-		Location loc = player.getLocation();
-		if (loc.getY() % 1 != 0)
-			loc.add(0, 0.5, 0);
 
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
 				|| Utils.getInstance().isUnrestricted(player)
 				|| CombatTagComunicator.isNPC(player)) {
 			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(name) && !player.isDead()) {
-			if (Settings.isSaveQuitLocationEnabled
-					&& data.isAuthAvailable(name)) {
-				final PlayerAuth auth = new PlayerAuth(name, loc.getBlockX(),
-						loc.getBlockY(), loc.getBlockZ(), loc.getWorld()
-								.getName());
-				try {
-					if (data instanceof Thread) {
-						data.updateQuitLoc(auth);
-					} else {
-						Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
-								new Runnable() {
-									@Override
-									public void run() {
-										data.updateQuitLoc(auth);
-									}
-								});
-					}
-				} catch (NullPointerException npe) {
-				}
-			}
 		}
 
 		if (LimboCache.getInstance().hasLimboPlayer(name)) {
@@ -448,8 +419,7 @@ public class AuthMePlayerListener implements Listener {
 				}
 			}
 			player.setOp(limbo.getOperator());
-			if (player.getGameMode() != GameMode.CREATIVE
-					&& !Settings.isMovementAllowed) {
+			if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
 				player.setAllowFlight(limbo.isFlying());
 				player.setFlying(limbo.isFlying());
 			}
@@ -461,8 +431,9 @@ public class AuthMePlayerListener implements Listener {
 			player.getVehicle().eject();
 		} catch (NullPointerException ex) {
 		}
-		if (gameMode.containsKey(name))
+		if (gameMode.containsKey(name)) {
 			gameMode.remove(name);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

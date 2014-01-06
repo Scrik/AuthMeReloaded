@@ -33,7 +33,6 @@ import com.maxmind.geoip.LookupService;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import fr.xephi.authme.api.API;
-import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
@@ -397,20 +396,10 @@ public class AuthMe extends JavaPlugin {
 		} catch (Exception e) { }
 		try {
 	        String name = player.getName().toLowerCase();
-	        if ((PlayerCache.getInstance().isAuthenticated(name)) && (!player.isDead()) && 
-	          (Settings.isSaveQuitLocationEnabled.booleanValue())) {
-	          final PlayerAuth auth = new PlayerAuth(player.getName().toLowerCase(), (int)player.getLocation().getX(), (int)player.getLocation().getY(), (int)player.getLocation().getZ(), player.getWorld().getName());
-	          Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-				@Override
-				public void run() {
-					database.updateQuitLoc(auth);
-				}
-	          });
-	        }
 	        if (LimboCache.getInstance().hasLimboPlayer(name))
 	        {
 	          LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-	          if (Settings.protectInventoryBeforeLogInEnabled.booleanValue()) {
+	          if (Settings.protectInventoryBeforeLogInEnabled) {
 	            player.getInventory().setArmorContents(limbo.getArmour());
 	            player.getInventory().setContents(limbo.getInventory());
 	          }
@@ -420,7 +409,6 @@ public class AuthMe extends JavaPlugin {
 	          LimboCache.getInstance().deleteLimboPlayer(name);
 	        }
 	        PlayerCache.getInstance().removePlayer(name);
-	        player.saveData();
 	      } catch (Exception ex) {
 	      }
 	}

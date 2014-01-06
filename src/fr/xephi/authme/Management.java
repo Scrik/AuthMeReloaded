@@ -330,11 +330,7 @@ public class Management {
 
                 // Teleport
                 if (Settings.isTeleportToSpawnEnabled) {
-                    if (Settings.isSaveQuitLocationEnabled && auth.getQuitLocY() != 0) {
-                        packQuitLocation();
-                    } else {
-                        teleportBackFromSpawn();
-                    }
+                   teleportBackFromSpawn();
                 }
                 // Cleanup no longer used temporary data
                 LimboCache.getInstance().deleteLimboPlayer(name);

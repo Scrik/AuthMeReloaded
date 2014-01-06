@@ -77,8 +77,4 @@ public class LimboCache {
         return singleton;
     }
 
-	public void updateLimboPlayer(Player player) {
-		this.addLimboPlayer(player);
-	}
-
 }
