@@ -592,7 +592,7 @@ public class FileDataSource implements DataSource {
         	int cached = 0;
             br = new BufferedReader(new FileReader(source));
             String line;
-            while ((line = br.readLine()) != null && cached < size) {
+            while ((line = br.readLine()) != null && (cached < size || size == 0)) {
                 String[] args = line.split(":");
                 PlayerAuth auth = null;
                 switch (args.length) {
