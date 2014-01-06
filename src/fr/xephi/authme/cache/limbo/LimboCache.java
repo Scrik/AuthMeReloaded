@@ -26,7 +26,6 @@ public class LimboCache {
     public void addLimboPlayer(Player player) {
         String name = player.getName().toLowerCase();
         Location loc = player.getLocation();
-        loc.setY(loc.getY() + 0.4D);
         GameMode gameMode = player.getGameMode();
         ItemStack[] arm = null;
         ItemStack[] inv = null;

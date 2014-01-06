@@ -36,6 +36,7 @@ import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
+import fr.xephi.authme.events.AuthMeTeleportEvent;
 import fr.xephi.authme.events.ProtectInventoryEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
 import fr.xephi.authme.events.SpawnTeleportEvent;
@@ -336,13 +337,7 @@ public class AuthMePlayerListener implements Listener {
 					player.teleport(tpEvent.getTo());
 				}
 			}
-		} else {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-		if (Settings.protectInventoryBeforeLogInEnabled) {
-			try {
+			if (Settings.protectInventoryBeforeLogInEnabled) {
 				LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(player.getName().toLowerCase());
 				ProtectInventoryEvent ev = new ProtectInventoryEvent(player,limbo.getInventory(), limbo.getArmour());
 				plugin.getServer().getPluginManager().callEvent(ev);
@@ -353,7 +348,10 @@ public class AuthMePlayerListener implements Listener {
 				} else {
 					API.setPlayerInventory(player, ev.getEmptyInventory(), ev.getEmptyArmor());
 				}
-			} catch (NullPointerException ex) {
+			}
+		} else {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
 			}
 		}
 		String msg = "";
@@ -406,11 +404,21 @@ public class AuthMePlayerListener implements Listener {
 
 		if (LimboCache.getInstance().hasLimboPlayer(name)) {
 			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
-				RestoreInventoryEvent ev = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
-				plugin.getServer().getPluginManager().callEvent(ev);
-				if (!ev.isCancelled()) {
-					API.setPlayerInventory(player, limbo.getInventory(), limbo.getArmour());
+			if (data.isAuthAvailable(name)) {
+				if (Settings.protectInventoryBeforeLogInEnabled) {
+					RestoreInventoryEvent ev = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
+					plugin.getServer().getPluginManager().callEvent(ev);
+					if (!ev.isCancelled()) {
+						API.setPlayerInventory(player, limbo.getInventory(), limbo.getArmour());
+					}
+				}
+				if (Settings.isTeleportToSpawnEnabled) {
+		            AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, limbo.getLoc());
+		            plugin.getServer().getPluginManager().callEvent(tpEvent);
+		            if (!tpEvent.isCancelled()) {
+		                Location fLoc = tpEvent.getTo();
+		                player.teleport(fLoc);
+		            }
 				}
 			}
 			player.setOp(limbo.getOperator());
@@ -421,11 +429,7 @@ public class AuthMePlayerListener implements Listener {
 			this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
-		try {
-			PlayerCache.getInstance().removePlayer(name);
-			player.getVehicle().eject();
-		} catch (NullPointerException ex) {
-		}
+		PlayerCache.getInstance().removePlayer(name);
 		gameMode.remove(name);
 	}
 
