@@ -62,9 +62,6 @@ settings:
         # Location", this options will prevent players that would exploit
         # your account when you are playing
         ForceSingleSession: true
-        # This will prevent all lost of quit position, when player
-        # isent loggedin
-        SaveQuitLocation: false
         # For activate Restricted user by ip u need
         # to set True this option and configure the field
         # AllowedRestrctedUser as show below
