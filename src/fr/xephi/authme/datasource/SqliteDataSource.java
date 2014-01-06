@@ -146,12 +146,12 @@ public class SqliteDataSource implements DataSource {
             rs = pst.executeQuery();
             if (rs.next()) {
                 if (rs.getString(columnIp).isEmpty() ) {
-                    return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                    return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
                 } else {
                         if(!columnSalt.isEmpty()){
-                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
                         } else {
-                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
                         }
                  }
             } else {

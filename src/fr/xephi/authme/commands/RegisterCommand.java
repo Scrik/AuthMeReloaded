@@ -133,7 +133,7 @@ public class RegisterCommand implements CommandExecutor {
 												(int) player.getLocation().getY(),
 												(int) player.getLocation().getZ(), 
 												player.getLocation().getWorld().getName(),
-												email, player.getName()
+												email
 										);
 										database.saveAuth(fAuth);
 										database.updateEmail(fAuth);
@@ -154,7 +154,8 @@ public class RegisterCommand implements CommandExecutor {
 												(int) player.getLocation().getY(),
 												(int) player.getLocation().getZ(), 
 												player.getLocation().getWorld().getName(),
-												email, player.getName());
+												email
+										);
 										database.saveAuth(fAuth);
 										database.updateEmail(fAuth);
 										database.updateSession(fAuth);
@@ -224,10 +225,9 @@ public class RegisterCommand implements CommandExecutor {
 			} else
 				hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[0], name);
 			if (Settings.getMySQLColumnSalt.isEmpty()) {
-				auth = new PlayerAuth(name, hash, ip, new Date().getTime(),
-						"your@email.com", player.getName());
+				auth = new PlayerAuth(name, hash, ip, new Date().getTime(), "your@email.com");
 			} else {
-				auth = new PlayerAuth(name, hash, PasswordSecurity.userSalt.get(name), ip, new Date().getTime(), player.getName());
+				auth = new PlayerAuth(name, hash, PasswordSecurity.userSalt.get(name), ip, new Date().getTime());
 			}
 			if (!database.saveAuth(auth)) {
 				player.sendMessage(m._("error"));

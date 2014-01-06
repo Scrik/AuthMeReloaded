@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.xephi.authme.ConsoleLogger;
-import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
@@ -103,23 +102,23 @@ public class FileDataSource implements DataSource {
                 if (args[0].equals(auth.getNickname())) {
                 	switch (args.length) {
                 		case 4: {
-                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), 0, 0, 0, "world", "your@email.com", API.getPlayerRealName(args[0]));
+                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), 0, 0, 0, "world", "your@email.com");
                 			break;
                 		}
                 		case 7: {
-                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world", "your@email.com", API.getPlayerRealName(args[0]));
+                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world", "your@email.com");
                 			break;
                 		}
                 		case 8: {
-                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com", API.getPlayerRealName(args[0]));
+                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
                 			break;
                 		}
                 		case 9: {
-                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
+                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
                 			break;
                 		}
                 		default: {
-                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], 0, 0, 0, 0, "world", "your@email.com", API.getPlayerRealName(args[0]));
+                			newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], 0, 0, 0, 0, "world", "your@email.com");
                 			break;
                 		}
                 	}
@@ -160,23 +159,23 @@ public class FileDataSource implements DataSource {
                 if (args[0].equals(auth.getNickname())) {
                     switch (args.length) {
                     	case 4: {
-                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), 0, 0, 0, "world", "your@email.com", API.getPlayerRealName(args[0]));
+                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), 0, 0, 0, "world", "your@email.com");
                     		break;
                     	}
                     	case 7: {
-                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world", "your@email.com", API.getPlayerRealName(args[0]));
+                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world", "your@email.com");
                     		break;
                     	}
                     	case 8: {
-                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com", API.getPlayerRealName(args[0]));
+                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
                     		break;
                     	}
                     	case 9: {
-                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
+                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
                     		break;
                     	}
                     	default: {
-                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), 0, 0, 0, "world", "your@email.com", API.getPlayerRealName(args[0]));
+                    		newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), 0, 0, 0, "world", "your@email.com");
                     		break;
                     	}
                     }
@@ -215,7 +214,7 @@ public class FileDataSource implements DataSource {
             while ((line = br.readLine()) != null) {
                 String[] args = line.split(":");
                 if (args[0].equals(auth.getNickname())) {
-                    newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), auth.getQuitLocX(), auth.getQuitLocY(), auth.getQuitLocZ(), auth.getWorld(), auth.getEmail(), API.getPlayerRealName(args[0]));
+                    newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), auth.getQuitLocX(), auth.getQuitLocY(), auth.getQuitLocZ(), auth.getWorld(), auth.getEmail());
                     break;
                 }
             }
@@ -371,17 +370,17 @@ public class FileDataSource implements DataSource {
                 if (args[0].equals(user)) {
                     switch (args.length) {
                         case 2:
-                            return new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com", API.getPlayerRealName(args[0]));
+                            return new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com");
                         case 3:
-                            return new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com",  API.getPlayerRealName(args[0]));
+                            return new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com");
                         case 4:
-                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com",  API.getPlayerRealName(args[0]));
+                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com");
                         case 7:
-                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com", API.getPlayerRealName(args[0]));
+                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com");
                         case 8:
-                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com", API.getPlayerRealName(args[0]));
+                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
                         case 9:
-                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
+                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
                     }
                 }
             }
@@ -423,7 +422,7 @@ public class FileDataSource implements DataSource {
 	            while ((line = br.readLine()) != null) {
 	                String[] args = line.split(":");
 	                if (args[0].equals(auth.getNickname())) {
-	                    newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], auth.getEmail(), API.getPlayerRealName(args[0]));
+	                    newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], auth.getEmail());
 	                    break;
 	                }
 	            }
@@ -598,27 +597,27 @@ public class FileDataSource implements DataSource {
                 PlayerAuth auth = null;
                 switch (args.length) {
                 case 2: {
-                	auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com", API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com");
                 	break;
                 }
                 case 3: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com",  API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com");
                 	break;
                 }
                 case 4: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com",  API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com");
                 	break;
                 }
                 case 7: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com", API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com");
                 	break;
                 }
                 case 8: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com", API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
                 	break;
                 }
                 case 9:
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8], API.getPlayerRealName(args[0]));
+                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
                 	break;
                 }
                 if (auth != null) {

@@ -4,7 +4,6 @@ import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
-import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.datasource.MiniConnectionPoolManager.TimeoutException;
 import fr.xephi.authme.security.HashAlgorithm;
@@ -17,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.Bukkit;
 
 
 public class MySQLDataSource implements DataSource {
@@ -178,14 +179,14 @@ public class MySQLDataSource implements DataSource {
             rs = pst.executeQuery();
             if (rs.next()) {
                 if (rs.getString(columnIp).isEmpty() ) {
-                    return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                    return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
                 } else {
                         if(!columnSalt.isEmpty()){
                             if(!columnGroup.isEmpty())
-                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
-                            else return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
+                            else return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
                         } else {
-                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail), API.getPlayerRealName(rs.getString(columnName)));
+                            return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
                         }
                  }
             } else {
@@ -229,7 +230,7 @@ public class MySQLDataSource implements DataSource {
             if (!columnOthers.isEmpty()) {
             	for(String column : columnOthers) {
             		pst = con.prepareStatement("UPDATE " + tableName + " SET " + tableName + "." + column + "=? WHERE " + columnName + "=?;");
-                    pst.setString(1, auth.getRealname());
+                    pst.setString(1, Bukkit.getOfflinePlayer(auth.getNickname()).getName());
                     pst.setString(2, auth.getNickname());
                     pst.executeUpdate();
             	}

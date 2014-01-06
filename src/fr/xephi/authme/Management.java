@@ -144,7 +144,7 @@ public class Management {
             		return;
             	}
             if (passwordVerified && player.isOnline()) {
-                PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email, realName);
+                PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email);
                 database.updateSession(auth);
 
                 if (Settings.useCaptcha) {
@@ -216,7 +216,7 @@ public class Management {
             String hash = pAuth.getHash();
             String email = pAuth.getEmail();
 
-            PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email, realName);
+            PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email);
             database.updateSession(auth);
 
             if (Settings.useCaptcha) {

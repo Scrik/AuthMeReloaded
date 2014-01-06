@@ -25,7 +25,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.Utils;
-import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.converter.FlatToSql;
@@ -266,7 +265,7 @@ public class AdminCommand implements CommandExecutor {
                     return true;
                 }
                 String hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[2], name);
-                PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", 0L, "your@email.com", API.getPlayerRealName(name));
+                PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", 0L, "your@email.com");
                 if (PasswordSecurity.userSalt.containsKey(name) && PasswordSecurity.userSalt.get(name) != null)
                 	auth.setSalt(PasswordSecurity.userSalt.get(name));
                 else
