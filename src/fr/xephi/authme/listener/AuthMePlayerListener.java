@@ -146,7 +146,7 @@ public class AuthMePlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 
 		Player player = event.getPlayer();
@@ -393,7 +393,7 @@ public class AuthMePlayerListener implements Listener {
 		event.setJoinMessage(null);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 
 		Player player = event.getPlayer();
@@ -430,7 +430,7 @@ public class AuthMePlayerListener implements Listener {
 		gameMode.remove(name);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR,ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
@@ -483,7 +483,7 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
 		
 		Player player = (Player) event.getPlayer();
@@ -508,7 +508,7 @@ public class AuthMePlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
 	public void onPlayerInventoryClick(InventoryClickEvent event) {
 
 		Player player = (Player) event.getWhoClicked();
@@ -627,38 +627,6 @@ public class AuthMePlayerListener implements Listener {
 			}
 		}
 		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-
-		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
-
-		if (Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-
-		if (!Settings.isTeleportToSpawnEnabled) {
-			return;
-		}
-
-		Location spawn = plugin.getSpawnLocation(player.getWorld());
-		event.setRespawnLocation(spawn);
 	}
 
 }
