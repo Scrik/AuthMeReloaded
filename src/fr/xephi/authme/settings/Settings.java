@@ -41,7 +41,7 @@ public final class Settings extends YamlConfiguration {
             isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
             isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
-            isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, removePassword, displayOtherAccounts,
+            isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
             useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
             disableSocialSpy, useEssentialsMotd,
             supportOldPassword,
@@ -155,7 +155,6 @@ public void loadConfigOptions() {
         rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
         rakamakHash = getRakamakHash();
         noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-        removePassword = configFile.getBoolean("Security.console.removePassword", true);
         getmailAccount = configFile.getString("Email.mailAccount", "");
         getmailPassword = configFile.getString("Email.mailPassword", "");
         getmailSMTP = configFile.getString("Email.mailSMTP", "smtp.gmail.com");
@@ -275,7 +274,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
         rakamakHash = getRakamakHash();
         noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-        removePassword = configFile.getBoolean("Security.console.removePassword", true);
         getmailAccount = configFile.getString("Email.mailAccount", "");
         getmailPassword = configFile.getString("Email.mailPassword", "");
         getmailSMTP = configFile.getString("Email.mailSMTP", "smtp.gmail.com");

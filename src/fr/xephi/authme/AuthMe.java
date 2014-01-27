@@ -115,10 +115,6 @@ public class AuthMe extends JavaPlugin {
 
         server = getServer();
 
-        //Set Console Filter
-        if (Settings.removePassword)
-        Bukkit.getLogger().setFilter(new ConsoleFilter());
-
         //Load MailApi
         if(!Settings.getmailAccount.isEmpty() && !Settings.getmailPassword.isEmpty())
         	mail = new SendMailSSL(this);
@@ -364,6 +360,8 @@ public class AuthMe extends JavaPlugin {
 			this.CitizensVersion = 0;
 		}
 	}
+	
+	
 
 	@Override
     public void onDisable() {
