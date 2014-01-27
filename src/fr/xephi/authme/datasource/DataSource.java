@@ -26,8 +26,6 @@ public interface DataSource {
 
     boolean removeAuth(String user);
 
-    boolean updateQuitLoc(PlayerAuth auth);
-
     int getIps(String ip);
 
     List<String> getAllAuthsByName(PlayerAuth auth);
@@ -45,5 +43,7 @@ public interface DataSource {
     void reload();
 
     void purgeBanned(List<String> banned);
+    
+    List<PlayerAuth> getAllAuths();
 
 }

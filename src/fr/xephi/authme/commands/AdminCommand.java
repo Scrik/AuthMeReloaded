@@ -464,7 +464,6 @@ public class AdminCommand implements CommandExecutor {
                 auth.setQuitLocY(0);
                 auth.setQuitLocZ(0);
                 auth.setWorld("world");
-                database.updateQuitLoc(auth);
                 sender.sendMessage(name + " 's last pos location is now reset");
             } catch (Exception e) {
             	ConsoleLogger.showError("An error occured while trying to reset location or player do not exist, please see below: ");

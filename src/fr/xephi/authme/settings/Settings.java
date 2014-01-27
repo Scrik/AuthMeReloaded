@@ -59,7 +59,7 @@ public final class Settings extends YamlConfiguration {
     public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
             getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
             passwordMaxLength, getRecoveryPassLength, getMailPort, maxLoginTry, captchaLength, saltLength, getmaxRegPerEmail,
-            bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration, authcachepreload;
+            bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
 
     protected static YamlConfiguration configFile;
 
@@ -104,7 +104,6 @@ public void loadConfigOptions() {
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
-        authcachepreload = configFile.getInt("DataSource.fileCachePreloadSize", 4000);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
         getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
         getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");
@@ -223,7 +222,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         getPasswordHash = getPasswordHash();
         getDataSource = getDataSource();
         isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
-        authcachepreload = configFile.getInt("DataSource.fileCachePreloadSize", 4000);
         getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
         getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
         getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");

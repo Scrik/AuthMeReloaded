@@ -201,42 +201,6 @@ public class FileDataSource implements DataSource {
         return true;
     }
 
-   @Override
-   public boolean updateQuitLoc(PlayerAuth auth) {
-       if (!isAuthAvailable(auth.getNickname())) {
-            return false;
-        }
-        PlayerAuth newAuth = null;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(source));
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                String[] args = line.split(":");
-                if (args[0].equals(auth.getNickname())) {
-                    newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), auth.getQuitLocX(), auth.getQuitLocY(), auth.getQuitLocZ(), auth.getWorld(), auth.getEmail());
-                    break;
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return false;
-        } catch (IOException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return false;
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ex) {
-                }
-            }
-        }
-        removeAuth(auth.getNickname());
-        saveAuth(newAuth);
-        return true;
-    }
-
     @Override
     public int getIps(String ip) {
         BufferedReader br = null;
@@ -366,22 +330,9 @@ public class FileDataSource implements DataSource {
             br = new BufferedReader(new FileReader(source));
             String line;
             while ((line = br.readLine()) != null) {
-                String[] args = line.split(":");
-                if (args[0].equals(user)) {
-                    switch (args.length) {
-                        case 2:
-                            return new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com");
-                        case 3:
-                            return new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com");
-                        case 4:
-                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com");
-                        case 7:
-                            return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com");
-                        case 8:
-                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
-                        case 9:
-                        	return new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
-                    }
+                PlayerAuth auth = parseAuth(line);
+                if (auth.getNickname().equals(user)) {
+                	return auth;
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -584,48 +535,19 @@ public class FileDataSource implements DataSource {
         return;
 	}
 	
-	
-	public List<PlayerAuth> getAuths(int size) {
-    	List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
+	@Override
+	public List<PlayerAuth> getAllAuths() {
+		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
         BufferedReader br = null;
         try {
-        	int cached = 0;
             br = new BufferedReader(new FileReader(source));
             String line;
-            while ((line = br.readLine()) != null && (cached < size || size == 0)) {
-                String[] args = line.split(":");
-                PlayerAuth auth = null;
-                switch (args.length) {
-                case 2: {
-                	auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com");
-                	break;
-                }
-                case 3: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com");
-                	break;
-                }
-                case 4: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com");
-                	break;
-                }
-                case 7: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com");
-                	break;
-                }
-                case 8: {
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
-                	break;
-                }
-                case 9:
-                	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
-                	break;
-                }
+            while ((line = br.readLine()) != null) {
+                PlayerAuth auth = parseAuth(line);
                 if (auth != null) {
                 	auths.add(auth);
-                    cached++;
                 }
             }
-            ConsoleLogger.info("Precached "+cached+" players auth");
         } catch (FileNotFoundException ex) {
             ConsoleLogger.showError(ex.getMessage());
         } catch (IOException ex) {
@@ -639,6 +561,38 @@ public class FileDataSource implements DataSource {
             }
         }
         return auths;
+	}
+	
+	private PlayerAuth parseAuth(String line) {
+        PlayerAuth auth = null;
+        String[] args = line.split(":");
+        switch (args.length) {
+	        case 2: {
+	        	auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0, "your@email.com");
+	        	break;
+	        }
+	        case 3: {
+	        	auth = new PlayerAuth(args[0], args[1], args[2], 0, "your@email.com");
+	        	break;
+	        }
+	        case 4: {
+	        	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), "your@email.com");
+	        	break;
+	        }
+	        case 7: {
+	        	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld", "your@email.com");
+	        	break;
+	        }
+	        case 8: {
+	        	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], "your@email.com");
+	        	break;
+	        }
+	        case 9: {
+	        	auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], args[8]);
+	        	break;
+	        }
+	    }
+        return auth;
 	}
 
 }

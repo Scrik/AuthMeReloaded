@@ -465,32 +465,6 @@ public class MySQLDataSource implements DataSource {
     }
 
     @Override
-    public synchronized boolean updateQuitLoc(PlayerAuth auth) {
-        Connection con = null;
-        PreparedStatement pst = null;
-        try {
-            con = makeSureConnectionIsReady();
-            pst = con.prepareStatement("UPDATE " + tableName + " SET "+ lastlocX + " =?, "+ lastlocY +"=?, "+ lastlocZ +"=?, " + lastlocWorld + "=? WHERE " + columnName + "=?;");
-            pst.setLong(1, auth.getQuitLocX());
-            pst.setLong(2, auth.getQuitLocY());
-            pst.setLong(3, auth.getQuitLocZ());
-            pst.setString(4, auth.getWorld());
-            pst.setString(5, auth.getNickname());
-            pst.executeUpdate();
-        } catch (SQLException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return false;
-        } catch (TimeoutException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return false;
-        } finally {
-            close(pst);
-            close(con);
-        }
-        return true;
-    }
-
-    @Override
     public synchronized int getIps(String ip) {
         Connection con = null;
         PreparedStatement pst = null;
@@ -768,5 +742,47 @@ public class MySQLDataSource implements DataSource {
         conPool = new MiniConnectionPoolManager(dataSource, 10);
         ConsoleLogger.info("ConnectionPool was unavailable... Reconnected!");
     }
+
+	@Override
+	public List<PlayerAuth> getAllAuths() {
+		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
+		Connection con = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		try {
+			con = makeSureConnectionIsReady();
+			pst = con.prepareStatement("SELECT * FROM " + tableName);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				PlayerAuth pa = null;
+				if (rs.getString(columnIp).isEmpty() ) {
+					pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
+				} else {
+					if(!columnSalt.isEmpty()) {
+						if(!columnGroup.isEmpty()) {
+							pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
+						} else {
+							pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
+						}
+					} else {
+						pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
+					}
+                 }
+				if (pa != null) {
+					auths.add(pa);
+				}
+            }
+        } catch (SQLException ex) {
+            ConsoleLogger.showError(ex.getMessage());
+            return null;
+        } catch (TimeoutException ex) {
+            ConsoleLogger.showError(ex.getMessage());
+        } finally {
+            close(rs);
+            close(pst);
+            close(con);
+        }
+		return null;
+	}
 
 }

@@ -196,7 +196,6 @@ public class AuthMe extends JavaPlugin {
 
         if (Settings.isCachingEnabled) {
             database = new CacheDataSource(this, database);
-            CacheDataSource.class.cast(database).preload(Settings.authcachepreload);
         }
 
         // Setup API

@@ -8,19 +8,19 @@ import org.bukkit.entity.Player;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.settings.Settings;
 
 
 public class CacheDataSource implements DataSource {
 
     private DataSource source;
     public AuthMe plugin;
-    private final HashMap<String, PlayerAuth> getAuthCache = new HashMap<String, PlayerAuth>();
+    private HashMap<String, PlayerAuth> getAuthCache = new HashMap<String, PlayerAuth>();
     private HashMap<String, Boolean> isAuthAvailableCache = new HashMap<String, Boolean>();
     
     public CacheDataSource(AuthMe plugin, DataSource source) {
     	this.plugin = plugin;
         this.source = source;
+        cacheAllAuths();
     }
 
 
@@ -73,19 +73,7 @@ public class CacheDataSource implements DataSource {
         }
         return false;
     }
-
-    @Override
-    public boolean updateQuitLoc(PlayerAuth auth) {
-        if (source.updateQuitLoc(auth)) {
-            getAuthCache.get(auth.getNickname()).setQuitLocX(auth.getQuitLocX());
-            getAuthCache.get(auth.getNickname()).setQuitLocY(auth.getQuitLocY());
-            getAuthCache.get(auth.getNickname()).setQuitLocZ(auth.getQuitLocZ());
-            getAuthCache.get(auth.getNickname()).setWorld(auth.getWorld());
-            return true;
-        }
-        return false;
-    }
-
+    
     @Override
     public int getIps(String ip) {
         return source.getIps(ip);
@@ -133,7 +121,7 @@ public class CacheDataSource implements DataSource {
     			}
     		}
     	}
-    	preload(Settings.authcachepreload);
+    	cacheAllAuths();
     }
 
 	@Override
@@ -180,15 +168,16 @@ public class CacheDataSource implements DataSource {
 		}
 	}
 	
-	public void preload(int size) {
-		if (source instanceof FileDataSource) {
-			List<PlayerAuth> auths = FileDataSource.class.cast(source).getAuths(size);
-			for (PlayerAuth auth : auths) {
-				cacheAuth(auth);
-			}
-		}
+	public List<PlayerAuth> getAllAuths() {
+		return source.getAllAuths();
 	}
 
+	public void cacheAllAuths() {
+		for (PlayerAuth pa : getAllAuths()) {
+			cacheAuth(pa);
+		}
+	}
+	
 	private void cacheAuth(PlayerAuth auth) {
 		getAuthCache.put(auth.getNickname(), auth);
 		isAuthAvailableCache.put(auth.getNickname(), true);
