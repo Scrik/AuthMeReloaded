@@ -402,36 +402,6 @@ public class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public List<String> getAllAuthsByName(PlayerAuth auth) {
-        BufferedReader br = null;
-        List<String> countIp = new ArrayList<String>();
-        try {
-            br = new BufferedReader(new FileReader(source));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] args = line.split(":");
-                if (args.length > 3 && args[2].equals(auth.getIp())) {
-                    countIp.add(args[0]);
-                }
-            }
-            return countIp;
-        } catch (FileNotFoundException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } catch (IOException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ex) {
-                }
-            }
-        } 
-	}
-
-	@Override
 	public List<String> getAllAuthsByIp(String ip) {
         BufferedReader br = null;
         List<String> countIp = new ArrayList<String>();

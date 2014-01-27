@@ -372,34 +372,6 @@ public class SqliteDataSource implements DataSource {
     }
 
 	@Override
-	public List<String> getAllAuthsByName(PlayerAuth auth) {
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        List<String> countIp = new ArrayList<String>();
-        try {
-            pst = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "
-                    + columnIp + "=?;");
-            pst.setString(1, auth.getIp());
-            rs = pst.executeQuery();
-            while(rs.next()) {
-                countIp.add(rs.getString(columnName));    
-            } 
-             return countIp;
-        } catch (SQLException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } catch (TimeoutException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } catch (NullPointerException npe) {
-        	return new ArrayList<String>();
-        } finally {
-            close(rs);
-            close(pst);
-        } 
-	}
-
-	@Override
 	public List<String> getAllAuthsByIp(String ip) {
         PreparedStatement pst = null;
         ResultSet rs = null;

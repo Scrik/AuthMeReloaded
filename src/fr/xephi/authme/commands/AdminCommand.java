@@ -169,90 +169,44 @@ public class AdminCommand implements CommandExecutor {
         	}
         } else if (args[0].equalsIgnoreCase("accounts")) {
         	if (args.length != 2) {
-        		sender.sendMessage("Usage: /authme accounts <playername>");
-        		sender.sendMessage("Or: /authme accounts <ip>");
+        		sender.sendMessage("Usage: /authme accounts <ip>");
         		return true;
         	}
-        	if (!args[1].contains(".")) {
-            	final CommandSender fSender = sender;
-            	final String[] arguments = args;
-            	Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-    				@Override
-    				public void run() {
-    		        	PlayerAuth pAuth = null;
-    		        	String message = "[AuthMe] ";
-    		        	try {
-    		        		pAuth = database.getAuth(arguments[1].toLowerCase());
-    		        	} catch (NullPointerException npe){
-    		        		fSender.sendMessage("[AuthMe] This player is unknown");
-    		        		return;
-    		        	}
-    		        	if (pAuth != null) {
-    		        		List<String> accountList = database.getAllAuthsByName(pAuth);
-    		        		if (accountList == null || accountList.isEmpty()) {
-    		            		fSender.sendMessage("[AuthMe] This player is unknown");
-    		            		return;
-    		        		}
-    		        		if (accountList.size() == 1) {
-    		            		fSender.sendMessage("[AuthMe] " + arguments[1] + " is a single account player");
-    		            		return;
-    		        		}
-    		            	int i = 0;
-    		            	for (String account : accountList) {
-    		            		i++;
-    		            		message = message + account;
-    		            		if (i != accountList.size()) {
-    		            			message = message + ", ";
-    		            		} else {
-    		            			message = message + ".";
-    		            		}
-    		            	}
-    		            	fSender.sendMessage("[AuthMe] " + arguments[1] + " has " + String.valueOf(accountList.size()) + " accounts");
-    		            	fSender.sendMessage(message);
-    		        	} else {
-    		        		fSender.sendMessage("[AuthMe] This player is unknown");
-    		        		return;
-    		        	}
-    				}
-            	});
-            	return true;
-        	} else {
-            	final CommandSender fSender = sender;
-            	final String[] arguments = args;
-            	Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-    				@Override
-    				public void run() {
-    		        	String message = "[AuthMe] ";
-    		        	if (arguments[1] != null) {
-    		        		List<String> accountList = database.getAllAuthsByIp(arguments[1]);
-    		        		if (accountList.isEmpty() || accountList == null) {
-    		            		fSender.sendMessage("[AuthMe] Please put a valid IP");
-    		            		return;
-    		        		}
-    		        		if (accountList.size() == 1) {
-    		            		fSender.sendMessage("[AuthMe] " + arguments[1] + " is a single account player");
-    		            		return;
-    		        		}
-    		            	int i = 0;
-    		            	for (String account : accountList) {
-    		            		i++;
-    		            		message = message + account;
-    		            		if (i != accountList.size()) {
-    		            			message = message + ", ";
-    		            		} else {
-    		            			message = message + ".";
-    		            		}
-    		            	}
-    		            	fSender.sendMessage("[AuthMe] " + arguments[1] + " has " + String.valueOf(accountList.size()) + " accounts");
-    		            	fSender.sendMessage(message);
-    		        	} else {
-    		        		fSender.sendMessage("[AuthMe] Please put a valid IP");
-    		        		return;
-    		        	}
-    				}
-            	});
-            	return true;
-        	}
+        	final CommandSender fSender = sender;
+        	final String[] arguments = args;
+        	Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				@Override
+				public void run() {
+		        	String message = "[AuthMe] ";
+		        	if (arguments[1] != null) {
+		        		List<String> accountList = database.getAllAuthsByIp(arguments[1]);
+		        		if (accountList.isEmpty() || accountList == null) {
+		            		fSender.sendMessage("[AuthMe] Please put a valid IP");
+		            		return;
+		        		}
+		        		if (accountList.size() == 1) {
+		            		fSender.sendMessage("[AuthMe] " + arguments[1] + " is a single account player");
+		            		return;
+		        		}
+		            	int i = 0;
+		            	for (String account : accountList) {
+		            		i++;
+		            		message = message + account;
+		            		if (i != accountList.size()) {
+		            			message = message + ", ";
+		            		} else {
+		            			message = message + ".";
+		            		}
+		            	}
+		            	fSender.sendMessage("[AuthMe] " + arguments[1] + " has " + String.valueOf(accountList.size()) + " accounts");
+		            	fSender.sendMessage(message);
+		        	} else {
+		        		fSender.sendMessage("[AuthMe] Please put a valid IP");
+		        		return;
+		        	}
+				}
+        	});
+        	return true;
         } else if (args[0].equalsIgnoreCase("register") || args[0].equalsIgnoreCase("reg")) {
             if (args.length != 3) {
                 sender.sendMessage("Usage: /authme register playername password");

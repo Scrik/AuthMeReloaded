@@ -1,7 +1,6 @@
 package fr.xephi.authme;
 
 import java.util.Date;
-import java.util.List;
 
 import me.muizers.Notifications.Notification;
 
@@ -159,8 +158,6 @@ public class Management {
                 player.setNoDamageTicks(0);
                 player.sendMessage(m._("login"));
 
-                displayOtherAccounts(auth);
-
                 if (!Settings.noConsoleSpam)
                     ConsoleLogger.info(player.getName() + " logged in!");
 
@@ -230,8 +227,6 @@ public class Management {
 
             player.setNoDamageTicks(0);
             player.sendMessage(m._("login"));
-
-            displayOtherAccounts(auth);
 
             if (!Settings.noConsoleSpam)
                 ConsoleLogger.info(player.getName() + " logged in!");
@@ -341,37 +336,4 @@ public class Management {
         }
     }
 
-    private void displayOtherAccounts(PlayerAuth auth) {
-        if (!Settings.displayOtherAccounts) {
-            return;
-        }
-        if (auth == null) {
-            return;
-        }
-        if (this.database.getAllAuthsByName(auth).isEmpty() || this.database.getAllAuthsByName(auth) == null) {
-            return;
-        }
-        if (this.database.getAllAuthsByName(auth).size() == 1) {
-            return;
-        }
-        List<String> accountList = this.database.getAllAuthsByName(auth);
-        String message = "[AuthMe] ";
-        int i = 0;
-        for (String account : accountList) {
-            i++;
-            message = message + account;
-            if (i != accountList.size()) {
-                message = message + ", ";
-            } else {
-                message = message + ".";
-            }
-        }
-        for (Player player : AuthMe.getInstance().getServer().getOnlinePlayers()) {
-            if (plugin.authmePermissible(player, "authme.seeOtherAccounts")) {
-                player.sendMessage("[AuthMe] The player " + auth.getNickname() + " has "
-                        + String.valueOf(accountList.size()) + " accounts");
-                player.sendMessage(message);
-            }
-        }
-    }
 }

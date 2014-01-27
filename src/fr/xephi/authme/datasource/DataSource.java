@@ -12,7 +12,7 @@ public interface DataSource {
         MYSQL, FILE, SQLITE
     }
     
-    boolean isAuthAvailable(String user);
+    public boolean isAuthAvailable(String user);
 
     PlayerAuth getAuth(String user);
 
@@ -27,8 +27,6 @@ public interface DataSource {
     boolean removeAuth(String user);
 
     int getIps(String ip);
-
-    List<String> getAllAuthsByName(PlayerAuth auth);
 
     List<String> getAllAuthsByIp(String ip);
 

@@ -586,35 +586,6 @@ public class MySQLDataSource implements DataSource {
     }
 
 	@Override
-	public synchronized List<String> getAllAuthsByName(PlayerAuth auth) {
-        Connection con = null;
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        List<String> countIp = new ArrayList<String>();
-        try {
-            con = makeSureConnectionIsReady();
-            pst = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "
-                    + columnIp + "=?;");
-            pst.setString(1, auth.getIp());
-            rs = pst.executeQuery();
-            while(rs.next()) {
-                countIp.add(rs.getString(columnName));    
-            } 
-             return countIp;
-        } catch (SQLException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } catch (TimeoutException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return new ArrayList<String>();
-        } finally {
-            close(rs);
-            close(pst);
-            close(con);
-        }     
-	}
-
-	@Override
 	public synchronized List<String> getAllAuthsByIp(String ip) {
         Connection con = null;
         PreparedStatement pst = null;
