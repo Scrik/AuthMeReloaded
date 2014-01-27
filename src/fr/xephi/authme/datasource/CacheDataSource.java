@@ -71,15 +71,11 @@ public class CacheDataSource implements DataSource {
         return false;
     }
 
-    @Override
-    public synchronized void close() {
-        source.close();
-    }
-
 	@Override
 	public synchronized boolean updateEmail(PlayerAuth auth) {
 		if(source.updateEmail(auth)) {
-			authCache.get(auth.getNickname()).setEmail(auth.getEmail());
+			clearAuth(auth.getNickname());
+			cacheAuth(auth);
 			return true;
 		}
 		return false;
@@ -179,5 +175,10 @@ public class CacheDataSource implements DataSource {
 			emailAuths.remove(nick);
 		}
 	}
+	
+    @Override
+    public synchronized void close() {
+        source.close();
+    }
 
 }
