@@ -1,5 +1,6 @@
 package fr.xephi.authme.datasource;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,8 @@ public class CacheDataSource implements DataSource {
     private DataSource source;
     public AuthMe plugin;
     private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
+    private HashMap<String, List<String>> emailCache = new HashMap<String, List<String>>();
+    private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
     
     public CacheDataSource(AuthMe plugin, DataSource source) {
     	this.plugin = plugin;
@@ -116,12 +119,20 @@ public class CacheDataSource implements DataSource {
 
 	@Override
 	public synchronized List<String> getAllAuthsByIp(String ip) {
-		return source.getAllAuthsByIp(ip);
+		if (ipCache.containsKey(ip)) {
+			return ipCache.get(ip);
+		} else {
+			return new ArrayList<String>();
+		}
 	}
 
 	@Override
 	public synchronized List<String> getAllAuthsByEmail(String email) {
-		return source.getAllAuthsByEmail(email);
+		if (emailCache.containsKey(email)) {
+			return emailCache.get(email);
+		} else {
+			return new ArrayList<String>();
+		}
 	}
 
 	@Override
@@ -145,7 +156,18 @@ public class CacheDataSource implements DataSource {
 	}
 	
 	private void cacheAuth(PlayerAuth auth) {
-		authCache.put(auth.getNickname(), auth);
+		String nick = auth.getNickname();
+		authCache.put(nick, auth);
+		String ip = auth.getIp();
+		if (!ipCache.containsKey(ip)) {
+			ipCache.put(ip, new ArrayList<String>());
+		}
+		ipCache.get(ip).add(nick);
+		String email = auth.getEmail();
+		if (!emailCache.containsKey(email)) {
+			emailCache.put(email, new ArrayList<String>());
+		}
+		emailCache.get(email).add(nick);
 	}
 
 }

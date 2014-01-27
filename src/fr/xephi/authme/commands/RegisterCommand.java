@@ -80,11 +80,8 @@ public class RegisterCommand implements CommandExecutor {
 			return true;
 		}
 
-		// TODO: Rewrite this, it is too slow
-		/////////////this is too slow!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if (Settings.getmaxRegPerIp > 0) {
-			if (!plugin.authmePermissible(sender, "authme.allow2accounts")
-					&& database.getAllAuthsByIp(ipA).size() >= Settings.getmaxRegPerIp) {
+			if (!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ipA).size() >= Settings.getmaxRegPerIp) {
 				player.sendMessage(m._("max_reg"));
 				return true;
 			}
