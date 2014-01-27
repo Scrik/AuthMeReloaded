@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.xephi.authme.AuthMe;
+import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 
 
@@ -150,9 +151,11 @@ public class CacheDataSource implements DataSource {
 	}
 
 	public void cacheAllAuths() {
-		for (PlayerAuth pa : getAllAuths()) {
-			cacheAuth(pa);
+		List<PlayerAuth> auths = getAllAuths();
+		for (PlayerAuth auth : auths) {
+			cacheAuth(auth);
 		}
+		ConsoleLogger.info("Cached "+ auths.size()+ " player auths");
 	}
 	
 	private void cacheAuth(PlayerAuth auth) {

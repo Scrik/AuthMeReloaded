@@ -15,7 +15,7 @@ import fr.xephi.authme.settings.Settings;
 
 public class ConsoleLogger {
 
-    private static final Logger log = Logger.getLogger("Minecraft");
+    private static final Logger log = Bukkit.getLogger();
 
     public static void info(String message) {
     	if (AuthMe.getInstance().isEnabled()) {

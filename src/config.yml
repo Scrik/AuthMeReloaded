@@ -3,8 +3,6 @@ DataSource:
     backend: file
     # Do we need to cache all things ?
     caching: true
-    # Preloads cache with this number of auths
-    fileCachePreloadSize: 3000
     # Column for storing or checking players nickname
     mySQLColumnName: username
     # Table of the database
