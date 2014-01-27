@@ -268,29 +268,6 @@ public class SqliteDataSource implements DataSource {
         return true;
     }
 
-    @Override
-    public int getIps(String ip) {
-        PreparedStatement pst = null;
-        ResultSet rs = null;
-        int countIp=0;
-        try {
-            pst = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "
-                    + columnIp + "=?;");
-            pst.setString(1, ip);
-            rs = pst.executeQuery();
-            while(rs.next()) {
-                countIp++;    
-            } 
-             return countIp;
-        } catch (SQLException ex) {
-            ConsoleLogger.showError(ex.getMessage());
-            return 0;
-        }  finally {
-            close(rs);
-            close(pst);
-        }         
-    }
-
 	@Override
 	public boolean updateEmail(PlayerAuth auth) {
         PreparedStatement pst = null;

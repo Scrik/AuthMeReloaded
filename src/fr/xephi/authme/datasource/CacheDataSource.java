@@ -14,8 +14,8 @@ public class CacheDataSource implements DataSource {
     private DataSource source;
     public AuthMe plugin;
     private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
-    private HashMap<String, List<String>> emailCache = new HashMap<String, List<String>>();
     private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
+    private HashMap<String, List<String>> emailCache = new HashMap<String, List<String>>();
     
     public CacheDataSource(AuthMe plugin, DataSource source) {
     	this.plugin = plugin;
@@ -42,6 +42,15 @@ public class CacheDataSource implements DataSource {
         }
         return false;
     }
+    
+    @Override
+    public synchronized boolean removeAuth(String user) {
+        if (source.removeAuth(user)) {
+        	clearAuth(user);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public synchronized boolean updatePassword(PlayerAuth auth) {
@@ -61,43 +70,10 @@ public class CacheDataSource implements DataSource {
         }
         return false;
     }
-    
-    @Override
-    public int getIps(String ip) {
-        return source.getIps(ip);
-    }
-
-    @Override
-    public List<String> autoPurgeDatabase(long until) {
-        List<String> cleared = source.autoPurgeDatabase(until);
-        if (cleared.size() > 0) {
-            for (PlayerAuth auth : authCache.values()) {
-                if(auth.getLastLogin() < until) {
-                    authCache.remove(auth.getNickname());
-                }
-            }
-        }
-        return cleared;
-    }
-
-    @Override
-    public synchronized boolean removeAuth(String user) {
-        if (source.removeAuth(user)) {
-            authCache.remove(user);
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public synchronized void close() {
         source.close();
-    }
-
-    @Override
-    public void reload() {
-    	authCache.clear();
-    	cacheAllAuths();
     }
 
 	@Override
@@ -135,13 +111,26 @@ public class CacheDataSource implements DataSource {
 			return new ArrayList<String>();
 		}
 	}
+	
+    @Override
+    public List<String> autoPurgeDatabase(long until) {
+        List<String> cleared = source.autoPurgeDatabase(until);
+        if (cleared.size() > 0) {
+            for (PlayerAuth auth : authCache.values()) {
+                if(auth.getLastLogin() < until) {
+                	clearAuth(auth.getNickname());
+                }
+            }
+        }
+        return cleared;
+    }
 
 	@Override
 	public synchronized void purgeBanned(List<String> banned) {
 		source.purgeBanned(banned);
 		for (PlayerAuth auth : authCache.values()) {
 			if (banned.contains(auth.getNickname())) {
-				authCache.remove(auth.getNickname());
+				clearAuth(auth.getNickname());
 			}
 		}
 	}
@@ -149,6 +138,14 @@ public class CacheDataSource implements DataSource {
 	public List<PlayerAuth> getAllAuths() {
 		return source.getAllAuths();
 	}
+	
+    @Override
+    public void reload() {
+    	authCache.clear();
+    	ipCache.clear();
+    	emailCache.clear();
+    	cacheAllAuths();
+    }
 
 	public void cacheAllAuths() {
 		List<PlayerAuth> auths = getAllAuths();
@@ -171,6 +168,16 @@ public class CacheDataSource implements DataSource {
 			emailCache.put(email, new ArrayList<String>());
 		}
 		emailCache.get(email).add(nick);
+	}
+	
+	private void clearAuth(String nick) {
+		authCache.remove(nick);
+		for (List<String> ipauths : ipCache.values()) {
+			ipauths.remove(nick);
+		}
+		for (List<String> emailAuths : emailCache.values()) {
+			emailAuths.remove(nick);
+		}
 	}
 
 }

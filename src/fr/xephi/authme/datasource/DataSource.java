@@ -26,8 +26,6 @@ public interface DataSource {
 
     boolean removeAuth(String user);
 
-    int getIps(String ip);
-
     List<String> getAllAuthsByIp(String ip);
 
     List<String> getAllAuthsByEmail(String email);
