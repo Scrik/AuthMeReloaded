@@ -50,45 +50,49 @@ import javax.mail.Message;
  */
 public final class SizeTerm extends IntegerComparisonTerm {
 
-    private static final long serialVersionUID = -2556219451005103709L;
+	private static final long serialVersionUID = -2556219451005103709L;
 
-    /**
-     * Constructor.
-     *
-     * @param comparison	the Comparison type
-     * @param size		the size
-     */
-    public SizeTerm(int comparison, int size) {
-	super(comparison, size);
-    }
-
-    /**
-     * The match method.
-     *
-     * @param msg	the size comparator is applied to this Message's size
-     * @return		true if the size is equal, otherwise false 
-     */
-    public boolean match(Message msg) {
-	int size;
-
-	try {
-	    size = msg.getSize();
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor.
+	 *
+	 * @param comparison	the Comparison type
+	 * @param size		the size
+	 */
+	public SizeTerm(int comparison, int size) {
+		super(comparison, size);
 	}
 
-	if (size == -1)
-	    return false;
+	/**
+	 * The match method.
+	 *
+	 * @param msg	the size comparator is applied to this Message's size
+	 * @return		true if the size is equal, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		int size;
 
-	return super.match(size);
-    }
+		try {
+			size = msg.getSize();
+		} catch (Exception e) {
+			return false;
+		}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof SizeTerm))
-	    return false;
-	return super.equals(obj);
-    }
+		if (size == -1) {
+			return false;
+		}
+
+		return super.match(size);
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof SizeTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

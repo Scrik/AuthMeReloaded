@@ -50,41 +50,44 @@ import javax.mail.Message;
  */
 public final class MessageNumberTerm extends IntegerComparisonTerm {
 
-    private static final long serialVersionUID = -5379625829658623812L;
+	private static final long serialVersionUID = -5379625829658623812L;
 
-    /**
-     * Constructor.
-     *
-     * @param number  the Message number
-     */
-    public MessageNumberTerm(int number) {
-	super(EQ, number);
-    }
-
-    /**
-     * The match method.
-     *
-     * @param msg	the Message number is matched with this Message
-     * @return		true if the match succeeds, otherwise false
-     */
-    public boolean match(Message msg) {
-	int msgno;
-
-	try {
-	    msgno = msg.getMessageNumber();
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor.
+	 *
+	 * @param number  the Message number
+	 */
+	public MessageNumberTerm(int number) {
+		super(EQ, number);
 	}
-	
-	return super.match(msgno);
-    }
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof MessageNumberTerm))
-	    return false;
-	return super.equals(obj);
-    }
+	/**
+	 * The match method.
+	 *
+	 * @param msg	the Message number is matched with this Message
+	 * @return		true if the match succeeds, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		int msgno;
+
+		try {
+			msgno = msg.getMessageNumber();
+		} catch (Exception e) {
+			return false;
+		}
+
+		return super.match(msgno);
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MessageNumberTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

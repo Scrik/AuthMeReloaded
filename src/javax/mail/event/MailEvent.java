@@ -49,15 +49,15 @@ import java.util.EventObject;
  */
 
 public abstract class MailEvent extends EventObject {
-    private static final long serialVersionUID = 1846275636325456631L;
+	private static final long serialVersionUID = 1846275636325456631L;
 
-    public MailEvent(Object source) {
-        super(source);
-    }
+	public MailEvent(Object source) {
+		super(source);
+	}
 
-    /**
-     * This method invokes the appropriate method on a listener for
-     * this event. Subclasses provide the implementation.
-     */
-    public abstract void dispatch(Object listener);
+	/**
+	 * This method invokes the appropriate method on a listener for
+	 * this event. Subclasses provide the implementation.
+	 */
+	public abstract void dispatch(Object listener);
 }

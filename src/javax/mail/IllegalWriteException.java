@@ -43,42 +43,42 @@ package javax.mail;
 
 /**
  * The exception thrown when a write is attempted on a read-only attribute
- * of any Messaging object. 
+ * of any Messaging object.
  *
  * @author John Mani
  */
 
 public class IllegalWriteException extends MessagingException {
 
-    private static final long serialVersionUID = 3974370223328268013L;
+	private static final long serialVersionUID = 3974370223328268013L;
 
-    /**
-     * Constructs an IllegalWriteException with no detail message.
-     */
-    public IllegalWriteException() {
-	super();
-    }
+	/**
+	 * Constructs an IllegalWriteException with no detail message.
+	 */
+	public IllegalWriteException() {
+		super();
+	}
 
-    /**
-     * Constructs an IllegalWriteException with the specified
-     * detail message.
-     *
-     * @param s		The detailed error message
-     */
-    public IllegalWriteException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs an IllegalWriteException with the specified
+	 * detail message.
+	 *
+	 * @param s		The detailed error message
+	 */
+	public IllegalWriteException(String s) {
+		super(s);
+	}
 
-    /**
-     * Constructs an IllegalWriteException with the specified
-     * detail message and embedded exception.  The exception is chained
-     * to this exception.
-     *
-     * @param s		The detailed error message
-     * @param e		The embedded exception
-     * @since		JavaMail 1.5
-     */
-    public IllegalWriteException(String s, Exception e) {
-	super(s, e);
-    }
+	/**
+	 * Constructs an IllegalWriteException with the specified
+	 * detail message and embedded exception.  The exception is chained
+	 * to this exception.
+	 *
+	 * @param s		The detailed error message
+	 * @param e		The embedded exception
+	 * @since		JavaMail 1.5
+	 */
+	public IllegalWriteException(String s, Exception e) {
+		super(s, e);
+	}
 }

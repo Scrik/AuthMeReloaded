@@ -40,7 +40,6 @@
 
 package javax.mail.internet;
 
-import java.util.*;
 
 /**
  * This class tokenizes RFC822 and MIME headers into the basic
@@ -48,7 +47,7 @@ import java.util.*;
  *
  * This class handles folded headers (ie headers with embedded
  * CRLF SPACE sequences). The folds are removed in the returned
- * tokens. 
+ * tokens.
  *
  * @author  John Mani
  * @author  Bill Shannon
@@ -56,434 +55,449 @@ import java.util.*;
 
 public class HeaderTokenizer {
 
-    /**
-     * The Token class represents tokens returned by the 
-     * HeaderTokenizer.
-     */
-    public static class Token {
-
-	private int type;
-	private String value;
-
 	/**
-	 * Token type indicating an ATOM.
+	 * The Token class represents tokens returned by the
+	 * HeaderTokenizer.
 	 */
-	public static final int ATOM 		= -1;
+	public static class Token {
 
-	/**
-	 * Token type indicating a quoted string. The value 
-	 * field contains the string without the quotes.
- 	 */
-	public static final int QUOTEDSTRING 	= -2;
+		private int type;
+		private String value;
 
-	/**
-	 * Token type indicating a comment. The value field 
-	 * contains the comment string without the comment 
-	 * start and end symbols.
-	 */
-	public static final int COMMENT		= -3;
+		/**
+		 * Token type indicating an ATOM.
+		 */
+		public static final int ATOM 		= -1;
 
-	/**
-	 * Token type indicating end of input.
-	 */
-	public static final int  EOF 		= -4;
+		/**
+		 * Token type indicating a quoted string. The value
+		 * field contains the string without the quotes.
+		 */
+		public static final int QUOTEDSTRING 	= -2;
 
-	/**
-	 * Constructor.
-	 * @param	type	Token type
-	 * @param	value	Token value
-	 */
-	public Token(int type, String value) {
-	     this.type = type;
-	     this.value = value;
+		/**
+		 * Token type indicating a comment. The value field
+		 * contains the comment string without the comment
+		 * start and end symbols.
+		 */
+		public static final int COMMENT		= -3;
+
+		/**
+		 * Token type indicating end of input.
+		 */
+		public static final int  EOF 		= -4;
+
+		/**
+		 * Constructor.
+		 * @param	type	Token type
+		 * @param	value	Token value
+		 */
+		public Token(int type, String value) {
+			this.type = type;
+			this.value = value;
+		}
+
+		/**
+		 * Return the type of the token. If the token represents a
+		 * delimiter or a control character, the type is that character
+		 * itself, converted to an integer. Otherwise, it's value is
+		 * one of the following:
+		 * <ul>
+		 * <li><code>ATOM</code> A sequence of ASCII characters
+		 *	delimited by either SPACE, CTL, "(", <"> or the
+		 *	specified SPECIALS
+		 * <li><code>QUOTEDSTRING</code> A sequence of ASCII characters
+		 *	within quotes
+		 * <li><code>COMMENT</code> A sequence of ASCII characters
+		 *	within "(" and ")".
+		 * <li><code>EOF</code> End of header
+		 * </ul>
+		 */
+		public int getType() {
+			return type;
+		}
+
+		/**
+		 * Returns the value of the token just read. When the current
+		 * token is a quoted string, this field contains the body of the
+		 * string, without the quotes. When the current token is a comment,
+		 * this field contains the body of the comment.
+		 *
+		 * @return	token value
+		 */
+		public String getValue() {
+			return value;
+		}
 	}
 
-	/**
-	 * Return the type of the token. If the token represents a
-	 * delimiter or a control character, the type is that character
-	 * itself, converted to an integer. Otherwise, it's value is 
-	 * one of the following:
-	 * <ul>
-	 * <li><code>ATOM</code> A sequence of ASCII characters 
-	 *	delimited by either SPACE, CTL, "(", <"> or the 
-	 *	specified SPECIALS
-	 * <li><code>QUOTEDSTRING</code> A sequence of ASCII characters
-	 *	within quotes
-	 * <li><code>COMMENT</code> A sequence of ASCII characters 
-	 *	within "(" and ")".
-	 * <li><code>EOF</code> End of header
-	 * </ul>
-	 */
-	public int getType() {
-	    return type;
-	}
+	private String string; // the string to be tokenized
+	private boolean skipComments; // should comments be skipped ?
+	private String delimiters; // delimiter string
+	private int currentPos; // current parse position
+	private int maxPos; // string length
+	private int nextPos; // track start of next Token for next()
+	private int peekPos; // track start of next Token for peek()
 
 	/**
-	 * Returns the value of the token just read. When the current
-	 * token is a quoted string, this field contains the body of the
-	 * string, without the quotes. When the current token is a comment,
-	 * this field contains the body of the comment.
+	 * RFC822 specials
+	 */
+	public final static String RFC822 = "()<>@,;:\\\"\t .[]";
+
+	/**
+	 * MIME specials
+	 */
+	public final static String MIME = "()<>@,;:\\\"\t []/?=";
+
+	// The EOF Token
+	private final static Token EOFToken = new Token(Token.EOF, null);
+
+	/**
+	 * Constructor that takes a rfc822 style header.
 	 *
-	 * @return	token value
+	 * @param	header	The rfc822 header to be tokenized
+	 * @param	delimiters      Set of delimiter characters
+	 *				to be used to delimit ATOMS. These
+	 *				are usually <code>RFC822</code> or
+	 *				<code>MIME</code>
+	 * @param   skipComments  If true, comments are skipped and
+	 *				not returned as tokens
 	 */
-	public String getValue() {
-	    return value;
+	public HeaderTokenizer(String header, String delimiters,
+			boolean skipComments) {
+		string = (header == null) ? "" : header; // paranoia ?!
+		this.skipComments = skipComments;
+		this.delimiters = delimiters;
+		currentPos = nextPos = peekPos = 0;
+		maxPos = string.length();
 	}
-    }
 
-    private String string; // the string to be tokenized
-    private boolean skipComments; // should comments be skipped ?
-    private String delimiters; // delimiter string
-    private int currentPos; // current parse position
-    private int maxPos; // string length
-    private int nextPos; // track start of next Token for next()
-    private int peekPos; // track start of next Token for peek()
+	/**
+	 * Constructor. Comments are ignored and not returned as tokens
+	 *
+	 * @param	header  The header that is tokenized
+	 * @param	delimiters  The delimiters to be used
+	 */
+	public HeaderTokenizer(String header, String delimiters) {
+		this(header, delimiters, true);
+	}
 
-    /**
-     * RFC822 specials
-     */
-    public final static String RFC822 = "()<>@,;:\\\"\t .[]";
+	/**
+	 * Constructor. The RFC822 defined delimiters - RFC822 - are
+	 * used to delimit ATOMS. Also comments are skipped and not
+	 * returned as tokens
+	 */
+	public HeaderTokenizer(String header)  {
+		this(header, RFC822);
+	}
 
-    /**
-     * MIME specials
-     */
-    public final static String MIME = "()<>@,;:\\\"\t []/?=";
+	/**
+	 * Parses the next token from this String. <p>
+	 *
+	 * Clients sit in a loop calling next() to parse successive
+	 * tokens until an EOF Token is returned.
+	 *
+	 * @return		the next Token
+	 * @exception	ParseException if the parse fails
+	 */
+	public Token next() throws ParseException {
+		return next('\0', false);
+	}
 
-    // The EOF Token
-    private final static Token EOFToken = new Token(Token.EOF, null);
+	/**
+	 * Parses the next token from this String.
+	 * If endOfAtom is not NUL, the token extends until the
+	 * endOfAtom character is seen, or to the end of the header.
+	 * This method is useful when parsing headers that don't
+	 * obey the MIME specification, e.g., by failing to quote
+	 * parameter values that contain spaces.
+	 *
+	 * @param	endOfAtom	if not NUL, character marking end of token
+	 * @return		the next Token
+	 * @exception	ParseException if the parse fails
+	 * @since		JavaMail 1.5
+	 */
+	public Token next(char endOfAtom) throws ParseException {
+		return next(endOfAtom, false);
+	}
 
-    /**
-     * Constructor that takes a rfc822 style header.
-     *
-     * @param	header	The rfc822 header to be tokenized
-     * @param	delimiters      Set of delimiter characters 
-     *				to be used to delimit ATOMS. These
-     *				are usually <code>RFC822</code> or 
-     *				<code>MIME</code>
-     * @param   skipComments  If true, comments are skipped and
-     *				not returned as tokens
-     */
-    public HeaderTokenizer(String header, String delimiters,
-    			   boolean skipComments) {
-	string = (header == null) ? "" : header; // paranoia ?!
-	this.skipComments = skipComments;
-	this.delimiters = delimiters;
-	currentPos = nextPos = peekPos = 0;
-	maxPos = string.length();
-    }
+	/**
+	 * Parses the next token from this String.
+	 * endOfAtom is handled as above.  If keepEscapes is true,
+	 * any backslash escapes are preserved in the returned string.
+	 * This method is useful when parsing headers that don't
+	 * obey the MIME specification, e.g., by failing to escape
+	 * backslashes in the filename parameter.
+	 *
+	 * @param	endOfAtom	if not NUL, character marking end of token
+	 * @param	keepEscapes	keep all backslashes in returned string?
+	 * @return		the next Token
+	 * @exception	ParseException if the parse fails
+	 * @since		JavaMail 1.5
+	 */
+	public Token next(char endOfAtom, boolean keepEscapes)
+			throws ParseException {
+		Token tk;
 
-    /**
-     * Constructor. Comments are ignored and not returned as tokens
-     *
-     * @param	header  The header that is tokenized
-     * @param	delimiters  The delimiters to be used
-     */
-    public HeaderTokenizer(String header, String delimiters) {
-	this(header, delimiters, true);
-    }
+		currentPos = nextPos; // setup currentPos
+		tk = getNext(endOfAtom, keepEscapes);
+		nextPos = peekPos = currentPos; // update currentPos and peekPos
+		return tk;
+	}
 
-    /**
-     * Constructor. The RFC822 defined delimiters - RFC822 - are
-     * used to delimit ATOMS. Also comments are skipped and not
-     * returned as tokens
-     */
-    public HeaderTokenizer(String header)  {
-	this(header, RFC822);
-    }
+	/**
+	 * Peek at the next token, without actually removing the token
+	 * from the parse stream. Invoking this method multiple times
+	 * will return successive tokens, until <code>next()</code> is
+	 * called. <p>
+	 *
+	 * @return		the next Token
+	 * @exception	ParseException if the parse fails
+	 */
+	public Token peek() throws ParseException {
+		Token tk;
 
-    /**
-     * Parses the next token from this String. <p>
-     *
-     * Clients sit in a loop calling next() to parse successive
-     * tokens until an EOF Token is returned.
-     *
-     * @return		the next Token
-     * @exception	ParseException if the parse fails
-     */
-    public Token next() throws ParseException { 
-	return next('\0', false);
-    }
+		currentPos = peekPos; // setup currentPos
+		tk = getNext('\0', false);
+		peekPos = currentPos; // update peekPos
+		return tk;
+	}
 
-    /**
-     * Parses the next token from this String.
-     * If endOfAtom is not NUL, the token extends until the
-     * endOfAtom character is seen, or to the end of the header.
-     * This method is useful when parsing headers that don't
-     * obey the MIME specification, e.g., by failing to quote
-     * parameter values that contain spaces.
-     *
-     * @param	endOfAtom	if not NUL, character marking end of token
-     * @return		the next Token
-     * @exception	ParseException if the parse fails
-     * @since		JavaMail 1.5
-     */
-    public Token next(char endOfAtom) throws ParseException { 
-	return next(endOfAtom, false);
-    }
+	/**
+	 * Return the rest of the Header.
+	 *
+	 * @return String	rest of header. null is returned if we are
+	 *			already at end of header
+	 */
+	public String getRemainder() {
+		return string.substring(nextPos);
+	}
 
-    /**
-     * Parses the next token from this String.
-     * endOfAtom is handled as above.  If keepEscapes is true,
-     * any backslash escapes are preserved in the returned string.
-     * This method is useful when parsing headers that don't
-     * obey the MIME specification, e.g., by failing to escape
-     * backslashes in the filename parameter.
-     *
-     * @param	endOfAtom	if not NUL, character marking end of token
-     * @param	keepEscapes	keep all backslashes in returned string?
-     * @return		the next Token
-     * @exception	ParseException if the parse fails
-     * @since		JavaMail 1.5
-     */
-    public Token next(char endOfAtom, boolean keepEscapes)
-				throws ParseException { 
-	Token tk;
+	/*
+	 * Return the next token starting from 'currentPos'. After the
+	 * parse, 'currentPos' is updated to point to the start of the
+	 * next token.
+	 */
+	private Token getNext(char endOfAtom, boolean keepEscapes)
+			throws ParseException {
+		// If we're already at end of string, return EOF
+		if (currentPos >= maxPos) {
+			return EOFToken;
+		}
 
-	currentPos = nextPos; // setup currentPos
-	tk = getNext(endOfAtom, keepEscapes);
-	nextPos = peekPos = currentPos; // update currentPos and peekPos
-	return tk;
-    }
+		// Skip white-space, position currentPos beyond the space
+		if (skipWhiteSpace() == Token.EOF) {
+			return EOFToken;
+		}
 
-    /**
-     * Peek at the next token, without actually removing the token
-     * from the parse stream. Invoking this method multiple times
-     * will return successive tokens, until <code>next()</code> is
-     * called. <p>
-     *
-     * @return		the next Token
-     * @exception	ParseException if the parse fails
-     */
-    public Token peek() throws ParseException {
-	Token tk;
+		char c;
+		int start;
+		boolean filter = false;
 
-	currentPos = peekPos; // setup currentPos
-	tk = getNext('\0', false);
-	peekPos = currentPos; // update peekPos
-	return tk;
-    }
-
-    /**
-     * Return the rest of the Header.
-     *
-     * @return String	rest of header. null is returned if we are
-     *			already at end of header
-     */
-    public String getRemainder() {
-	return string.substring(nextPos);
-    }
-
-    /*
-     * Return the next token starting from 'currentPos'. After the
-     * parse, 'currentPos' is updated to point to the start of the 
-     * next token.
-     */
-    private Token getNext(char endOfAtom, boolean keepEscapes)
-				throws ParseException {
-	// If we're already at end of string, return EOF
-	if (currentPos >= maxPos)
-	    return EOFToken;
-
-	// Skip white-space, position currentPos beyond the space
-	if (skipWhiteSpace() == Token.EOF)
-	    return EOFToken;
-
-	char c; 
-	int start; 
-	boolean filter = false;
-	
-	c = string.charAt(currentPos);
-
-	// Check or Skip comments and position currentPos
-	// beyond the comment
-	while (c == '(') {
-	    // Parsing comment ..
-	    int nesting;
-	    for (start = ++currentPos, nesting = 1; 
-		 nesting > 0 && currentPos < maxPos;
-		 currentPos++) {
 		c = string.charAt(currentPos);
-		if (c == '\\') {  // Escape sequence
-		    currentPos++; // skip the escaped character
-		    filter = true;
-		} else if (c == '\r')
-		    filter = true;
-		else if (c == '(')
-		    nesting++;
-		else if (c == ')')
-		    nesting--;
-	    }
-	    if (nesting != 0)
-		throw new ParseException("Unbalanced comments");
 
-	    if (!skipComments) {
-		// Return the comment, if we are asked to.
-		// Note that the comment start & end markers are ignored.
-		String s;
-		if (filter) // need to go thru the token again.
-		    s = filterToken(string, start, currentPos-1, keepEscapes);
-		else
-		    s = string.substring(start,currentPos-1);
+		// Check or Skip comments and position currentPos
+		// beyond the comment
+		while (c == '(') {
+			// Parsing comment ..
+			int nesting;
+			for (start = ++currentPos, nesting = 1;
+					nesting > 0 && currentPos < maxPos;
+					currentPos++) {
+				c = string.charAt(currentPos);
+				if (c == '\\') {  // Escape sequence
+					currentPos++; // skip the escaped character
+					filter = true;
+				} else if (c == '\r') {
+					filter = true;
+				} else if (c == '(') {
+					nesting++;
+				} else if (c == ')') {
+					nesting--;
+				}
+			}
+			if (nesting != 0) {
+				throw new ParseException("Unbalanced comments");
+			}
 
-		return new Token(Token.COMMENT, s);
-	    }
+			if (!skipComments) {
+				// Return the comment, if we are asked to.
+				// Note that the comment start & end markers are ignored.
+				String s;
+				if (filter) {
+					s = filterToken(string, start, currentPos-1, keepEscapes);
+				} else {
+					s = string.substring(start,currentPos-1);
+				}
 
-	    // Skip any whitespace after the comment.
-	    if (skipWhiteSpace() == Token.EOF)
-		return EOFToken;
-	    c = string.charAt(currentPos);
-	}
+				return new Token(Token.COMMENT, s);
+			}
 
-	// Check for quoted-string and position currentPos 
-	//  beyond the terminating quote
-	if (c == '"') {
-	    currentPos++;	// skip initial quote
-	    return collectString('"', keepEscapes);
-	}
-	
-	// Check for SPECIAL or CTL
-	if (c < 040 || c >= 0177 || delimiters.indexOf(c) >= 0) {
-	    if (endOfAtom > 0 && c != endOfAtom) {
-		// not expecting a special character here,
-		// pretend it's a quoted string
-		return collectString(endOfAtom, keepEscapes);
-	    }
-	    currentPos++; // re-position currentPos
-	    char ch[] = new char[1];
-	    ch[0] = c;
-	    return new Token((int)c, new String(ch));
-	}
-
-	// Check for ATOM
-	for (start = currentPos; currentPos < maxPos; currentPos++) {
-	    c = string.charAt(currentPos);
-	    // ATOM is delimited by either SPACE, CTL, "(", <"> 
-	    // or the specified SPECIALS
-	    if (c < 040 || c >= 0177 || c == '(' || c == ' ' ||
-			c == '"' || delimiters.indexOf(c) >= 0) {
-		if (endOfAtom > 0 && c != endOfAtom) {
-		    // not the expected atom after all;
-		    // back up and pretend it's a quoted string
-		    currentPos = start;
-		    return collectString(endOfAtom, keepEscapes);
-		}
-		break;
-	    }
-	}
-	return new Token(Token.ATOM, string.substring(start, currentPos));
-    }
-
-    private Token collectString(char eos, boolean keepEscapes)
-				throws ParseException {
-	int start;
-	boolean filter = false;
-	for (start = currentPos; currentPos < maxPos; currentPos++) {
-	    char c = string.charAt(currentPos);
-	    if (c == '\\') { // Escape sequence
-		currentPos++;
-		filter = true;
-	    } else if (c == '\r')
-		filter = true;
-	    else if (c == eos) {
-		currentPos++;
-		String s;
-
-		if (filter)
-		    s = filterToken(string, start, currentPos-1, keepEscapes);
-		else
-		    s = string.substring(start, currentPos-1);
-
-		if (c != '"') {		// not a real quoted string
-		    s = trimWhiteSpace(s);
-		    currentPos--;	// back up before the eos char
+			// Skip any whitespace after the comment.
+			if (skipWhiteSpace() == Token.EOF) {
+				return EOFToken;
+			}
+			c = string.charAt(currentPos);
 		}
 
+		// Check for quoted-string and position currentPos
+		//  beyond the terminating quote
+		if (c == '"') {
+			currentPos++;	// skip initial quote
+			return collectString('"', keepEscapes);
+		}
+
+		// Check for SPECIAL or CTL
+		if (c < 040 || c >= 0177 || delimiters.indexOf(c) >= 0) {
+			if (endOfAtom > 0 && c != endOfAtom) {
+				// not expecting a special character here,
+				// pretend it's a quoted string
+				return collectString(endOfAtom, keepEscapes);
+			}
+			currentPos++; // re-position currentPos
+			char ch[] = new char[1];
+			ch[0] = c;
+			return new Token(c, new String(ch));
+		}
+
+		// Check for ATOM
+		for (start = currentPos; currentPos < maxPos; currentPos++) {
+			c = string.charAt(currentPos);
+			// ATOM is delimited by either SPACE, CTL, "(", <">
+			// or the specified SPECIALS
+			if (c < 040 || c >= 0177 || c == '(' || c == ' ' ||
+					c == '"' || delimiters.indexOf(c) >= 0) {
+				if (endOfAtom > 0 && c != endOfAtom) {
+					// not the expected atom after all;
+					// back up and pretend it's a quoted string
+					currentPos = start;
+					return collectString(endOfAtom, keepEscapes);
+				}
+				break;
+			}
+		}
+		return new Token(Token.ATOM, string.substring(start, currentPos));
+	}
+
+	private Token collectString(char eos, boolean keepEscapes)
+			throws ParseException {
+		int start;
+		boolean filter = false;
+		for (start = currentPos; currentPos < maxPos; currentPos++) {
+			char c = string.charAt(currentPos);
+			if (c == '\\') { // Escape sequence
+				currentPos++;
+				filter = true;
+			} else if (c == '\r') {
+				filter = true;
+			} else if (c == eos) {
+				currentPos++;
+				String s;
+
+				if (filter) {
+					s = filterToken(string, start, currentPos-1, keepEscapes);
+				} else {
+					s = string.substring(start, currentPos-1);
+				}
+
+				if (c != '"') {		// not a real quoted string
+					s = trimWhiteSpace(s);
+					currentPos--;	// back up before the eos char
+				}
+
+				return new Token(Token.QUOTEDSTRING, s);
+			}
+		}
+
+		// ran off the end of the string
+
+		// if we're looking for a matching quote, that's an error
+		if (eos == '"') {
+			throw new ParseException("Unbalanced quoted string");
+		}
+
+		// otherwise, just return whatever's left
+		String s;
+		if (filter) {
+			s = filterToken(string, start, currentPos, keepEscapes);
+		} else {
+			s = string.substring(start, currentPos);
+		}
+		s = trimWhiteSpace(s);
 		return new Token(Token.QUOTEDSTRING, s);
-	    }
 	}
 
-	// ran off the end of the string
-
-	// if we're looking for a matching quote, that's an error
-	if (eos == '"')
-	    throw new ParseException("Unbalanced quoted string");
-
-	// otherwise, just return whatever's left
-	String s;
-	if (filter)
-	    s = filterToken(string, start, currentPos, keepEscapes);
-	else
-	    s = string.substring(start, currentPos);
-	s = trimWhiteSpace(s);
-	return new Token(Token.QUOTEDSTRING, s);
-    }
-
-    // Skip SPACE, HT, CR and NL
-    private int skipWhiteSpace() {
-	char c;
-	for (; currentPos < maxPos; currentPos++)
-	    if (((c = string.charAt(currentPos)) != ' ') && 
-		(c != '\t') && (c != '\r') && (c != '\n'))
-		return currentPos;
-	return Token.EOF;
-    }
-
-    // Trim SPACE, HT, CR and NL from end of string
-    private static String trimWhiteSpace(String s) {
-	char c;
-	int i;
-	for (i = s.length() - 1; i >= 0; i--) {
-	    if (((c = s.charAt(i)) != ' ') && 
-		(c != '\t') && (c != '\r') && (c != '\n'))
-		break;
+	// Skip SPACE, HT, CR and NL
+	private int skipWhiteSpace() {
+		char c;
+		for (; currentPos < maxPos; currentPos++) {
+			if (((c = string.charAt(currentPos)) != ' ') &&
+					(c != '\t') && (c != '\r') && (c != '\n')) {
+				return currentPos;
+			}
+		}
+		return Token.EOF;
 	}
-	if (i <= 0)
-	    return "";
-	else
-	    return s.substring(0, i + 1);
-    }
 
-    /* Process escape sequences and embedded LWSPs from a comment or
-     * quoted string.
-     */
-    private static String filterToken(String s, int start, int end,
-				boolean keepEscapes) {
-	StringBuffer sb = new StringBuffer();
-	char c;
-	boolean gotEscape = false;
-	boolean gotCR = false;
-
-	for (int i = start; i < end; i++) {
-	    c = s.charAt(i);
-	    if (c == '\n' && gotCR) {
-		// This LF is part of an unescaped 
-		// CRLF sequence (i.e, LWSP). Skip it.
-		gotCR = false;
-		continue;
-	    }
-
-	    gotCR = false;
-	    if (!gotEscape) {
-		// Previous character was NOT '\'
-		if (c == '\\') // skip this character
-		    gotEscape = true;
-		else if (c == '\r') // skip this character
-		    gotCR = true;
-		else // append this character
-		    sb.append(c);
-	    } else {
-		// Previous character was '\'. So no need to 
-		// bother with any special processing, just 
-		// append this character.  If keepEscapes is
-		// set, keep the backslash.  IE6 fails to escape
-		// backslashes in quoted strings in HTTP headers,
-		// e.g., in the filename parameter.
-		if (keepEscapes)
-		    sb.append('\\');
-		sb.append(c);
-		gotEscape = false;
-	    }
+	// Trim SPACE, HT, CR and NL from end of string
+	private static String trimWhiteSpace(String s) {
+		char c;
+		int i;
+		for (i = s.length() - 1; i >= 0; i--) {
+			if (((c = s.charAt(i)) != ' ') &&
+					(c != '\t') && (c != '\r') && (c != '\n')) {
+				break;
+			}
+		}
+		if (i <= 0) {
+			return "";
+		} else {
+			return s.substring(0, i + 1);
+		}
 	}
-	return sb.toString();
-    }
+
+	/* Process escape sequences and embedded LWSPs from a comment or
+	 * quoted string.
+	 */
+	private static String filterToken(String s, int start, int end,
+			boolean keepEscapes) {
+		StringBuffer sb = new StringBuffer();
+		char c;
+		boolean gotEscape = false;
+		boolean gotCR = false;
+
+		for (int i = start; i < end; i++) {
+			c = s.charAt(i);
+			if (c == '\n' && gotCR) {
+				// This LF is part of an unescaped
+				// CRLF sequence (i.e, LWSP). Skip it.
+				gotCR = false;
+				continue;
+			}
+
+			gotCR = false;
+			if (!gotEscape) {
+				// Previous character was NOT '\'
+				if (c == '\\') {
+					gotEscape = true;
+				} else if (c == '\r') {
+					gotCR = true;
+				} else {
+					sb.append(c);
+				}
+			} else {
+				// Previous character was '\'. So no need to
+				// bother with any special processing, just
+				// append this character.  If keepEscapes is
+				// set, keep the backslash.  IE6 fails to escape
+				// backslashes in quoted strings in HTTP headers,
+				// e.g., in the filename parameter.
+				if (keepEscapes) {
+					sb.append('\\');
+				}
+				sb.append(c);
+				gotEscape = false;
+			}
+		}
+		return sb.toString();
+	}
 }

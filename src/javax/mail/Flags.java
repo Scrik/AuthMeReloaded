@@ -41,13 +41,16 @@
 package javax.mail;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Vector;
 
 /**
  * The Flags class represents the set of flags on a Message.  Flags
  * are composed of predefined system flags, and user defined flags. <p>
  *
- * A System flag is represented by the <code>Flags.Flag</code> 
+ * A System flag is represented by the <code>Flags.Flag</code>
  * inner class. A User defined flag is represented as a String.
  * User flags are case-independent. <p>
  *
@@ -67,7 +70,7 @@ import java.util.*;
  * JavaMail API releases.  The current serialization support is
  * appropriate for short term storage. <p>
  *
- * The below code sample illustrates how to set, examine, and get the 
+ * The below code sample illustrates how to set, examine, and get the
  * flags for a message. <p>
  * <pre>
  *
@@ -99,363 +102,392 @@ import java.util.*;
 
 public class Flags implements Cloneable, Serializable {
 
-    private int system_flags = 0;
-    private Hashtable user_flags = null;
+	private int system_flags = 0;
+	private Hashtable<String, String> user_flags = null;
 
-    private final static int ANSWERED_BIT 	= 0x01;
-    private final static int DELETED_BIT 	= 0x02;
-    private final static int DRAFT_BIT 		= 0x04;
-    private final static int FLAGGED_BIT 	= 0x08;
-    private final static int RECENT_BIT		= 0x10;
-    private final static int SEEN_BIT		= 0x20;
-    private final static int USER_BIT		= 0x80000000;
+	private final static int ANSWERED_BIT 	= 0x01;
+	private final static int DELETED_BIT 	= 0x02;
+	private final static int DRAFT_BIT 		= 0x04;
+	private final static int FLAGGED_BIT 	= 0x08;
+	private final static int RECENT_BIT		= 0x10;
+	private final static int SEEN_BIT		= 0x20;
+	private final static int USER_BIT		= 0x80000000;
 
-    private static final long serialVersionUID = 6243590407214169028L;
-
-    /**
-     * This inner class represents an individual system flag. A set
-     * of standard system flag objects are predefined here.
-     */
-    public static final class Flag {
-	/**
-	 * This message has been answered. This flag is set by clients 
-	 * to indicate that this message has been answered to.
-	 */
-	public static final Flag ANSWERED = new Flag(ANSWERED_BIT);
+	private static final long serialVersionUID = 6243590407214169028L;
 
 	/**
-	 * This message is marked deleted. Clients set this flag to
-	 * mark a message as deleted. The expunge operation on a folder
-	 * removes all messages in that folder that are marked for deletion.
+	 * This inner class represents an individual system flag. A set
+	 * of standard system flag objects are predefined here.
 	 */
-	public static final Flag DELETED = new Flag(DELETED_BIT);
+	public static final class Flag {
+		/**
+		 * This message has been answered. This flag is set by clients
+		 * to indicate that this message has been answered to.
+		 */
+		public static final Flag ANSWERED = new Flag(ANSWERED_BIT);
 
-	/**
-	 * This message is a draft. This flag is set by clients
-	 * to indicate that the message is a draft message.
-	 */
-	public static final Flag DRAFT = new Flag(DRAFT_BIT);
+		/**
+		 * This message is marked deleted. Clients set this flag to
+		 * mark a message as deleted. The expunge operation on a folder
+		 * removes all messages in that folder that are marked for deletion.
+		 */
+		public static final Flag DELETED = new Flag(DELETED_BIT);
 
-	/**
-	 * This message is flagged. No semantic is defined for this flag.
-	 * Clients alter this flag.
-	 */
-	public static final Flag FLAGGED = new Flag(FLAGGED_BIT);
+		/**
+		 * This message is a draft. This flag is set by clients
+		 * to indicate that the message is a draft message.
+		 */
+		public static final Flag DRAFT = new Flag(DRAFT_BIT);
 
-	/**
-	 * This message is recent. Folder implementations set this flag
-	 * to indicate that this message is new to this folder, that is,
-	 * it has arrived since the last time this folder was opened. <p>
-	 *
-	 * Clients cannot alter this flag.
-	 */
-	public static final Flag RECENT = new Flag(RECENT_BIT);
+		/**
+		 * This message is flagged. No semantic is defined for this flag.
+		 * Clients alter this flag.
+		 */
+		public static final Flag FLAGGED = new Flag(FLAGGED_BIT);
 
-	/**
-	 * This message is seen. This flag is implicitly set by the 
-	 * implementation when the this Message's content is returned 
-	 * to the client in some form. The <code>getInputStream</code>
-	 * and <code>getContent</code> methods on Message cause this
-	 * flag to be set. <p>
-	 *
-	 * Clients can alter this flag.
-	 */
-	public static final Flag SEEN = new Flag(SEEN_BIT);
+		/**
+		 * This message is recent. Folder implementations set this flag
+		 * to indicate that this message is new to this folder, that is,
+		 * it has arrived since the last time this folder was opened. <p>
+		 *
+		 * Clients cannot alter this flag.
+		 */
+		public static final Flag RECENT = new Flag(RECENT_BIT);
 
-	/**
-	 * A special flag that indicates that this folder supports
-	 * user defined flags. <p>
-	 *
-	 * The implementation sets this flag. Clients cannot alter 
-	 * this flag but can use it to determine if a folder supports
-	 * user defined flags by using
-	 * <code>folder.getPermanentFlags().contains(Flags.Flag.USER)</code>.
-	 */
-	public static final Flag USER = new Flag(USER_BIT);
+		/**
+		 * This message is seen. This flag is implicitly set by the
+		 * implementation when the this Message's content is returned
+		 * to the client in some form. The <code>getInputStream</code>
+		 * and <code>getContent</code> methods on Message cause this
+		 * flag to be set. <p>
+		 *
+		 * Clients can alter this flag.
+		 */
+		public static final Flag SEEN = new Flag(SEEN_BIT);
 
-	// flags are stored as bits for efficiency
-	private int bit;
-	private Flag(int bit) {
-	    this.bit = bit;
+		/**
+		 * A special flag that indicates that this folder supports
+		 * user defined flags. <p>
+		 *
+		 * The implementation sets this flag. Clients cannot alter
+		 * this flag but can use it to determine if a folder supports
+		 * user defined flags by using
+		 * <code>folder.getPermanentFlags().contains(Flags.Flag.USER)</code>.
+		 */
+		public static final Flag USER = new Flag(USER_BIT);
+
+		// flags are stored as bits for efficiency
+		private int bit;
+		private Flag(int bit) {
+			this.bit = bit;
+		}
 	}
-    }
 
 
-    /**
-     * Construct an empty Flags object.
-     */
-    public Flags() { }
+	/**
+	 * Construct an empty Flags object.
+	 */
+	public Flags() { }
 
-    /**
-     * Construct a Flags object initialized with the given flags.
-     *
-     * @param flags	the flags for initialization
-     */
-    public Flags(Flags flags) {
-	this.system_flags = flags.system_flags;
-	if (flags.user_flags != null)
-	    this.user_flags = (Hashtable)flags.user_flags.clone();
-    }
-
-    /**
-     * Construct a Flags object initialized with the given system flag.
-     *
-     * @param flag	the flag for initialization
-     */
-    public Flags(Flag flag) {
-	this.system_flags |= flag.bit;
-    }
-
-    /**
-     * Construct a Flags object initialized with the given user flag.
-     *
-     * @param flag	the flag for initialization
-     */
-    public Flags(String flag) {
-	user_flags = new Hashtable(1);
-	user_flags.put(flag.toLowerCase(Locale.ENGLISH), flag);
-    }
-
-    /**
-     * Add the specified system flag to this Flags object.
-     *
-     * @param flag	the flag to add
-     */
-    public void add(Flag flag) {
-	system_flags |= flag.bit;
-    }
-
-    /**
-     * Add the specified user flag to this Flags object.
-     *
-     * @param flag	the flag to add
-     */
-    public void add(String flag) {
-	if (user_flags == null)
-	    user_flags = new Hashtable(1);
-	user_flags.put(flag.toLowerCase(Locale.ENGLISH), flag);
-    }
-
-    /**
-     * Add all the flags in the given Flags object to this
-     * Flags object.
-     *
-     * @param f	Flags object
-     */
-    public void add(Flags f) {
-	system_flags |= f.system_flags; // add system flags
-
-	if (f.user_flags != null) { // add user-defined flags
-	    if (user_flags == null)
-		user_flags = new Hashtable(1);
-
-	    Enumeration e = f.user_flags.keys();
-
-	    while (e.hasMoreElements()) {
-		String s = (String)e.nextElement();
-		user_flags.put(s, f.user_flags.get(s));
-	    }
+	/**
+	 * Construct a Flags object initialized with the given flags.
+	 *
+	 * @param flags	the flags for initialization
+	 */
+	@SuppressWarnings("unchecked")
+	public Flags(Flags flags) {
+		this.system_flags = flags.system_flags;
+		if (flags.user_flags != null) {
+			this.user_flags = (Hashtable<String, String>)flags.user_flags.clone();
+		}
 	}
-    }
 
-    /**
-     * Remove the specified system flag from this Flags object.
-     *
-     * @param	flag 	the flag to be removed
-     */
-    public void remove(Flag flag) {
-	system_flags &= ~flag.bit;
-    }
-
-    /**
-     * Remove the specified user flag from this Flags object.
-     *
-     * @param	flag 	the flag to be removed
-     */
-    public void remove(String flag) {
-	if (user_flags != null)
-	    user_flags.remove(flag.toLowerCase(Locale.ENGLISH));
-    }
-
-    /**
-     * Remove all flags in the given Flags object from this 
-     * Flags object.
-     *
-     * @param	f 	the flag to be removed
-     */
-    public void remove(Flags f) {
-	system_flags &= ~f.system_flags; // remove system flags
-
-	if (f.user_flags != null) {
-	    if (user_flags == null)
-		return;
-
-	    Enumeration e = f.user_flags.keys();
-	    while (e.hasMoreElements())
-		user_flags.remove(e.nextElement());
+	/**
+	 * Construct a Flags object initialized with the given system flag.
+	 *
+	 * @param flag	the flag for initialization
+	 */
+	public Flags(Flag flag) {
+		this.system_flags |= flag.bit;
 	}
-    }
 
-    /**
-     * Check whether the specified system flag is present in this Flags object.
-     *
-     * @return 		true of the given flag is present, otherwise false.
-     */
-    public boolean contains(Flag flag) {
-	return (system_flags & flag.bit) != 0;
-    }
+	/**
+	 * Construct a Flags object initialized with the given user flag.
+	 *
+	 * @param flag	the flag for initialization
+	 */
+	public Flags(String flag) {
+		user_flags = new Hashtable<String, String>(1);
+		user_flags.put(flag.toLowerCase(Locale.ENGLISH), flag);
+	}
 
-    /**
-     * Check whether the specified user flag is present in this Flags object.
-     *
-     * @return 		true of the given flag is present, otherwise false.
-     */
-    public boolean contains(String flag) {
-	if (user_flags == null) 
-	    return false;
-	else
-	    return user_flags.containsKey(flag.toLowerCase(Locale.ENGLISH));
-    }
+	/**
+	 * Add the specified system flag to this Flags object.
+	 *
+	 * @param flag	the flag to add
+	 */
+	public void add(Flag flag) {
+		system_flags |= flag.bit;
+	}
 
-    /**
-     * Check whether all the flags in the specified Flags object are
-     * present in this Flags object.
-     *
-     * @return	true if all flags in the given Flags object are present, 
-     *		otherwise false.
-     */
-    public boolean contains(Flags f) {
-	// Check system flags
-	if ((f.system_flags & system_flags) != f.system_flags)
-	    return false;
+	/**
+	 * Add the specified user flag to this Flags object.
+	 *
+	 * @param flag	the flag to add
+	 */
+	public void add(String flag) {
+		if (user_flags == null) {
+			user_flags = new Hashtable<String, String>(1);
+		}
+		user_flags.put(flag.toLowerCase(Locale.ENGLISH), flag);
+	}
 
-	// Check user flags
-	if (f.user_flags != null) {
-	    if (user_flags == null)
+	/**
+	 * Add all the flags in the given Flags object to this
+	 * Flags object.
+	 *
+	 * @param f	Flags object
+	 */
+	public void add(Flags f) {
+		system_flags |= f.system_flags; // add system flags
+
+		if (f.user_flags != null) { // add user-defined flags
+			if (user_flags == null) {
+				user_flags = new Hashtable<String, String>(1);
+			}
+
+			Enumeration<String> e = f.user_flags.keys();
+
+			while (e.hasMoreElements()) {
+				String s = e.nextElement();
+				user_flags.put(s, f.user_flags.get(s));
+			}
+		}
+	}
+
+	/**
+	 * Remove the specified system flag from this Flags object.
+	 *
+	 * @param	flag 	the flag to be removed
+	 */
+	public void remove(Flag flag) {
+		system_flags &= ~flag.bit;
+	}
+
+	/**
+	 * Remove the specified user flag from this Flags object.
+	 *
+	 * @param	flag 	the flag to be removed
+	 */
+	public void remove(String flag) {
+		if (user_flags != null) {
+			user_flags.remove(flag.toLowerCase(Locale.ENGLISH));
+		}
+	}
+
+	/**
+	 * Remove all flags in the given Flags object from this
+	 * Flags object.
+	 *
+	 * @param	f 	the flag to be removed
+	 */
+	public void remove(Flags f) {
+		system_flags &= ~f.system_flags; // remove system flags
+
+		if (f.user_flags != null) {
+			if (user_flags == null) {
+				return;
+			}
+
+			Enumeration<String> e = f.user_flags.keys();
+			while (e.hasMoreElements()) {
+				user_flags.remove(e.nextElement());
+			}
+		}
+	}
+
+	/**
+	 * Check whether the specified system flag is present in this Flags object.
+	 *
+	 * @return 		true of the given flag is present, otherwise false.
+	 */
+	public boolean contains(Flag flag) {
+		return (system_flags & flag.bit) != 0;
+	}
+
+	/**
+	 * Check whether the specified user flag is present in this Flags object.
+	 *
+	 * @return 		true of the given flag is present, otherwise false.
+	 */
+	public boolean contains(String flag) {
+		if (user_flags == null) {
+			return false;
+		} else {
+			return user_flags.containsKey(flag.toLowerCase(Locale.ENGLISH));
+		}
+	}
+
+	/**
+	 * Check whether all the flags in the specified Flags object are
+	 * present in this Flags object.
+	 *
+	 * @return	true if all flags in the given Flags object are present,
+	 *		otherwise false.
+	 */
+	public boolean contains(Flags f) {
+		// Check system flags
+		if ((f.system_flags & system_flags) != f.system_flags) {
+			return false;
+		}
+
+		// Check user flags
+		if (f.user_flags != null) {
+			if (user_flags == null) {
+				return false;
+			}
+			Enumeration<String> e = f.user_flags.keys();
+
+			while (e.hasMoreElements()) {
+				if (!user_flags.containsKey(e.nextElement())) {
+					return false;
+				}
+			}
+		}
+
+		// If we've made it till here, return true
+		return true;
+	}
+
+	/**
+	 * Check whether the two Flags objects are equal.
+	 *
+	 * @return	true if they're equal
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Flags)) {
+			return false;
+		}
+
+		Flags f = (Flags)obj;
+
+		// Check system flags
+		if (f.system_flags != this.system_flags) {
+			return false;
+		}
+
+		// Check user flags
+		if (f.user_flags == null && this.user_flags == null) {
+			return true;
+		}
+		if (f.user_flags != null && this.user_flags != null &&
+				f.user_flags.size() == this.user_flags.size()) {
+			Enumeration<String> e = f.user_flags.keys();
+
+			while (e.hasMoreElements()) {
+				if (!this.user_flags.containsKey(e.nextElement())) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		return false;
-	    Enumeration e = f.user_flags.keys();
-
-	    while (e.hasMoreElements()) {
-		if (!user_flags.containsKey(e.nextElement()))
-		    return false;
-	    }
 	}
 
-	// If we've made it till here, return true
-	return true;
-    }
-
-    /**
-     * Check whether the two Flags objects are equal.
-     *
-     * @return	true if they're equal
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof Flags))
-	    return false;
-
-	Flags f = (Flags)obj;
-
-	// Check system flags
-	if (f.system_flags != this.system_flags)
-	    return false;
-
-	// Check user flags
-	if (f.user_flags == null && this.user_flags == null)
-	    return true;
-	if (f.user_flags != null && this.user_flags != null &&
-		f.user_flags.size() == this.user_flags.size()) {
-	    Enumeration e = f.user_flags.keys();
-
-	    while (e.hasMoreElements()) {
-		if (!this.user_flags.containsKey(e.nextElement()))
-		    return false;
-	    }
-	    return true;
+	/**
+	 * Compute a hash code for this Flags object.
+	 *
+	 * @return	the hash code
+	 */
+	@Override
+	public int hashCode() {
+		int hash = system_flags;
+		if (user_flags != null) {
+			Enumeration<String> e = user_flags.keys();
+			while (e.hasMoreElements()) {
+				hash += e.nextElement().hashCode();
+			}
+		}
+		return hash;
 	}
 
-	return false;
-    }
+	/**
+	 * Return all the system flags in this Flags object.  Returns
+	 * an array of size zero if no flags are set.
+	 *
+	 * @return	array of Flags.Flag objects representing system flags
+	 */
+	public Flag[] getSystemFlags() {
+		Vector<Flag> v = new Vector<Flag>();
+		if ((system_flags & ANSWERED_BIT) != 0) {
+			v.addElement(Flag.ANSWERED);
+		}
+		if ((system_flags & DELETED_BIT) != 0) {
+			v.addElement(Flag.DELETED);
+		}
+		if ((system_flags & DRAFT_BIT) != 0) {
+			v.addElement(Flag.DRAFT);
+		}
+		if ((system_flags & FLAGGED_BIT) != 0) {
+			v.addElement(Flag.FLAGGED);
+		}
+		if ((system_flags & RECENT_BIT) != 0) {
+			v.addElement(Flag.RECENT);
+		}
+		if ((system_flags & SEEN_BIT) != 0) {
+			v.addElement(Flag.SEEN);
+		}
+		if ((system_flags & USER_BIT) != 0) {
+			v.addElement(Flag.USER);
+		}
 
-    /**
-     * Compute a hash code for this Flags object.
-     *
-     * @return	the hash code
-     */
-    public int hashCode() {
-	int hash = system_flags;
-	if (user_flags != null) {
-	    Enumeration e = user_flags.keys();
-	    while (e.hasMoreElements())
-		hash += ((String)e.nextElement()).hashCode();
-	}
-	return hash;
-    }
-
-    /**
-     * Return all the system flags in this Flags object.  Returns
-     * an array of size zero if no flags are set.
-     *
-     * @return	array of Flags.Flag objects representing system flags
-     */
-    public Flag[] getSystemFlags() {
-	Vector v = new Vector();
-	if ((system_flags & ANSWERED_BIT) != 0)
-	    v.addElement(Flag.ANSWERED);
-	if ((system_flags & DELETED_BIT) != 0)
-	    v.addElement(Flag.DELETED);
-	if ((system_flags & DRAFT_BIT) != 0)
-	    v.addElement(Flag.DRAFT);
-	if ((system_flags & FLAGGED_BIT) != 0)
-	    v.addElement(Flag.FLAGGED);
-	if ((system_flags & RECENT_BIT) != 0)
-	    v.addElement(Flag.RECENT);
-	if ((system_flags & SEEN_BIT) != 0)
-	    v.addElement(Flag.SEEN);
-	if ((system_flags & USER_BIT) != 0)
-	    v.addElement(Flag.USER);
-
-	Flag[] f = new Flag[v.size()];
-	v.copyInto(f);
-	return f;
-    }
-
-    /**
-     * Return all the user flags in this Flags object.  Returns
-     * an array of size zero if no flags are set.
-     *
-     * @return	array of Strings, each String represents a flag.
-     */
-    public String[] getUserFlags() {
-	Vector v = new Vector();
-	if (user_flags != null) {
-	    Enumeration e = user_flags.elements();
-
-	    while (e.hasMoreElements())
-		v.addElement(e.nextElement());
+		Flag[] f = new Flag[v.size()];
+		v.copyInto(f);
+		return f;
 	}
 
-	String[] f = new String[v.size()];
-	v.copyInto(f);
-	return f;
-    }
+	/**
+	 * Return all the user flags in this Flags object.  Returns
+	 * an array of size zero if no flags are set.
+	 *
+	 * @return	array of Strings, each String represents a flag.
+	 */
+	public String[] getUserFlags() {
+		Vector<String> v = new Vector<String>();
+		if (user_flags != null) {
+			Enumeration<String> e = user_flags.elements();
 
-    /**
-     * Returns a clone of this Flags object.
-     */
-    public Object clone() {
-	Flags f = null;
-	try {
-	    f = (Flags)super.clone();
-	} catch (CloneNotSupportedException cex) {
-	    // ignore, can't happen
+			while (e.hasMoreElements()) {
+				v.addElement(e.nextElement());
+			}
+		}
+
+		String[] f = new String[v.size()];
+		v.copyInto(f);
+		return f;
 	}
-	if (this.user_flags != null)
-	    f.user_flags = (Hashtable)this.user_flags.clone();
-	return f;
-    }
 
-    /*****
+	/**
+	 * Returns a clone of this Flags object.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object clone() {
+		Flags f = null;
+		try {
+			f = (Flags)super.clone();
+		} catch (CloneNotSupportedException cex) {
+			// ignore, can't happen
+		}
+		if (this.user_flags != null) {
+			f.user_flags = (Hashtable<String, String>)this.user_flags.clone();
+		}
+		return f;
+	}
+
+	/*****
     public static void main(String argv[]) throws Exception {
 	// a new flags object
 	Flags f1 = new Flags();
@@ -516,7 +548,7 @@ public class Flags implements Cloneable, Serializable {
 	    System.out.println("success");
 	else
 	    System.out.println("fail");
-		
+
 	if (f1.contains(Flags.Flag.SEEN))
 	    System.out.println("success");
 	else
@@ -585,5 +617,5 @@ public class Flags implements Cloneable, Serializable {
 	else
 	    System.out.println("fail");
     }
-    ****/
+	 ****/
 }

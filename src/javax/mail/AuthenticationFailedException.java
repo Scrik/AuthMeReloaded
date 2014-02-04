@@ -50,35 +50,35 @@ package javax.mail;
 
 public class AuthenticationFailedException extends MessagingException {
 
-    private static final long serialVersionUID = 492080754054436511L;
+	private static final long serialVersionUID = 492080754054436511L;
 
-    /**
-     * Constructs an AuthenticationFailedException.
-     */
-    public AuthenticationFailedException() {
-	super();
-    }
+	/**
+	 * Constructs an AuthenticationFailedException.
+	 */
+	public AuthenticationFailedException() {
+		super();
+	}
 
-    /**
-     * Constructs an AuthenticationFailedException with the specified
-     * detail message.
-     *
-     * @param message	The detailed error message
-     */
-    public AuthenticationFailedException(String message) {
-	super(message);
-    }
+	/**
+	 * Constructs an AuthenticationFailedException with the specified
+	 * detail message.
+	 *
+	 * @param message	The detailed error message
+	 */
+	public AuthenticationFailedException(String message) {
+		super(message);
+	}
 
-    /**
-     * Constructs an AuthenticationFailedException with the specified
-     * detail message and embedded exception.  The exception is chained
-     * to this exception.
-     *
-     * @param message	The detailed error message
-     * @param e		The embedded exception
-     * @since		JavaMail 1.5
-     */
-    public AuthenticationFailedException(String message, Exception e) {
-	super(message, e);
-    }
+	/**
+	 * Constructs an AuthenticationFailedException with the specified
+	 * detail message and embedded exception.  The exception is chained
+	 * to this exception.
+	 *
+	 * @param message	The detailed error message
+	 * @param e		The embedded exception
+	 * @since		JavaMail 1.5
+	 */
+	public AuthenticationFailedException(String message, Exception e) {
+		super(message, e);
+	}
 }

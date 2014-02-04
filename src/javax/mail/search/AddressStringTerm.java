@@ -40,12 +40,11 @@
 
 package javax.mail.search;
 
-import javax.mail.Message;
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
 /**
- * This abstract class implements string comparisons for Message 
+ * This abstract class implements string comparisons for Message
  * addresses. <p>
  *
  * Note that this class differs from the <code>AddressTerm</code> class
@@ -57,47 +56,50 @@ import javax.mail.internet.InternetAddress;
 
 public abstract class AddressStringTerm extends StringTerm {
 
-    private static final long serialVersionUID = 3086821234204980368L;
+	private static final long serialVersionUID = 3086821234204980368L;
 
-    /**
-     * Constructor.
-     *
-     * @param pattern   the address pattern to be compared.
-     */
-    protected AddressStringTerm(String pattern) {
-	super(pattern, true); // we need case-insensitive comparison.
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param pattern   the address pattern to be compared.
+	 */
+	protected AddressStringTerm(String pattern) {
+		super(pattern, true); // we need case-insensitive comparison.
+	}
 
-    /**
-     * Check whether the address pattern specified in the constructor is
-     * a substring of the string representation of the given Address
-     * object. <p>
-     *
-     * Note that if the string representation of the given Address object
-     * contains charset or transfer encodings, the encodings must be 
-     * accounted for, during the match process. <p>
-     *
-     * @param   a 	The comparison is applied to this Address object.
-     * @return          true if the match succeeds, otherwise false.
-     */
-    protected boolean match(Address a) {
-	if (a instanceof InternetAddress) {
-	    InternetAddress ia = (InternetAddress)a;
-	    // We dont use toString() to get "a"'s String representation,
-	    // because InternetAddress.toString() returns a RFC 2047 
-	    // encoded string, which isn't what we need here.
+	/**
+	 * Check whether the address pattern specified in the constructor is
+	 * a substring of the string representation of the given Address
+	 * object. <p>
+	 *
+	 * Note that if the string representation of the given Address object
+	 * contains charset or transfer encodings, the encodings must be
+	 * accounted for, during the match process. <p>
+	 *
+	 * @param   a 	The comparison is applied to this Address object.
+	 * @return          true if the match succeeds, otherwise false.
+	 */
+	protected boolean match(Address a) {
+		if (a instanceof InternetAddress) {
+			InternetAddress ia = (InternetAddress)a;
+			// We dont use toString() to get "a"'s String representation,
+			// because InternetAddress.toString() returns a RFC 2047
+			// encoded string, which isn't what we need here.
 
-	    return super.match(ia.toUnicodeString());
-	} else
-	    return super.match(a.toString());
-    }
+			return super.match(ia.toUnicodeString());
+		} else {
+			return super.match(a.toString());
+		}
+	}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof AddressStringTerm))
-	    return false;
-	return super.equals(obj);
-    }
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof AddressStringTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

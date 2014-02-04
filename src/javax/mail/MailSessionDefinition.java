@@ -63,50 +63,50 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MailSessionDefinition {
 
-    /**
-     * Description of this mail session.
-     */
-    String description() default "";
+	/**
+	 * Description of this mail session.
+	 */
+	String description() default "";
 
-    /**
-     * JNDI name by which the mail session will be registered.
-     */
-    String name();
+	/**
+	 * JNDI name by which the mail session will be registered.
+	 */
+	String name();
 
-    /**
-     * Store protocol name.
-     */
-    String storeProtocol() default "";
+	/**
+	 * Store protocol name.
+	 */
+	String storeProtocol() default "";
 
-    /**
-     * Transport protocol name.
-     */
-    String transportProtocol() default "";
+	/**
+	 * Transport protocol name.
+	 */
+	String transportProtocol() default "";
 
-    /**
-     * Host name for the mail server.
-     */
-    String host() default "";
+	/**
+	 * Host name for the mail server.
+	 */
+	String host() default "";
 
-    /**
-     * User name to use for authentication.
-     */
-    String user() default "";
+	/**
+	 * User name to use for authentication.
+	 */
+	String user() default "";
 
-    /**
-     * Password to use for authentication.
-     */
-    String password() default "";
+	/**
+	 * Password to use for authentication.
+	 */
+	String password() default "";
 
-    /**
-     * From address for the user.
-     */
-    String from() default "";
+	/**
+	 * From address for the user.
+	 */
+	String from() default "";
 
-    /**
-     * Properties to include in the Session.
-     * Properties are specified using the format:
-     * <i>propertyName=propertyValue</i> with one property per array element.
-     */
-    String[] properties() default {};
+	/**
+	 * Properties to include in the Session.
+	 * Properties are specified using the format:
+	 * <i>propertyName=propertyValue</i> with one property per array element.
+	 */
+	String[] properties() default {};
 }

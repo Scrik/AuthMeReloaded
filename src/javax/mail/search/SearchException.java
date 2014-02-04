@@ -51,20 +51,20 @@ import javax.mail.MessagingException;
 
 public class SearchException extends MessagingException {
 
-    private static final long serialVersionUID = -7092886778226268686L;
+	private static final long serialVersionUID = -7092886778226268686L;
 
-    /**
-     * Constructs a SearchException with no detail message.
-     */
-    public SearchException() {
-	super();
-    }
+	/**
+	 * Constructs a SearchException with no detail message.
+	 */
+	public SearchException() {
+		super();
+	}
 
-    /**
-     * Constructs a SearchException with the specified detail message.
-     * @param s		the detail message
-     */
-    public SearchException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs a SearchException with the specified detail message.
+	 * @param s		the detail message
+	 */
+	public SearchException(String s) {
+		super(s);
+	}
 }

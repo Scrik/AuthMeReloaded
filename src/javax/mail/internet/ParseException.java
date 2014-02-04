@@ -43,7 +43,7 @@ package javax.mail.internet;
 import javax.mail.MessagingException;
 
 /**
- * The exception thrown due to an error in parsing RFC822 
+ * The exception thrown due to an error in parsing RFC822
  * or MIME headers
  *
  * @author John Mani
@@ -51,20 +51,20 @@ import javax.mail.MessagingException;
 
 public class ParseException extends MessagingException {
 
-    private static final long serialVersionUID = 7649991205183658089L;
+	private static final long serialVersionUID = 7649991205183658089L;
 
-    /**
-     * Constructs a ParseException with no detail message.
-     */
-    public ParseException() {
-	super();
-    }
+	/**
+	 * Constructs a ParseException with no detail message.
+	 */
+	public ParseException() {
+		super();
+	}
 
-    /**
-     * Constructs a ParseException with the specified detail message.
-     * @param s		the detail message
-     */
-    public ParseException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs a ParseException with the specified detail message.
+	 * @param s		the detail message
+	 */
+	public ParseException(String s) {
+		super(s);
+	}
 }

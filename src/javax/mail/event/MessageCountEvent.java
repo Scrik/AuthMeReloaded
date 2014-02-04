@@ -40,8 +40,8 @@
 
 package javax.mail.event;
 
-import java.util.*;
-import javax.mail.*;
+import javax.mail.Folder;
+import javax.mail.Message;
 
 /**
  * This class notifies changes in the number of messages in a folder. <p>
@@ -61,94 +61,96 @@ import javax.mail.*;
 
 public class MessageCountEvent extends MailEvent {
 
-    /** The messages were added to their folder */
-    public static final int ADDED 		= 1;
-    /** The messages were removed from their folder */
-    public static final int REMOVED 		= 2;
+	/** The messages were added to their folder */
+	public static final int ADDED 		= 1;
+	/** The messages were removed from their folder */
+	public static final int REMOVED 		= 2;
 
-    /**
-     * The event type.
-     *
-     * @serial
-     */
-    protected int type;
+	/**
+	 * The event type.
+	 *
+	 * @serial
+	 */
+	protected int type;
 
-    /**
-     * If true, this event is the result of an explicit
-     * expunge by this client, and the messages in this 
-     * folder have been renumbered to account for this.
-     * If false, this event is the result of an expunge
-     * by external sources.
-     *
-     * @serial
-     */
-    protected boolean removed;
+	/**
+	 * If true, this event is the result of an explicit
+	 * expunge by this client, and the messages in this
+	 * folder have been renumbered to account for this.
+	 * If false, this event is the result of an expunge
+	 * by external sources.
+	 *
+	 * @serial
+	 */
+	protected boolean removed;
 
-    /**
-     * The messages.
-     */
-    transient protected Message[] msgs;
+	/**
+	 * The messages.
+	 */
+	transient protected Message[] msgs;
 
-    private static final long serialVersionUID = -7447022340837897369L;
+	private static final long serialVersionUID = -7447022340837897369L;
 
-    /**
-     * Constructor.
-     * @param folder  	The containing folder
-     * @param type	The event type
-     * @param removed	If true, this event is the result of an explicit
-     *			expunge by this client, and the messages in this 
-     *			folder have been renumbered to account for this.
-     *			If false, this event is the result of an expunge
-     *			by external sources.
-     *
-     * @param msgs	The messages added/removed
-     */
-    public MessageCountEvent(Folder folder, int type, 
-			     boolean removed, Message[] msgs) {
-	super(folder);
-	this.type = type;
-	this.removed = removed;
-	this.msgs = msgs;
-    }
+	/**
+	 * Constructor.
+	 * @param folder  	The containing folder
+	 * @param type	The event type
+	 * @param removed	If true, this event is the result of an explicit
+	 *			expunge by this client, and the messages in this
+	 *			folder have been renumbered to account for this.
+	 *			If false, this event is the result of an expunge
+	 *			by external sources.
+	 *
+	 * @param msgs	The messages added/removed
+	 */
+	public MessageCountEvent(Folder folder, int type,
+			boolean removed, Message[] msgs) {
+		super(folder);
+		this.type = type;
+		this.removed = removed;
+		this.msgs = msgs;
+	}
 
-    /**
-     * Return the type of this event.
-     * @return  type
-     */
-    public int getType() {
-	return type;
-    }
+	/**
+	 * Return the type of this event.
+	 * @return  type
+	 */
+	public int getType() {
+		return type;
+	}
 
-    /**
-     * Indicates whether this event is the result of an explicit
-     * expunge by this client, or due to an expunge from external
-     * sources. If <code>true</code>, this event is due to an
-     * explicit expunge and hence all remaining messages in this
-     * folder have been renumbered. If <code>false</code>, this event
-     * is due to an external expunge. <p>
-     *
-     * Note that this method is valid only if the type of this event
-     * is <code>REMOVED</code>
-     */
-    public boolean isRemoved() {
-	return removed;
-    }
+	/**
+	 * Indicates whether this event is the result of an explicit
+	 * expunge by this client, or due to an expunge from external
+	 * sources. If <code>true</code>, this event is due to an
+	 * explicit expunge and hence all remaining messages in this
+	 * folder have been renumbered. If <code>false</code>, this event
+	 * is due to an external expunge. <p>
+	 *
+	 * Note that this method is valid only if the type of this event
+	 * is <code>REMOVED</code>
+	 */
+	public boolean isRemoved() {
+		return removed;
+	}
 
-    /**
-     * Return the array of messages added or removed.
-     * @return array of messages
-     */
-    public Message[] getMessages() {
-	return msgs;
-    }
+	/**
+	 * Return the array of messages added or removed.
+	 * @return array of messages
+	 */
+	public Message[] getMessages() {
+		return msgs;
+	}
 
-    /**
-     * Invokes the appropriate MessageCountListener method.
-     */
-    public void dispatch(Object listener) {
-	if (type == ADDED)
-	    ((MessageCountListener)listener).messagesAdded(this);
-	else // REMOVED
-	    ((MessageCountListener)listener).messagesRemoved(this);
-    }
+	/**
+	 * Invokes the appropriate MessageCountListener method.
+	 */
+	@Override
+	public void dispatch(Object listener) {
+		if (type == ADDED) {
+			((MessageCountListener)listener).messagesAdded(this);
+		} else {
+			((MessageCountListener)listener).messagesRemoved(this);
+		}
+	}
 }

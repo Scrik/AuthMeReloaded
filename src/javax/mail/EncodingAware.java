@@ -68,12 +68,12 @@ package javax.mail;
 
 public interface EncodingAware {
 
-    /**
-     * Return the MIME Content-Transfer-Encoding to use for this data,
-     * or null to indicate that an appropriate value should be chosen
-     * by the caller.
-     *
-     * @return		the Content-Transfer-Encoding value, or null
-     */
-    public String getEncoding();
+	/**
+	 * Return the MIME Content-Transfer-Encoding to use for this data,
+	 * or null to indicate that an appropriate value should be chosen
+	 * by the caller.
+	 *
+	 * @return		the Content-Transfer-Encoding value, or null
+	 */
+	public String getEncoding();
 }

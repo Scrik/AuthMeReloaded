@@ -49,78 +49,81 @@ import java.util.Date;
  * @author John Mani
  */
 public abstract class DateTerm extends ComparisonTerm {
-    /**
-     * The date.
-     *
-     * @serial
-     */
-    protected Date date;
+	/**
+	 * The date.
+	 *
+	 * @serial
+	 */
+	protected Date date;
 
-    private static final long serialVersionUID = 4818873430063720043L;
+	private static final long serialVersionUID = 4818873430063720043L;
 
-    /**
-     * Constructor.
-     * @param comparison the comparison type
-     * @param date  The Date to be compared against
-     */
-    protected DateTerm(int comparison, Date date) {
-	this.comparison = comparison;
-	this.date = date;
-    }
-
-    /**
-     * Return the Date to compare with.
-     */
-    public Date getDate() {
-	return new Date(date.getTime());
-    }
-
-    /**
-     * Return the type of comparison.
-     */
-    public int getComparison() {
-	return comparison;
-    }
-
-    /**
-     * The date comparison method.
-     *
-     * @param d	the date in the constructor is compared with this date
-     * @return  true if the dates match, otherwise false
-     */
-    protected boolean match(Date d) {
-	switch (comparison) {
-	    case LE: 
-		return d.before(date) || d.equals(date);
-	    case LT:
-		return d.before(date);
-	    case EQ:
-		return d.equals(date);
-	    case NE:
-		return !d.equals(date);
-	    case GT:
-		return d.after(date);
-	    case GE:
-		return d.after(date) || d.equals(date);
-	    default:
-		return false;
+	/**
+	 * Constructor.
+	 * @param comparison the comparison type
+	 * @param date  The Date to be compared against
+	 */
+	protected DateTerm(int comparison, Date date) {
+		this.comparison = comparison;
+		this.date = date;
 	}
-    }
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof DateTerm))
-	    return false;
-	DateTerm dt = (DateTerm)obj;
-	return dt.date.equals(this.date) && super.equals(obj);
-    }
+	/**
+	 * Return the Date to compare with.
+	 */
+	public Date getDate() {
+		return new Date(date.getTime());
+	}
 
-    /**
-     * Compute a hashCode for this object.
-     */
-    public int hashCode() {
-	return date.hashCode() + super.hashCode();
-    }
+	/**
+	 * Return the type of comparison.
+	 */
+	public int getComparison() {
+		return comparison;
+	}
+
+	/**
+	 * The date comparison method.
+	 *
+	 * @param d	the date in the constructor is compared with this date
+	 * @return  true if the dates match, otherwise false
+	 */
+	protected boolean match(Date d) {
+		switch (comparison) {
+		case LE:
+			return d.before(date) || d.equals(date);
+		case LT:
+			return d.before(date);
+		case EQ:
+			return d.equals(date);
+		case NE:
+			return !d.equals(date);
+		case GT:
+			return d.after(date);
+		case GE:
+			return d.after(date) || d.equals(date);
+		default:
+			return false;
+		}
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof DateTerm)) {
+			return false;
+		}
+		DateTerm dt = (DateTerm)obj;
+		return dt.date.equals(this.date) && super.equals(obj);
+	}
+
+	/**
+	 * Compute a hashCode for this object.
+	 */
+	@Override
+	public int hashCode() {
+		return date.hashCode() + super.hashCode();
+	}
 }

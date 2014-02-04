@@ -40,7 +40,6 @@
 
 package javax.mail;
 
-import java.util.Vector;
 
 /**
  * This class represents a set of quotas for a given quota root.
@@ -55,75 +54,75 @@ import java.util.Vector;
 
 public class Quota {
 
-    /**
-     * An individual resource in a quota root.
-     *
-     * @since JavaMail 1.4
-     */
-    public static class Resource {
-	/** The name of the resource. */
-	public String name;
-	/** The current usage of the resource. */
-	public long usage;
-	/** The usage limit for the resource. */
-	public long limit;
+	/**
+	 * An individual resource in a quota root.
+	 *
+	 * @since JavaMail 1.4
+	 */
+	public static class Resource {
+		/** The name of the resource. */
+		public String name;
+		/** The current usage of the resource. */
+		public long usage;
+		/** The usage limit for the resource. */
+		public long limit;
+
+		/**
+		 * Construct a Resource object with the given name,
+		 * usage, and limit.
+		 *
+		 * @param	name	the resource name
+		 * @param	usage	the current usage of the resource
+		 * @param	limit	the usage limit for the resource
+		 */
+		public Resource(String name, long usage, long limit) {
+			this.name = name;
+			this.usage = usage;
+			this.limit = limit;
+		}
+	}
 
 	/**
-	 * Construct a Resource object with the given name,
-	 * usage, and limit.
-	 *
-	 * @param	name	the resource name
-	 * @param	usage	the current usage of the resource
-	 * @param	limit	the usage limit for the resource
+	 * The name of the quota root.
 	 */
-	public Resource(String name, long usage, long limit) {
-	    this.name = name;
-	    this.usage = usage;
-	    this.limit = limit;
+	public String quotaRoot;
+
+	/**
+	 * The set of resources associated with this quota root.
+	 */
+	public Quota.Resource[] resources;
+
+	/**
+	 * Create a Quota object for the named quotaroot with no associated
+	 * resources.
+	 *
+	 * @param	quotaRoot	the name of the quota root
+	 */
+	public Quota(String quotaRoot) {
+		this.quotaRoot = quotaRoot;
 	}
-    }
 
-    /**
-     * The name of the quota root.
-     */
-    public String quotaRoot;
-
-    /**
-     * The set of resources associated with this quota root.
-     */
-    public Quota.Resource[] resources;
-
-    /**
-     * Create a Quota object for the named quotaroot with no associated
-     * resources.
-     *
-     * @param	quotaRoot	the name of the quota root
-     */
-    public Quota(String quotaRoot) {
-	this.quotaRoot = quotaRoot;
-    }
-
-    /**
-     * Set a resource limit for this quota root.
-     *
-     * @param	name	the name of the resource
-     * @param	limit	the resource limit
-     */
-    public void setResourceLimit(String name, long limit) {
-	if (resources == null) {
-	    resources = new Quota.Resource[1];
-	    resources[0] = new Quota.Resource(name, 0, limit);
-	    return;
+	/**
+	 * Set a resource limit for this quota root.
+	 *
+	 * @param	name	the name of the resource
+	 * @param	limit	the resource limit
+	 */
+	public void setResourceLimit(String name, long limit) {
+		if (resources == null) {
+			resources = new Quota.Resource[1];
+			resources[0] = new Quota.Resource(name, 0, limit);
+			return;
+		}
+		for (int i = 0; i < resources.length; i++) {
+			if (resources[i].name.equalsIgnoreCase(name)) {
+				resources[i].limit = limit;
+				return;
+			}
+		}
+		Quota.Resource[] ra = new Quota.Resource[resources.length + 1];
+		System.arraycopy(resources, 0, ra, 0, resources.length);
+		ra[ra.length - 1] = new Quota.Resource(name, 0, limit);
+		resources = ra;
 	}
-	for (int i = 0; i < resources.length; i++) {
-	    if (resources[i].name.equalsIgnoreCase(name)) {
-		resources[i].limit = limit;
-		return;
-	    }
-	}
-	Quota.Resource[] ra = new Quota.Resource[resources.length + 1];
-	System.arraycopy(resources, 0, ra, 0, resources.length);
-	ra[ra.length - 1] = new Quota.Resource(name, 0, limit);
-	resources = ra;
-    }
 }

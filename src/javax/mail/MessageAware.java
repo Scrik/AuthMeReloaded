@@ -51,8 +51,8 @@ package javax.mail;
  * @since	JavaMail 1.1
  */
 public interface MessageAware {
-    /**
-     * Return the message context.
-     */
-    public MessageContext getMessageContext();
+	/**
+	 * Return the message context.
+	 */
+	public MessageContext getMessageContext();
 }

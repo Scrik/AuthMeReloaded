@@ -40,8 +40,8 @@
 
 package javax.mail;
 
-import java.io.*;
 import java.util.Vector;
+
 import javax.mail.event.MailEvent;
 
 /**
@@ -55,104 +55,109 @@ import javax.mail.event.MailEvent;
  */
 class EventQueue implements Runnable {
 
-    static class QueueElement {
-	QueueElement next = null;
-	QueueElement prev = null;
-	MailEvent event = null;
-	Vector vector = null;
+	static class QueueElement {
+		QueueElement next = null;
+		QueueElement prev = null;
+		MailEvent event = null;
+		Vector<?> vector = null;
 
-	QueueElement(MailEvent event, Vector vector) {
-	    this.event = event;
-	    this.vector = vector;
+		QueueElement(MailEvent event, Vector<?> vector) {
+			this.event = event;
+			this.vector = vector;
+		}
 	}
-    }
 
-    private QueueElement head = null;
-    private QueueElement tail = null;
-    private Thread qThread;
+	private QueueElement head = null;
+	private QueueElement tail = null;
+	private Thread qThread;
 
-    public EventQueue() {
-	qThread = new Thread(this, "JavaMail-EventQueue");
-	qThread.setDaemon(true);  // not a user thread
-	qThread.start();
-    }
-
-    /**
-     * Enqueue an event.
-     */
-    public synchronized void enqueue(MailEvent event, Vector vector) {
-	QueueElement newElt = new QueueElement(event, vector);
-
-	if (head == null) {
-	    head = newElt;
-	    tail = newElt;
-	} else {
-	    newElt.next = head;
-	    head.prev = newElt;
-	    head = newElt;
+	public EventQueue() {
+		qThread = new Thread(this, "JavaMail-EventQueue");
+		qThread.setDaemon(true);  // not a user thread
+		qThread.start();
 	}
-	notifyAll();
-    }
 
-    /**
-     * Dequeue the oldest object on the queue.
-     * Used only by the run() method.
-     *
-     * @return    the oldest object on the queue.
-     * @exception java.lang.InterruptedException if another thread has
-     *              interrupted this thread.
-     */
-    private synchronized QueueElement dequeue()
-				throws InterruptedException {
-	while (tail == null)
-	    wait();
-	QueueElement elt = tail;
-	tail = elt.prev;
-	if (tail == null) {
-	    head = null;
-	} else {
-	    tail.next = null;
+	/**
+	 * Enqueue an event.
+	 */
+	public synchronized void enqueue(MailEvent event, Vector<?> vector) {
+		QueueElement newElt = new QueueElement(event, vector);
+
+		if (head == null) {
+			head = newElt;
+			tail = newElt;
+		} else {
+			newElt.next = head;
+			head.prev = newElt;
+			head = newElt;
+		}
+		notifyAll();
 	}
-	elt.prev = elt.next = null;
-	return elt;
-    }
 
-    /**
-     * Pull events off the queue and dispatch them.
-     */
-    public void run() {
-	QueueElement qe;
-
-	try {
-	    loop:
-	    for (;;) {
-		qe = dequeue();	// blocks until an item is available
-		MailEvent e = qe.event;
-		Vector v = qe.vector;
-
-		for (int i = 0; i < v.size(); i++)
-		    try {
-			e.dispatch(v.elementAt(i));
-		    } catch (Throwable t) {
-			if (t instanceof InterruptedException)
-			    break loop;
-			// ignore anything else thrown by the listener
-		    }
-
-		qe = null; e = null; v = null;
-	    }
-	} catch (InterruptedException e) {
-	    // just die
+	/**
+	 * Dequeue the oldest object on the queue.
+	 * Used only by the run() method.
+	 *
+	 * @return    the oldest object on the queue.
+	 * @exception java.lang.InterruptedException if another thread has
+	 *              interrupted this thread.
+	 */
+	private synchronized QueueElement dequeue()
+			throws InterruptedException {
+		while (tail == null) {
+			wait();
+		}
+		QueueElement elt = tail;
+		tail = elt.prev;
+		if (tail == null) {
+			head = null;
+		} else {
+			tail.next = null;
+		}
+		elt.prev = elt.next = null;
+		return elt;
 	}
-    }
 
-    /**
-     * Stop the dispatcher so we can be destroyed.
-     */
-    void stop() {
-	if (qThread != null) {
-	    qThread.interrupt();	// kill our thread
-	    qThread = null;
+	/**
+	 * Pull events off the queue and dispatch them.
+	 */
+	@Override
+	public void run() {
+		QueueElement qe;
+
+		try {
+			loop:
+				for (;;) {
+					qe = dequeue();	// blocks until an item is available
+					MailEvent e = qe.event;
+					Vector<?> v = qe.vector;
+
+					for (int i = 0; i < v.size(); i++) {
+						try {
+							e.dispatch(v.elementAt(i));
+						} catch (Throwable t) {
+							if (t instanceof InterruptedException)
+							{
+								break loop;
+								// ignore anything else thrown by the listener
+							}
+						}
+					}
+
+					qe = null; e = null; v = null;
+				}
+		} catch (InterruptedException e) {
+			// just die
+		}
 	}
-    }
+
+	/**
+	 * Stop the dispatcher so we can be destroyed.
+	 */
+	void stop() {
+		if (qThread != null) {
+			qThread.interrupt();	// kill our thread
+			qThread = null;
+		}
+	}
 }

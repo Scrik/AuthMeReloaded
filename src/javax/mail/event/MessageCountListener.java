@@ -40,7 +40,6 @@
 
 package javax.mail.event;
 
-import java.util.*;
 
 /**
  * This is the Listener interface for MessageCount events.
@@ -49,13 +48,13 @@ import java.util.*;
  */
 
 public interface MessageCountListener extends java.util.EventListener {
-    /**
-     * Invoked when messages are added into a folder.
-     */
-    public void messagesAdded(MessageCountEvent e);
+	/**
+	 * Invoked when messages are added into a folder.
+	 */
+	public void messagesAdded(MessageCountEvent e);
 
-    /**
-     * Invoked when messages are removed (expunged) from a folder.
-     */
-    public void messagesRemoved(MessageCountEvent e);
+	/**
+	 * Invoked when messages are removed (expunged) from a folder.
+	 */
+	public void messagesRemoved(MessageCountEvent e);
 }

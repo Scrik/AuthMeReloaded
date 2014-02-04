@@ -40,8 +40,8 @@
 
 package javax.mail.search;
 
-import javax.mail.Message;
 import javax.mail.Address;
+import javax.mail.Message;
 
 /**
  * This class implements comparisons for the From Address header.
@@ -51,46 +51,52 @@ import javax.mail.Address;
  */
 public final class FromTerm extends AddressTerm {
 
-    private static final long serialVersionUID = 5214730291502658665L;
+	private static final long serialVersionUID = 5214730291502658665L;
 
-    /**
-     * Constructor
-     * @param address	The Address to be compared
-     */
-    public FromTerm(Address address) {
-	super(address);
-    }
-
-    /**
-     * The address comparator.
-     *
-     * @param msg	The address comparison is applied to this Message
-     * @return		true if the comparison succeeds, otherwise false
-     */
-    public boolean match(Message msg) {
-	Address[] from;
-
-	try {
-	    from = msg.getFrom();
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor
+	 * @param address	The Address to be compared
+	 */
+	public FromTerm(Address address) {
+		super(address);
 	}
 
-	if (from == null)
-	    return false;
+	/**
+	 * The address comparator.
+	 *
+	 * @param msg	The address comparison is applied to this Message
+	 * @return		true if the comparison succeeds, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		Address[] from;
 
-	for (int i=0; i < from.length; i++)
-	    if (super.match(from[i]))
-		return true;
-	return false;
-    }
+		try {
+			from = msg.getFrom();
+		} catch (Exception e) {
+			return false;
+		}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof FromTerm))
-	    return false;
-	return super.equals(obj);
-    }
+		if (from == null) {
+			return false;
+		}
+
+		for (int i=0; i < from.length; i++) {
+			if (super.match(from[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof FromTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

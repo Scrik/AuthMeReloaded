@@ -40,9 +40,11 @@
 
 package javax.mail.internet;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Enumeration;
-import javax.mail.*;
+
+import javax.mail.MessagingException;
 
 import com.sun.mail.util.LineOutputStream;
 
@@ -61,64 +63,68 @@ import com.sun.mail.util.LineOutputStream;
  */
 
 public class PreencodedMimeBodyPart extends MimeBodyPart {
-    private String encoding;
+	private String encoding;
 
-    /**
-     * Create a PreencodedMimeBodyPart that assumes the data is
-     * encoded using the specified encoding.  The encoding must
-     * be a MIME supported Content-Transfer-Encoding.
-     */
-    public PreencodedMimeBodyPart(String encoding) {
-	this.encoding = encoding;
-    }
-
-    /**
-     * Returns the content transfer encoding specified when
-     * this object was created.
-     */
-    public String getEncoding() throws MessagingException {
-	return encoding;
-    }
-
-    /**
-     * Output the body part as an RFC 822 format stream.
-     *
-     * @exception MessagingException
-     * @exception IOException	if an error occurs writing to the
-     *				stream or if an error is generated
-     *				by the javax.activation layer.
-     * @see javax.activation.DataHandler#writeTo
-     */
-    public void writeTo(OutputStream os)
-			throws IOException, MessagingException {
-
-	// see if we already have a LOS
-	LineOutputStream los = null;
-	if (os instanceof LineOutputStream) {
-	    los = (LineOutputStream) os;
-	} else {
-	    los = new LineOutputStream(os);
+	/**
+	 * Create a PreencodedMimeBodyPart that assumes the data is
+	 * encoded using the specified encoding.  The encoding must
+	 * be a MIME supported Content-Transfer-Encoding.
+	 */
+	public PreencodedMimeBodyPart(String encoding) {
+		this.encoding = encoding;
 	}
 
-	// First, write out the header
-	Enumeration hdrLines = getAllHeaderLines();
-	while (hdrLines.hasMoreElements())
-	    los.writeln((String)hdrLines.nextElement());
+	/**
+	 * Returns the content transfer encoding specified when
+	 * this object was created.
+	 */
+	@Override
+	public String getEncoding() throws MessagingException {
+		return encoding;
+	}
 
-	// The CRLF separator between header and content
-	los.writeln();
+	/**
+	 * Output the body part as an RFC 822 format stream.
+	 *
+	 * @exception MessagingException
+	 * @exception IOException	if an error occurs writing to the
+	 *				stream or if an error is generated
+	 *				by the javax.activation layer.
+	 * @see javax.activation.DataHandler#writeTo
+	 */
+	@Override
+	public void writeTo(OutputStream os)
+			throws IOException, MessagingException {
 
-	// Finally, the content, already encoded.
-	getDataHandler().writeTo(os);
-	os.flush();
-    }
+		// see if we already have a LOS
+		LineOutputStream los = null;
+		if (os instanceof LineOutputStream) {
+			los = (LineOutputStream) os;
+		} else {
+			los = new LineOutputStream(os);
+		}
 
-    /**
-     * Force the <code>Content-Transfer-Encoding</code> header to use
-     * the encoding that was specified when this object was created.
-     */
-    protected void updateHeaders() throws MessagingException {
-	super.updateHeaders();
-	MimeBodyPart.setEncoding(this, encoding);
-    }
+		// First, write out the header
+		Enumeration<?> hdrLines = getAllHeaderLines();
+		while (hdrLines.hasMoreElements()) {
+			los.writeln((String)hdrLines.nextElement());
+		}
+
+		// The CRLF separator between header and content
+		los.writeln();
+
+		// Finally, the content, already encoded.
+		getDataHandler().writeTo(os);
+		os.flush();
+	}
+
+	/**
+	 * Force the <code>Content-Transfer-Encoding</code> header to use
+	 * the encoding that was specified when this object was created.
+	 */
+	@Override
+	protected void updateHeaders() throws MessagingException {
+		super.updateHeaders();
+		MimeBodyPart.setEncoding(this, encoding);
+	}
 }

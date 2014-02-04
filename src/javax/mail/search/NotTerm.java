@@ -49,45 +49,49 @@ import javax.mail.Message;
  * @author John Mani
  */
 public final class NotTerm extends SearchTerm {
-    /**
-     * The search term to negate.
-     *
-     * @serial
-     */
-    private SearchTerm term;
+	/**
+	 * The search term to negate.
+	 *
+	 * @serial
+	 */
+	private SearchTerm term;
 
-    private static final long serialVersionUID = 7152293214217310216L;
+	private static final long serialVersionUID = 7152293214217310216L;
 
-    public NotTerm(SearchTerm t) {
-	term = t;
-    }
+	public NotTerm(SearchTerm t) {
+		term = t;
+	}
 
-    /**
-     * Return the term to negate.
-     */
-    public SearchTerm getTerm() {
-	return term;
-    }
+	/**
+	 * Return the term to negate.
+	 */
+	public SearchTerm getTerm() {
+		return term;
+	}
 
-    /* The NOT operation */
-    public boolean match(Message msg) {
-	return !term.match(msg);
-    }
+	/* The NOT operation */
+	@Override
+	public boolean match(Message msg) {
+		return !term.match(msg);
+	}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof NotTerm))
-	    return false;
-	NotTerm nt = (NotTerm)obj;
-	return nt.term.equals(this.term);
-    }
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof NotTerm)) {
+			return false;
+		}
+		NotTerm nt = (NotTerm)obj;
+		return nt.term.equals(this.term);
+	}
 
-    /**
-     * Compute a hashCode for this object.
-     */
-    public int hashCode() {
-	return term.hashCode() << 1;
-    }
+	/**
+	 * Compute a hashCode for this object.
+	 */
+	@Override
+	public int hashCode() {
+		return term.hashCode() << 1;
+	}
 }

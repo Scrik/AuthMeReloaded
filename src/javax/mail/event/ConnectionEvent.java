@@ -40,8 +40,6 @@
 
 package javax.mail.event;
 
-import java.util.*;
-import javax.mail.*;
 
 /**
  * This class models Connection events.
@@ -51,48 +49,50 @@ import javax.mail.*;
 
 public class ConnectionEvent extends MailEvent  {
 
-    /** A connection was opened. */
-    public static final int OPENED 		= 1;
-    /** A connection was disconnected (not currently used). */
-    public static final int DISCONNECTED 	= 2;
-    /** A connection was closed. */
-    public static final int CLOSED 		= 3;
+	/** A connection was opened. */
+	public static final int OPENED 		= 1;
+	/** A connection was disconnected (not currently used). */
+	public static final int DISCONNECTED 	= 2;
+	/** A connection was closed. */
+	public static final int CLOSED 		= 3;
 
-    /**
-     * The event type.
-     *
-     * @serial
-     */
-    protected int type;
+	/**
+	 * The event type.
+	 *
+	 * @serial
+	 */
+	protected int type;
 
-    private static final long serialVersionUID = -1855480171284792957L;
+	private static final long serialVersionUID = -1855480171284792957L;
 
-    /**
-     * Constructor
-     * @param source  The source object
-     */
-    public ConnectionEvent(Object source, int type) {
-	super(source);
-	this.type = type;
-    }
+	/**
+	 * Constructor
+	 * @param source  The source object
+	 */
+	public ConnectionEvent(Object source, int type) {
+		super(source);
+		this.type = type;
+	}
 
-    /**
-     * Return the type of this event
-     * @return  type
-     */
-    public int getType() {
-	return type;
-    }
+	/**
+	 * Return the type of this event
+	 * @return  type
+	 */
+	public int getType() {
+		return type;
+	}
 
-    /**
-     * Invokes the appropriate ConnectionListener method
-     */
-    public void dispatch(Object listener) {
-	if (type == OPENED)
-	    ((ConnectionListener)listener).opened(this);
-	else if (type == DISCONNECTED)
-	    ((ConnectionListener)listener).disconnected(this);
-	else if (type == CLOSED)
-	    ((ConnectionListener)listener).closed(this);
-    }
+	/**
+	 * Invokes the appropriate ConnectionListener method
+	 */
+	@Override
+	public void dispatch(Object listener) {
+		if (type == OPENED) {
+			((ConnectionListener)listener).opened(this);
+		} else if (type == DISCONNECTED) {
+			((ConnectionListener)listener).disconnected(this);
+		} else if (type == CLOSED) {
+			((ConnectionListener)listener).closed(this);
+		}
+	}
 }

@@ -40,7 +40,6 @@
 
 package javax.mail.event;
 
-import java.util.*;
 
 /**
  * This is the Listener interface for Folder events.
@@ -49,18 +48,18 @@ import java.util.*;
  */
 
 public interface FolderListener extends java.util.EventListener {
-    /**
-     * Invoked when a Folder is created.
-     */
-    public void folderCreated(FolderEvent e);
+	/**
+	 * Invoked when a Folder is created.
+	 */
+	public void folderCreated(FolderEvent e);
 
-    /**
-     * Invoked when a folder is deleted.
-     */
-    public void folderDeleted(FolderEvent e);
+	/**
+	 * Invoked when a folder is deleted.
+	 */
+	public void folderDeleted(FolderEvent e);
 
-    /**
-     * Invoked when a folder is renamed.
-     */
-    public void folderRenamed(FolderEvent e);
+	/**
+	 * Invoked when a folder is renamed.
+	 */
+	public void folderRenamed(FolderEvent e);
 }

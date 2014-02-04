@@ -52,35 +52,35 @@ package javax.mail;
 
 public class MessageRemovedException extends MessagingException {
 
-    private static final long serialVersionUID = 1951292550679528690L;
+	private static final long serialVersionUID = 1951292550679528690L;
 
-    /**
-     * Constructs a MessageRemovedException with no detail message.
-     */
-    public MessageRemovedException() {
-	super();
-    }
+	/**
+	 * Constructs a MessageRemovedException with no detail message.
+	 */
+	public MessageRemovedException() {
+		super();
+	}
 
-    /**
-     * Constructs a MessageRemovedException with the specified
-     * detail message.
-     *
-     * @param s		The detailed error message
-     */
-    public MessageRemovedException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs a MessageRemovedException with the specified
+	 * detail message.
+	 *
+	 * @param s		The detailed error message
+	 */
+	public MessageRemovedException(String s) {
+		super(s);
+	}
 
-    /**
-     * Constructs a MessageRemovedException with the specified
-     * detail message and embedded exception.  The exception is chained
-     * to this exception.
-     *
-     * @param s		The detailed error message
-     * @param e		The embedded exception
-     * @since		JavaMail 1.5
-     */
-    public MessageRemovedException(String s, Exception e) {
-	super(s, e);
-    }
+	/**
+	 * Constructs a MessageRemovedException with the specified
+	 * detail message and embedded exception.  The exception is chained
+	 * to this exception.
+	 *
+	 * @param s		The detailed error message
+	 * @param e		The embedded exception
+	 * @since		JavaMail 1.5
+	 */
+	public MessageRemovedException(String s, Exception e) {
+		super(s, e);
+	}
 }

@@ -40,11 +40,17 @@
 
 package javax.mail.internet;
 
-import javax.mail.*;
-import javax.activation.*;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.UnknownServiceException;
-import com.sun.mail.util.PropUtil;
+
+import javax.activation.DataSource;
+import javax.mail.FolderClosedException;
+import javax.mail.MessageAware;
+import javax.mail.MessageContext;
+import javax.mail.MessagingException;
+
 import com.sun.mail.util.FolderClosedIOException;
 
 /**
@@ -57,112 +63,121 @@ import com.sun.mail.util.FolderClosedIOException;
  */
 
 public class MimePartDataSource implements DataSource, MessageAware {
-    /**
-     * The MimePart that provides the data for this DataSource.
-     *
-     * @since	JavaMail 1.4
-     */
-    protected MimePart part;
+	/**
+	 * The MimePart that provides the data for this DataSource.
+	 *
+	 * @since	JavaMail 1.4
+	 */
+	protected MimePart part;
 
-    private MessageContext context;
+	private MessageContext context;
 
-    /**
-     * Constructor, that constructs a DataSource from a MimePart.
-     */
-    public MimePartDataSource(MimePart part) {
-	this.part = part;
-    }
-
-    /**
-     * Returns an input stream from this  MimePart. <p>
-     *
-     * This method applies the appropriate transfer-decoding, based 
-     * on the Content-Transfer-Encoding attribute of this MimePart.
-     * Thus the returned input stream is a decoded stream of bytes.<p>
-     *
-     * This implementation obtains the raw content from the Part
-     * using the <code>getContentStream()</code> method and decodes
-     * it using the <code>MimeUtility.decode()</code> method.
-     *
-     * @see	javax.mail.internet.MimeMessage#getContentStream
-     * @see	javax.mail.internet.MimeBodyPart#getContentStream
-     * @see	javax.mail.internet.MimeUtility#decode
-     * @return 	decoded input stream
-     */
-    public InputStream getInputStream() throws IOException {
-	InputStream is;
-
-	try {
-	    if (part instanceof MimeBodyPart)
-		is = ((MimeBodyPart)part).getContentStream();
-	    else if (part instanceof MimeMessage)
-		is = ((MimeMessage)part).getContentStream();
-	    else
-		throw new MessagingException("Unknown part");
-	    
-	    String encoding =
-		MimeBodyPart.restrictEncoding(part, part.getEncoding());
-	    if (encoding != null)
-		return MimeUtility.decode(is, encoding);
-	    else
-		return is;
-	} catch (FolderClosedException fex) {
-	    throw new FolderClosedIOException(fex.getFolder(),
-						fex.getMessage());
-	} catch (MessagingException mex) {
-	    throw new IOException(mex.getMessage());
+	/**
+	 * Constructor, that constructs a DataSource from a MimePart.
+	 */
+	public MimePartDataSource(MimePart part) {
+		this.part = part;
 	}
-    }
 
-    /**
-     * DataSource method to return an output stream. <p>
-     *
-     * This implementation throws the UnknownServiceException.
-     */
-    public OutputStream getOutputStream() throws IOException {
-	throw new UnknownServiceException("Writing not supported");
-    }
+	/**
+	 * Returns an input stream from this  MimePart. <p>
+	 *
+	 * This method applies the appropriate transfer-decoding, based
+	 * on the Content-Transfer-Encoding attribute of this MimePart.
+	 * Thus the returned input stream is a decoded stream of bytes.<p>
+	 *
+	 * This implementation obtains the raw content from the Part
+	 * using the <code>getContentStream()</code> method and decodes
+	 * it using the <code>MimeUtility.decode()</code> method.
+	 *
+	 * @see	javax.mail.internet.MimeMessage#getContentStream
+	 * @see	javax.mail.internet.MimeBodyPart#getContentStream
+	 * @see	javax.mail.internet.MimeUtility#decode
+	 * @return 	decoded input stream
+	 */
+	@Override
+	public InputStream getInputStream() throws IOException {
+		InputStream is;
 
-    /**
-     * Returns the content-type of this DataSource. <p>
-     *
-     * This implementation just invokes the <code>getContentType</code>
-     * method on the MimePart.
-     */
-    public String getContentType() {
-	try {
-	    return part.getContentType();
-	} catch (MessagingException mex) {
-	    // would like to be able to reflect the exception to the
-	    // application, but since we can't do that we return a
-	    // generic "unknown" value here and hope for another
-	    // exception later.
-	    return "application/octet-stream";
+		try {
+			if (part instanceof MimeBodyPart) {
+				is = ((MimeBodyPart)part).getContentStream();
+			} else if (part instanceof MimeMessage) {
+				is = ((MimeMessage)part).getContentStream();
+			} else {
+				throw new MessagingException("Unknown part");
+			}
+
+			String encoding =
+					MimeBodyPart.restrictEncoding(part, part.getEncoding());
+			if (encoding != null) {
+				return MimeUtility.decode(is, encoding);
+			} else {
+				return is;
+			}
+		} catch (FolderClosedException fex) {
+			throw new FolderClosedIOException(fex.getFolder(),
+					fex.getMessage());
+		} catch (MessagingException mex) {
+			throw new IOException(mex.getMessage());
+		}
 	}
-    }
 
-    /**
-     * DataSource method to return a name.  <p>
-     *
-     * This implementation just returns an empty string.
-     */
-    public String getName() {
-	try {
-	    if (part instanceof MimeBodyPart)
-		return ((MimeBodyPart)part).getFileName();
-	} catch (MessagingException mex) {
-	    // ignore it
+	/**
+	 * DataSource method to return an output stream. <p>
+	 *
+	 * This implementation throws the UnknownServiceException.
+	 */
+	@Override
+	public OutputStream getOutputStream() throws IOException {
+		throw new UnknownServiceException("Writing not supported");
 	}
-	return "";
-    }
 
-    /**
-     * Return the <code>MessageContext</code> for the current part.
-     * @since JavaMail 1.1
-     */
-    public synchronized MessageContext getMessageContext() {
-	if (context == null)
-	    context = new MessageContext(part);
-	return context;
-    }
+	/**
+	 * Returns the content-type of this DataSource. <p>
+	 *
+	 * This implementation just invokes the <code>getContentType</code>
+	 * method on the MimePart.
+	 */
+	@Override
+	public String getContentType() {
+		try {
+			return part.getContentType();
+		} catch (MessagingException mex) {
+			// would like to be able to reflect the exception to the
+			// application, but since we can't do that we return a
+			// generic "unknown" value here and hope for another
+			// exception later.
+			return "application/octet-stream";
+		}
+	}
+
+	/**
+	 * DataSource method to return a name.  <p>
+	 *
+	 * This implementation just returns an empty string.
+	 */
+	@Override
+	public String getName() {
+		try {
+			if (part instanceof MimeBodyPart) {
+				return ((MimeBodyPart)part).getFileName();
+			}
+		} catch (MessagingException mex) {
+			// ignore it
+		}
+		return "";
+	}
+
+	/**
+	 * Return the <code>MessageContext</code> for the current part.
+	 * @since JavaMail 1.1
+	 */
+	@Override
+	public synchronized MessageContext getMessageContext() {
+		if (context == null) {
+			context = new MessageContext(part);
+		}
+		return context;
+	}
 }

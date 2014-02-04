@@ -40,8 +40,7 @@
 
 package javax.mail.event;
 
-import java.util.*;
-import javax.mail.*;
+import javax.mail.Store;
 
 /**
  * This class models notifications from the Store connection. These
@@ -54,66 +53,67 @@ import javax.mail.*;
 
 public class StoreEvent extends MailEvent {
 
-    /**
-     * Indicates that this message is an ALERT.
-     */
-    public static final int ALERT 		= 1;
+	/**
+	 * Indicates that this message is an ALERT.
+	 */
+	public static final int ALERT 		= 1;
 
-    /**
-     * Indicates that this message is a NOTICE.
-     */
-    public static final int NOTICE 		= 2;
+	/**
+	 * Indicates that this message is a NOTICE.
+	 */
+	public static final int NOTICE 		= 2;
 
-    /**
-     * The event type.
-     *
-     * @serial
-     */
-    protected int type;
+	/**
+	 * The event type.
+	 *
+	 * @serial
+	 */
+	protected int type;
 
-    /**
-     * The message text to be presented to the user.
-     *
-     * @serial
-     */
-    protected String message;
+	/**
+	 * The message text to be presented to the user.
+	 *
+	 * @serial
+	 */
+	protected String message;
 
-    private static final long serialVersionUID = 1938704919992515330L;
+	private static final long serialVersionUID = 1938704919992515330L;
 
-    /**
-     * Constructor.
-     * @param store  The source Store
-     */
-    public StoreEvent(Store store, int type, String message) {
-	super(store);
-	this.type = type;
-	this.message = message;
-    }
+	/**
+	 * Constructor.
+	 * @param store  The source Store
+	 */
+	public StoreEvent(Store store, int type, String message) {
+		super(store);
+		this.type = type;
+		this.message = message;
+	}
 
-    /**
-     * Return the type of this event.
-     *
-     * @return  type
-     * @see #ALERT
-     * @see #NOTICE
-     */
-    public int getMessageType() {
-	return type;
-    }
+	/**
+	 * Return the type of this event.
+	 *
+	 * @return  type
+	 * @see #ALERT
+	 * @see #NOTICE
+	 */
+	public int getMessageType() {
+		return type;
+	}
 
-    /**
-     * Get the message from the Store.
-     *
-     * @return message from the Store
-     */
-    public String getMessage() {
-	return message;
-    }
+	/**
+	 * Get the message from the Store.
+	 *
+	 * @return message from the Store
+	 */
+	public String getMessage() {
+		return message;
+	}
 
-    /**
-     * Invokes the appropriate StoreListener method.
-     */
-    public void dispatch(Object listener) {
-	((StoreListener)listener).notification(this);
-    }
+	/**
+	 * Invokes the appropriate StoreListener method.
+	 */
+	@Override
+	public void dispatch(Object listener) {
+		((StoreListener)listener).notification(this);
+	}
 }

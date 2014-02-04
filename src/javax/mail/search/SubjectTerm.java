@@ -52,46 +52,50 @@ import javax.mail.Message;
  */
 public final class SubjectTerm extends StringTerm {
 
-    private static final long serialVersionUID = 7481568618055573432L;
+	private static final long serialVersionUID = 7481568618055573432L;
 
-    /**
-     * Constructor.
-     *
-     * @param pattern  the pattern to search for
-     */
-    public SubjectTerm(String pattern) {
-	// Note: comparison is case-insensitive
-	super(pattern);
-    }
-
-    /**
-     * The match method.
-     *
-     * @param msg	the pattern match is applied to this Message's 
-     *			subject header
-     * @return		true if the pattern match succeeds, otherwise false
-     */
-    public boolean match(Message msg) {
-	String subj;
-
-	try {
-	    subj = msg.getSubject();
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor.
+	 *
+	 * @param pattern  the pattern to search for
+	 */
+	public SubjectTerm(String pattern) {
+		// Note: comparison is case-insensitive
+		super(pattern);
 	}
 
-	if (subj == null)
-	    return false;
+	/**
+	 * The match method.
+	 *
+	 * @param msg	the pattern match is applied to this Message's
+	 *			subject header
+	 * @return		true if the pattern match succeeds, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		String subj;
 
-	return super.match(subj);
-    }
+		try {
+			subj = msg.getSubject();
+		} catch (Exception e) {
+			return false;
+		}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof SubjectTerm))
-	    return false;
-	return super.equals(obj);
-    }
+		if (subj == null) {
+			return false;
+		}
+
+		return super.match(subj);
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof SubjectTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

@@ -73,15 +73,15 @@ import javax.mail.Message;
  */
 public abstract class SearchTerm implements Serializable {
 
-    private static final long serialVersionUID = -6652358452205992789L;
+	private static final long serialVersionUID = -6652358452205992789L;
 
-    /**
-     * This method applies a specific match criterion to the given
-     * message and returns the result.
-     *
-     * @param msg	The match criterion is applied on this message
-     * @return		true, it the match succeeds, false if the match fails
-     */
+	/**
+	 * This method applies a specific match criterion to the given
+	 * message and returns the result.
+	 *
+	 * @param msg	The match criterion is applied on this message
+	 * @return		true, it the match succeeds, false if the match fails
+	 */
 
-    public abstract boolean match(Message msg);
+	public abstract boolean match(Message msg);
 }

@@ -49,7 +49,10 @@ package javax.mail.event;
  * @author John Mani
  */
 public abstract class ConnectionAdapter implements ConnectionListener {
-    public void opened(ConnectionEvent e) {}
-    public void disconnected(ConnectionEvent e) {}
-    public void closed(ConnectionEvent e) {}
+	@Override
+	public void opened(ConnectionEvent e) {}
+	@Override
+	public void disconnected(ConnectionEvent e) {}
+	@Override
+	public void closed(ConnectionEvent e) {}
 }

@@ -41,6 +41,7 @@
 package javax.mail.search;
 
 import java.util.Date;
+
 import javax.mail.Message;
 
 /**
@@ -51,46 +52,50 @@ import javax.mail.Message;
  */
 public final class ReceivedDateTerm extends DateTerm {
 
-    private static final long serialVersionUID = -2756695246195503170L;
+	private static final long serialVersionUID = -2756695246195503170L;
 
-    /**
-     * Constructor.
-     *
-     * @param comparison	the Comparison type
-     * @param date		the date to be compared
-     */
-    public ReceivedDateTerm(int comparison, Date date) {
-	super(comparison, date);
-    }
-
-    /**
-     * The match method.
-     *
-     * @param msg	the date comparator is applied to this Message's
-     *			sent date
-     * @return		true if the comparison succeeds, otherwise false
-     */
-    public boolean match(Message msg) {
-	Date d;
-
-	try {
-	    d = msg.getReceivedDate();
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor.
+	 *
+	 * @param comparison	the Comparison type
+	 * @param date		the date to be compared
+	 */
+	public ReceivedDateTerm(int comparison, Date date) {
+		super(comparison, date);
 	}
 
-	if (d == null)
-	    return false;
+	/**
+	 * The match method.
+	 *
+	 * @param msg	the date comparator is applied to this Message's
+	 *			sent date
+	 * @return		true if the comparison succeeds, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		Date d;
 
-	return super.match(d);
-    }
+		try {
+			d = msg.getReceivedDate();
+		} catch (Exception e) {
+			return false;
+		}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof ReceivedDateTerm))
-	    return false;
-	return super.equals(obj);
-    }
+		if (d == null) {
+			return false;
+		}
+
+		return super.match(d);
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ReceivedDateTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

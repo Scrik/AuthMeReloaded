@@ -50,47 +50,50 @@ import javax.mail.Address;
  */
 
 public abstract class AddressTerm extends SearchTerm {
-    /**
-     * The address.
-     *
-     * @serial
-     */
-    protected Address address;
+	/**
+	 * The address.
+	 *
+	 * @serial
+	 */
+	protected Address address;
 
-    private static final long serialVersionUID = 2005405551929769980L;
+	private static final long serialVersionUID = 2005405551929769980L;
 
-    protected AddressTerm(Address address) {
-	this.address = address;
-    }
+	protected AddressTerm(Address address) {
+		this.address = address;
+	}
 
-    /**
-     * Return the address to match with.
-     */
-    public Address getAddress() {
-	return address;
-    }
+	/**
+	 * Return the address to match with.
+	 */
+	public Address getAddress() {
+		return address;
+	}
 
-    /**
-     * Match against the argument Address.
-     */
-    protected boolean match(Address a) {
-	return (a.equals(address));
-    }
+	/**
+	 * Match against the argument Address.
+	 */
+	protected boolean match(Address a) {
+		return (a.equals(address));
+	}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof AddressTerm))
-	    return false;
-	AddressTerm at = (AddressTerm)obj;
-	return at.address.equals(this.address);
-    }
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof AddressTerm)) {
+			return false;
+		}
+		AddressTerm at = (AddressTerm)obj;
+		return at.address.equals(this.address);
+	}
 
-    /**
-     * Compute a hashCode for this object.
-     */
-    public int hashCode() {
-	return address.hashCode();
-    }
+	/**
+	 * Compute a hashCode for this object.
+	 */
+	@Override
+	public int hashCode() {
+		return address.hashCode();
+	}
 }

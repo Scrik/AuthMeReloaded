@@ -43,7 +43,7 @@ package javax.mail.search;
 import javax.mail.Message;
 
 /**
- * This term models the RFC822 "MessageId" - a message-id for 
+ * This term models the RFC822 "MessageId" - a message-id for
  * Internet messages that is supposed to be unique per message.
  * Clients can use this term to search a folder for a message given
  * its MessageId. <p>
@@ -55,49 +55,55 @@ import javax.mail.Message;
  */
 public final class MessageIDTerm extends StringTerm {
 
-    private static final long serialVersionUID = -2121096296454691963L;
+	private static final long serialVersionUID = -2121096296454691963L;
 
-    /**
-     * Constructor.
-     *
-     * @param msgid  the msgid to search for
-     */
-    public MessageIDTerm(String msgid) {
-	// Note: comparison is case-insensitive
-	super(msgid);
-    }
-
-    /**
-     * The match method.
-     *
-     * @param msg	the match is applied to this Message's 
-     *			Message-ID header
-     * @return		true if the match succeeds, otherwise false
-     */
-    public boolean match(Message msg) {
-	String[] s;
-
-	try {
-	    s = msg.getHeader("Message-ID");
-	} catch (Exception e) {
-	    return false;
+	/**
+	 * Constructor.
+	 *
+	 * @param msgid  the msgid to search for
+	 */
+	public MessageIDTerm(String msgid) {
+		// Note: comparison is case-insensitive
+		super(msgid);
 	}
 
-	if (s == null)
-	    return false;
+	/**
+	 * The match method.
+	 *
+	 * @param msg	the match is applied to this Message's
+	 *			Message-ID header
+	 * @return		true if the match succeeds, otherwise false
+	 */
+	@Override
+	public boolean match(Message msg) {
+		String[] s;
 
-	for (int i=0; i < s.length; i++)
-	    if (super.match(s[i]))
-		return true;
-	return false;
-    }
+		try {
+			s = msg.getHeader("Message-ID");
+		} catch (Exception e) {
+			return false;
+		}
 
-    /**
-     * Equality comparison.
-     */
-    public boolean equals(Object obj) {
-	if (!(obj instanceof MessageIDTerm))
-	    return false;
-	return super.equals(obj);
-    }
+		if (s == null) {
+			return false;
+		}
+
+		for (int i=0; i < s.length; i++) {
+			if (super.match(s[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Equality comparison.
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MessageIDTerm)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
 }

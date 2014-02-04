@@ -40,8 +40,7 @@
 
 package javax.mail.event;
 
-import java.util.*;
-import javax.mail.*;
+import javax.mail.Folder;
 
 /**
  * This class models Folder <em>existence</em> events. FolderEvents are
@@ -63,105 +62,107 @@ import javax.mail.*;
 
 public class FolderEvent extends MailEvent {
 
-    /** The folder was created. */
-    public static final int CREATED 		= 1;
-    /** The folder was deleted. */
-    public static final int DELETED 		= 2;
-    /** The folder was renamed. */
-    public static final int RENAMED 		= 3;
+	/** The folder was created. */
+	public static final int CREATED 		= 1;
+	/** The folder was deleted. */
+	public static final int DELETED 		= 2;
+	/** The folder was renamed. */
+	public static final int RENAMED 		= 3;
 
-    /**
-     * The event type.
-     *
-     * @serial
-     */
-    protected int type;
+	/**
+	 * The event type.
+	 *
+	 * @serial
+	 */
+	protected int type;
 
-    /**
-     * The folder the event occurred on.
-     */
-    transient protected Folder folder;
+	/**
+	 * The folder the event occurred on.
+	 */
+	transient protected Folder folder;
 
-    /**
-     * The folder that represents the new name, in case of a RENAMED event.
-     *
-     * @since	JavaMail 1.1
-     */
-    transient protected Folder newFolder;
+	/**
+	 * The folder that represents the new name, in case of a RENAMED event.
+	 *
+	 * @since	JavaMail 1.1
+	 */
+	transient protected Folder newFolder;
 
-    private static final long serialVersionUID = 5278131310563694307L;
+	private static final long serialVersionUID = 5278131310563694307L;
 
-    /**
-     * Constructor. <p>
-     *
-     * @param source  	The source of the event
-     * @param folder	The affected folder
-     * @param type	The event type
-     */
-    public FolderEvent(Object source, Folder folder, int type) {
-	this(source, folder, folder, type);
-    }
+	/**
+	 * Constructor. <p>
+	 *
+	 * @param source  	The source of the event
+	 * @param folder	The affected folder
+	 * @param type	The event type
+	 */
+	public FolderEvent(Object source, Folder folder, int type) {
+		this(source, folder, folder, type);
+	}
 
-    /**
-     * Constructor. Use for RENAMED events.
-     *
-     * @param source  	The source of the event
-     * @param oldFolder	The folder that is renamed
-     * @param newFolder	The folder that represents the new name
-     * @param type	The event type
-     * @since		JavaMail 1.1
-     */
-    public FolderEvent(Object source, Folder oldFolder, 
-		       Folder newFolder, int type) {
-	super(source);
-	this.folder = oldFolder;
-	this.newFolder = newFolder;
-	this.type = type;
-    }
+	/**
+	 * Constructor. Use for RENAMED events.
+	 *
+	 * @param source  	The source of the event
+	 * @param oldFolder	The folder that is renamed
+	 * @param newFolder	The folder that represents the new name
+	 * @param type	The event type
+	 * @since		JavaMail 1.1
+	 */
+	public FolderEvent(Object source, Folder oldFolder,
+			Folder newFolder, int type) {
+		super(source);
+		this.folder = oldFolder;
+		this.newFolder = newFolder;
+		this.type = type;
+	}
 
-    /**
-     * Return the type of this event.
-     *
-     * @return  type
-     */
-    public int getType() {
-	return type;
-    }
+	/**
+	 * Return the type of this event.
+	 *
+	 * @return  type
+	 */
+	public int getType() {
+		return type;
+	}
 
-    /**
-     * Return the affected folder.
-     *
-     * @return 		the affected folder
-     * @see 		#getNewFolder
-     */
-    public Folder getFolder() {
-	return folder;
-    }
+	/**
+	 * Return the affected folder.
+	 *
+	 * @return 		the affected folder
+	 * @see 		#getNewFolder
+	 */
+	public Folder getFolder() {
+		return folder;
+	}
 
-    /**
-     * If this event indicates that a folder is renamed, (i.e, the event type
-     * is RENAMED), then this method returns the Folder object representing the
-     * new name. <p>
-     *
-     * The <code>getFolder()</code> method returns the folder that is renamed.
-     *
-     * @return		Folder representing the new name.
-     * @see		#getFolder
-     * @since		JavaMail 1.1
-     */
-    public Folder getNewFolder() {
-	return newFolder;
-    }
+	/**
+	 * If this event indicates that a folder is renamed, (i.e, the event type
+	 * is RENAMED), then this method returns the Folder object representing the
+	 * new name. <p>
+	 *
+	 * The <code>getFolder()</code> method returns the folder that is renamed.
+	 *
+	 * @return		Folder representing the new name.
+	 * @see		#getFolder
+	 * @since		JavaMail 1.1
+	 */
+	public Folder getNewFolder() {
+		return newFolder;
+	}
 
-    /**
-     * Invokes the appropriate FolderListener method
-     */
-    public void dispatch(Object listener) {
-	if (type == CREATED)
-	    ((FolderListener)listener).folderCreated(this);
-	else if (type == DELETED)
-	    ((FolderListener)listener).folderDeleted(this);
-	else if (type == RENAMED)
-	    ((FolderListener)listener).folderRenamed(this);
-    }
+	/**
+	 * Invokes the appropriate FolderListener method
+	 */
+	@Override
+	public void dispatch(Object listener) {
+		if (type == CREATED) {
+			((FolderListener)listener).folderCreated(this);
+		} else if (type == DELETED) {
+			((FolderListener)listener).folderDeleted(this);
+		} else if (type == RENAMED) {
+			((FolderListener)listener).folderRenamed(this);
+		}
+	}
 }

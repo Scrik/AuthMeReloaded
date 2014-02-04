@@ -41,7 +41,7 @@
 package javax.mail;
 
 /**
- * This exception is thrown when Session attempts to instantiate a  
+ * This exception is thrown when Session attempts to instantiate a
  * Provider that doesn't exist.
  * 
  * @author Max Spivak
@@ -49,35 +49,35 @@ package javax.mail;
 
 public class NoSuchProviderException extends MessagingException {
 
-    private static final long serialVersionUID = 8058319293154708827L;
-    
-    /**
-     * Constructs a NoSuchProviderException with no detail message.
-     */
-    public NoSuchProviderException() {
-	super();
-    }
+	private static final long serialVersionUID = 8058319293154708827L;
 
-    /**
-     * Constructs a NoSuchProviderException with the specified
-     * detail message.
-     *
-     * @param message	The detailed error message
-     */
-    public NoSuchProviderException(String message) {
-	super(message);
-    }
+	/**
+	 * Constructs a NoSuchProviderException with no detail message.
+	 */
+	public NoSuchProviderException() {
+		super();
+	}
 
-    /**
-     * Constructs a NoSuchProviderException with the specified
-     * detail message and embedded exception.  The exception is chained
-     * to this exception.
-     *
-     * @param message	The detailed error message
-     * @param e		The embedded exception
-     * @since		JavaMail 1.5
-     */
-    public NoSuchProviderException(String message, Exception e) {
-	super(message, e);
-    }
+	/**
+	 * Constructs a NoSuchProviderException with the specified
+	 * detail message.
+	 *
+	 * @param message	The detailed error message
+	 */
+	public NoSuchProviderException(String message) {
+		super(message);
+	}
+
+	/**
+	 * Constructs a NoSuchProviderException with the specified
+	 * detail message and embedded exception.  The exception is chained
+	 * to this exception.
+	 *
+	 * @param message	The detailed error message
+	 * @param e		The embedded exception
+	 * @since		JavaMail 1.5
+	 */
+	public NoSuchProviderException(String message, Exception e) {
+		super(message, e);
+	}
 }

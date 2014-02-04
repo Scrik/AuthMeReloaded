@@ -207,6 +207,7 @@ public class MySQLDataSource implements DataSource {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public synchronized boolean saveAuth(PlayerAuth auth) {
 		Connection con = null;
@@ -413,6 +414,7 @@ public class MySQLDataSource implements DataSource {
 		return true;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public synchronized List<String> autoPurgeDatabase(long until) {
 		Connection con = null;

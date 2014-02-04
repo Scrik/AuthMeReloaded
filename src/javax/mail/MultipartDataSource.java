@@ -40,10 +40,6 @@
 
 package javax.mail;
 
-import java.util.Vector;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
 import javax.activation.DataSource;
 
 /**
@@ -65,22 +61,22 @@ import javax.activation.DataSource;
 
 public interface MultipartDataSource extends DataSource {
 
-    /**
-     * Return the number of enclosed BodyPart objects.
-     *
-     * @return          number of parts
-     */
-    public int getCount();
+	/**
+	 * Return the number of enclosed BodyPart objects.
+	 *
+	 * @return          number of parts
+	 */
+	public int getCount();
 
-    /**
-     * Get the specified Part.  Parts are numbered starting at 0.
-     *
-     * @param index     the index of the desired Part
-     * @return          the Part
-     * @exception       IndexOutOfBoundsException if the given index
-     *			is out of range.
-     * @exception       MessagingException
-     */
-    public BodyPart getBodyPart(int index) throws MessagingException;
+	/**
+	 * Get the specified Part.  Parts are numbered starting at 0.
+	 *
+	 * @param index     the index of the desired Part
+	 * @return          the Part
+	 * @exception       IndexOutOfBoundsException if the given index
+	 *			is out of range.
+	 * @exception       MessagingException
+	 */
+	public BodyPart getBodyPart(int index) throws MessagingException;
 
 }

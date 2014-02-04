@@ -40,7 +40,6 @@
 
 package javax.mail.event;
 
-import java.util.*;
 
 /**
  * This is the Listener interface for MessageChanged events
@@ -49,11 +48,11 @@ import java.util.*;
  */
 
 public interface MessageChangedListener extends java.util.EventListener {
-    /**
-     * Invoked when a message is changed. The change-type specifies
-     * what changed.
-     * @see MessageChangedEvent#FLAGS_CHANGED
-     * @see MessageChangedEvent#ENVELOPE_CHANGED
-     */
-    public void messageChanged(MessageChangedEvent e);
+	/**
+	 * Invoked when a message is changed. The change-type specifies
+	 * what changed.
+	 * @see MessageChangedEvent#FLAGS_CHANGED
+	 * @see MessageChangedEvent#ENVELOPE_CHANGED
+	 */
+	public void messageChanged(MessageChangedEvent e);
 }

@@ -42,7 +42,7 @@ package javax.mail;
 
 
 /**
- * The exception thrown when a method is not supported by the 
+ * The exception thrown when a method is not supported by the
  * implementation
  *
  * @author John Mani
@@ -50,35 +50,35 @@ package javax.mail;
 
 public class MethodNotSupportedException extends MessagingException {
 
-    private static final long serialVersionUID = -3757386618726131322L;
+	private static final long serialVersionUID = -3757386618726131322L;
 
-    /**
-     * Constructs a MethodNotSupportedException with no detail message.
-     */
-    public MethodNotSupportedException() {
-	super();
-    }
+	/**
+	 * Constructs a MethodNotSupportedException with no detail message.
+	 */
+	public MethodNotSupportedException() {
+		super();
+	}
 
-    /**
-     * Constructs a MethodNotSupportedException with the specified
-     * detail message.
-     *
-     * @param s		The detailed error message
-     */
-    public MethodNotSupportedException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs a MethodNotSupportedException with the specified
+	 * detail message.
+	 *
+	 * @param s		The detailed error message
+	 */
+	public MethodNotSupportedException(String s) {
+		super(s);
+	}
 
-    /**
-     * Constructs a MethodNotSupportedException with the specified
-     * detail message and embedded exception.  The exception is chained
-     * to this exception.
-     *
-     * @param s		The detailed error message
-     * @param e		The embedded exception
-     * @since		JavaMail 1.5
-     */
-    public MethodNotSupportedException(String s, Exception e) {
-	super(s, e);
-    }
+	/**
+	 * Constructs a MethodNotSupportedException with the specified
+	 * detail message and embedded exception.  The exception is chained
+	 * to this exception.
+	 *
+	 * @param s		The detailed error message
+	 * @param e		The embedded exception
+	 * @since		JavaMail 1.5
+	 */
+	public MethodNotSupportedException(String s, Exception e) {
+		super(s, e);
+	}
 }

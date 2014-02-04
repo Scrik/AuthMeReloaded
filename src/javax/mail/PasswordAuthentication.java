@@ -54,30 +54,30 @@ package javax.mail;
 
 public final class PasswordAuthentication {
 
-    private final String userName;
-    private final String password;
+	private final String userName;
+	private final String password;
 
-    /** 
-     * Initialize a new PasswordAuthentication
-     * @param userName the user name
-     * @param password The user's password
-     */
-    public PasswordAuthentication(String userName, String password) {
-	this.userName = userName;
-	this.password = password;
-    }
+	/**
+	 * Initialize a new PasswordAuthentication
+	 * @param userName the user name
+	 * @param password The user's password
+	 */
+	public PasswordAuthentication(String userName, String password) {
+		this.userName = userName;
+		this.password = password;
+	}
 
-    /**
-     * @return the user name
-     */
-    public String getUserName() {
-	return userName;
-    }
+	/**
+	 * @return the user name
+	 */
+	public String getUserName() {
+		return userName;
+	}
 
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-	return password;
-    }
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
 }

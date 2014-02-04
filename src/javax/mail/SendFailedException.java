@@ -56,85 +56,85 @@ package javax.mail;
  */
 
 public class SendFailedException extends MessagingException {
-    transient protected Address[] invalid;
-    transient protected Address[] validSent;
-    transient protected Address[] validUnsent;
+	transient protected Address[] invalid;
+	transient protected Address[] validSent;
+	transient protected Address[] validUnsent;
 
-    private static final long serialVersionUID = -6457531621682372913L;
+	private static final long serialVersionUID = -6457531621682372913L;
 
-    /**
-     * Constructs a SendFailedException with no detail message.
-     */
-    public SendFailedException() {
-	super();
-    }
+	/**
+	 * Constructs a SendFailedException with no detail message.
+	 */
+	public SendFailedException() {
+		super();
+	}
 
-    /**
-     * Constructs a SendFailedException with the specified detail message.
-     * @param s		the detail message
-     */
-    public SendFailedException(String s) {
-	super(s);
-    }
+	/**
+	 * Constructs a SendFailedException with the specified detail message.
+	 * @param s		the detail message
+	 */
+	public SendFailedException(String s) {
+		super(s);
+	}
 
-    /**
-     * Constructs a SendFailedException with the specified 
-     * Exception and detail message. The specified exception is chained
-     * to this exception.
-     * @param s		the detail message
-     * @param e		the embedded exception
-     * @see	#getNextException
-     * @see	#setNextException
-     */
-    public SendFailedException(String s, Exception e) {
-	super(s, e);
-    }
+	/**
+	 * Constructs a SendFailedException with the specified
+	 * Exception and detail message. The specified exception is chained
+	 * to this exception.
+	 * @param s		the detail message
+	 * @param e		the embedded exception
+	 * @see	#getNextException
+	 * @see	#setNextException
+	 */
+	public SendFailedException(String s, Exception e) {
+		super(s, e);
+	}
 
 
-    /**
-     * Constructs a SendFailedException with the specified string
-     * and the specified address objects.
-     *
-     * @param msg	the detail message
-     * @param ex        the embedded exception
-     * @param validSent valid addresses to which message was sent
-     * @param validUnsent valid addresses to which message was not sent
-     * @param invalid 	the invalid addresses
-     * @see	#getNextException
-     * @see	#setNextException
-     */
-    public SendFailedException(String msg, Exception ex, Address[] validSent, 
-			       Address[] validUnsent, Address[] invalid) {
-	super(msg, ex);
-	this.validSent = validSent;
-	this.validUnsent = validUnsent;
-	this.invalid = invalid;
-    }
+	/**
+	 * Constructs a SendFailedException with the specified string
+	 * and the specified address objects.
+	 *
+	 * @param msg	the detail message
+	 * @param ex        the embedded exception
+	 * @param validSent valid addresses to which message was sent
+	 * @param validUnsent valid addresses to which message was not sent
+	 * @param invalid 	the invalid addresses
+	 * @see	#getNextException
+	 * @see	#setNextException
+	 */
+	public SendFailedException(String msg, Exception ex, Address[] validSent,
+			Address[] validUnsent, Address[] invalid) {
+		super(msg, ex);
+		this.validSent = validSent;
+		this.validUnsent = validUnsent;
+		this.invalid = invalid;
+	}
 
-    /**
-     * Return the addresses to which this message was sent succesfully.
-     * @return Addresses to which the message was sent successfully or null
-     */
-    public Address[] getValidSentAddresses() {
-	return validSent;
-    }
+	/**
+	 * Return the addresses to which this message was sent succesfully.
+	 * @return Addresses to which the message was sent successfully or null
+	 */
+	public Address[] getValidSentAddresses() {
+		return validSent;
+	}
 
-    /**
-     * Return the addresses that are valid but to which this message 
-     * was not sent.
-     * @return Addresses that are valid but to which the message was 
-     *         not sent successfully or null
-     */
-    public Address[] getValidUnsentAddresses() {
-	return validUnsent;
-    }
+	/**
+	 * Return the addresses that are valid but to which this message
+	 * was not sent.
+	 * @return Addresses that are valid but to which the message was
+	 *         not sent successfully or null
+	 */
+	public Address[] getValidUnsentAddresses() {
+		return validUnsent;
+	}
 
-    /**
-     * Return the addresses to which this message could not be sent.
-     *
-     * @return Addresses to which the message sending failed or null;
-     */
-    public Address[] getInvalidAddresses() {
-	return invalid;
-    }
+	/**
+	 * Return the addresses to which this message could not be sent.
+	 *
+	 * @return Addresses to which the message sending failed or null;
+	 */
+	public Address[] getInvalidAddresses() {
+		return invalid;
+	}
 }

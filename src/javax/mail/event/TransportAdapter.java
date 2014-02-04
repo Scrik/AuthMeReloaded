@@ -49,7 +49,10 @@ package javax.mail.event;
  * @author John Mani
  */
 public abstract class TransportAdapter implements TransportListener {
-    public void messageDelivered(TransportEvent e) {}
-    public void messageNotDelivered(TransportEvent e) {}
-    public void messagePartiallyDelivered(TransportEvent e) {}
+	@Override
+	public void messageDelivered(TransportEvent e) {}
+	@Override
+	public void messageNotDelivered(TransportEvent e) {}
+	@Override
+	public void messagePartiallyDelivered(TransportEvent e) {}
 }

@@ -53,30 +53,30 @@ package javax.mail;
 
 public abstract class BodyPart implements Part {
 
-    /**
-     * The <code>Multipart</code> object containing this <code>BodyPart</code>,
-     * if known.
-     * @since	JavaMail 1.1
-     */
-    protected Multipart parent;
+	/**
+	 * The <code>Multipart</code> object containing this <code>BodyPart</code>,
+	 * if known.
+	 * @since	JavaMail 1.1
+	 */
+	protected Multipart parent;
 
-    /**
-     * Return the containing <code>Multipart</code> object,
-     * or <code>null</code> if not known.
-     */
-    public Multipart getParent() {
-	return parent;
-    }
+	/**
+	 * Return the containing <code>Multipart</code> object,
+	 * or <code>null</code> if not known.
+	 */
+	public Multipart getParent() {
+		return parent;
+	}
 
-    /**
-     * Set the parent of this <code>BodyPart</code> to be the specified
-     * <code>Multipart</code>.  Normally called by <code>Multipart</code>'s
-     * <code>addBodyPart</code> method.  <code>parent</code> may be
-     * <code>null</code> if the <code>BodyPart</code> is being removed
-     * from its containing <code>Multipart</code>.
-     * @since	JavaMail 1.1
-     */
-    void setParent(Multipart parent) {
-	this.parent = parent;
-    }
+	/**
+	 * Set the parent of this <code>BodyPart</code> to be the specified
+	 * <code>Multipart</code>.  Normally called by <code>Multipart</code>'s
+	 * <code>addBodyPart</code> method.  <code>parent</code> may be
+	 * <code>null</code> if the <code>BodyPart</code> is being removed
+	 * from its containing <code>Multipart</code>.
+	 * @since	JavaMail 1.1
+	 */
+	void setParent(Multipart parent) {
+		this.parent = parent;
+	}
 }
