@@ -55,16 +55,8 @@ public class RegisterCommand implements CommandExecutor {
 
 		final Player player = (Player) sender;
 		final String name = player.getName().toLowerCase();
-		String ipA = player.getAddress().getAddress().getHostAddress();
-
-		if (Settings.bungee) {
-			if (plugin.realIp.containsKey(name)) {
-				ipA = plugin.realIp.get(name);
-			}
-		}
-
-		final String ip = ipA;
-
+		final String ip = player.getAddress().getAddress().getHostAddress();
+		
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			player.sendMessage(m._("logged_in"));
 			return true;
@@ -81,7 +73,7 @@ public class RegisterCommand implements CommandExecutor {
 		}
 
 		if (Settings.getmaxRegPerIp > 0) {
-			if (!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ipA).size() >= Settings.getmaxRegPerIp) {
+			if (!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ip).size() >= Settings.getmaxRegPerIp) {
 				player.sendMessage(m._("max_reg"));
 				return true;
 			}
@@ -179,21 +171,13 @@ public class RegisterCommand implements CommandExecutor {
 				LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(nwMsg.getTaskId());
 
 				LimboCache.getInstance().deleteLimboPlayer(name);
-				if (Settings.isTeleportToSpawnEnabled) {
-					World world = player.getWorld();
-					Location loca = plugin.getSpawnLocation(world);
-					RegisterTeleportEvent tpEvent = new RegisterTeleportEvent( player, loca);
-					plugin.getServer().getPluginManager().callEvent(tpEvent);
-					if (!tpEvent.isCancelled()) {
-						player.teleport(tpEvent.getTo());
-					}
-				}
 				if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
 					player.setAllowFlight(false);
 					player.setFlying(false);
 				}
-				if (!Settings.noConsoleSpam)
+				if (!Settings.noConsoleSpam) {
 					ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
+				}
 				if (plugin.notifications != null) { 
 					plugin.notifications.showNotification(new Notification("[AuthMe] "+ player.getName() + " has registered!"));
 				}

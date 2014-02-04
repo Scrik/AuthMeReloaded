@@ -315,10 +315,6 @@ public class AuthMePlayerListener implements Listener {
 		BukkitScheduler sched = plugin.getServer().getScheduler();
 
 		String ip = player.getAddress().getAddress().getHostAddress();
-		if (Settings.bungee) {
-			if (plugin.realIp.containsKey(name))
-				ip = plugin.realIp.get(name);
-		}
 
 		if (Settings.isAllowRestrictedIp && !Settings.getRestrictedIp(name, ip)) {
 			player.kickPlayer("You are not the Owner of this account, please try another name!");

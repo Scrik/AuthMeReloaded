@@ -42,7 +42,7 @@ public final class Settings extends YamlConfiguration {
             isCachingEnabled, isKickOnWrongPasswordEnabled,
             getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
             isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
-            useCaptcha, emailRegistration, multiverse, notifications, chestshop, bungee, banUnsafeIp, doubleEmailCheck,
+            useCaptcha, emailRegistration, multiverse, notifications, chestshop, banUnsafeIp, doubleEmailCheck,
             disableSocialSpy, useEssentialsMotd,
             supportOldPassword,
             enableProtection, enableAntiBot;
@@ -174,7 +174,6 @@ public void loadConfigOptions() {
         multiverse = configFile.getBoolean("Hooks.multiverse", true);
         chestshop = configFile.getBoolean("Hooks.chestshop", true);
         notifications = configFile.getBoolean("Hooks.notifications", true);
-        bungee = configFile.getBoolean("Hooks.bungeecord", false);
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);
@@ -292,7 +291,6 @@ public static void reloadConfigOptions(YamlConfiguration newConfig) {
         multiverse = configFile.getBoolean("Hooks.multiverse", true);
         chestshop = configFile.getBoolean("Hooks.chestshop", true);
         notifications = configFile.getBoolean("Hooks.notifications", true);
-        bungee = configFile.getBoolean("Hooks.bungeecord", false);
         banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
         doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
         useLogging = configFile.getBoolean("Security.console.logConsole", false);

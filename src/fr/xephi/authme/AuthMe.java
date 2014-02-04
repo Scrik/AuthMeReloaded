@@ -50,12 +50,10 @@ import fr.xephi.authme.datasource.FileDataSource;
 import fr.xephi.authme.datasource.MySQLDataSource;
 import fr.xephi.authme.datasource.SqliteDataSource;
 import fr.xephi.authme.listener.AuthMeBlockListener;
-import fr.xephi.authme.listener.AuthMeBungeeCordListener;
 import fr.xephi.authme.listener.AuthMeChestShopListener;
 import fr.xephi.authme.listener.AuthMeEntityListener;
 import fr.xephi.authme.listener.AuthMePlayerListener;
 import fr.xephi.authme.listener.AuthMeSpoutListener;
-import fr.xephi.authme.plugin.manager.BungeeCordMessage;
 import fr.xephi.authme.plugin.manager.CitizensCommunicator;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.plugin.manager.EssSpawn;
@@ -85,7 +83,6 @@ public class AuthMe extends JavaPlugin {
 	public Management management;
     public HashMap<String, Integer> captcha = new HashMap<String, Integer>();
     public HashMap<String, String> cap = new HashMap<String, String>();
-    public HashMap<String, String> realIp = new HashMap<String, String>();
 	public MultiverseCore multiverse = null;
 	public Location essentialsSpawn;
 	public LookupService ls = null;
@@ -216,17 +213,9 @@ public class AuthMe extends JavaPlugin {
         	pm.registerEvents(new AuthMeChestShopListener(database, this), this);
         	ConsoleLogger.info("Successfully hook with ChestShop!");
         }
-        if (Settings.bungee) {
-        	Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        	Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeCordMessage(this));
-        	pm.registerEvents(new AuthMeBungeeCordListener(database), this);
-        	ConsoleLogger.info("Successfully hook with BungeeCord!");
-        }
-
         //Find Permissions
         if (pm.getPlugin("Vault") != null) {
-            RegisteredServiceProvider<Permission> permissionProvider =
-                getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+            RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
             if (permissionProvider != null) {
             	permission = permissionProvider.getProvider();
             	ConsoleLogger.info("Vault plugin detected, hook with " + permission.getName() + " system");

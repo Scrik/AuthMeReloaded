@@ -71,10 +71,6 @@ public class Management {
 
         protected String getIP() {
             String ip = player.getAddress().getAddress().getHostAddress();
-            if (Settings.bungee) {
-                if (plugin.realIp.containsKey(name))
-                    ip = plugin.realIp.get(name);
-            }
             return ip;
         }
         protected boolean needsCaptcha() {
