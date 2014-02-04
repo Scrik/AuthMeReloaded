@@ -20,7 +20,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -64,16 +63,13 @@ public class AuthMe extends JavaPlugin {
 	private Settings settings;
 	private Messages m;
 	public static Server server;
-	public static Plugin authme;
 	public static Permission permission;
 	private static AuthMe instance;
-	private JavaPlugin plugin;
 	public CitizensCommunicator citizens;
 	public SendMailSSL mail = null;
 	public int CitizensVersion = 0;
 	public int CombatTag = 0;
 	public double ChestShop = 0;
-	public boolean BungeeCord = false;
 	public Essentials ess;
 	public Notifications notifications;
 	public API api;
@@ -89,7 +85,6 @@ public class AuthMe extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		authme = instance;
 
 		citizens = new CitizensCommunicator(this);
 
@@ -399,7 +394,7 @@ public class AuthMe extends JavaPlugin {
 				}
 				player.teleport(limbo.getLoc());
 				player.setOp(limbo.getOperator());
-				this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
+				Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
 				LimboCache.getInstance().deleteLimboPlayer(name);
 			}
 			PlayerCache.getInstance().removePlayer(name);
