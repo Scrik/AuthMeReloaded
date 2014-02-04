@@ -4,9 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
-*
-* @author Xephi59
-*/
+ *
+ * @author Xephi59
+ */
 public class RegisterTeleportEvent extends CustomEvent {
 
 	private Player player;

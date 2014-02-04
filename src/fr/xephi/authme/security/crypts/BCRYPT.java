@@ -14,7 +14,6 @@
 package fr.xephi.authme.security.crypts;
 
 import java.io.UnsupportedEncodingException;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -54,7 +53,7 @@ import java.security.SecureRandom;
  * String stronger_salt = BCrypt.gensalt(12)<br />
  * </code>
  * <p>
- * The amount of work increases exponentially (2**log_rounds), so 
+ * The amount of work increases exponentially (2**log_rounds), so
  * each increment is twice as much work. The default log_rounds is
  * 10, and the valid range is 4 to 31.
  *
@@ -384,13 +383,14 @@ public class BCRYPT implements EncryptionMethod {
 	 * @exception IllegalArgumentException if the length is invalid
 	 */
 	private static String encode_base64(byte d[], int len)
-		throws IllegalArgumentException {
+			throws IllegalArgumentException {
 		int off = 0;
 		StringBuffer rs = new StringBuffer();
 		int c1, c2;
 
-		if (len <= 0 || len > d.length)
+		if (len <= 0 || len > d.length) {
 			throw new IllegalArgumentException ("Invalid len");
+		}
 
 		while (off < len) {
 			c1 = d[off++] & 0xff;
@@ -423,9 +423,10 @@ public class BCRYPT implements EncryptionMethod {
 	 * @return	the decoded value of x
 	 */
 	private static byte char64(char x) {
-		if ((int)x < 0 || (int)x > index_64.length)
+		if (x < 0 || x > index_64.length) {
 			return -1;
-		return index_64[(int)x];
+		}
+		return index_64[x];
 	}
 
 	/**
@@ -438,33 +439,38 @@ public class BCRYPT implements EncryptionMethod {
 	 * @throws IllegalArgumentException if maxolen is invalid
 	 */
 	private static byte[] decode_base64(String s, int maxolen)
-		throws IllegalArgumentException {
+			throws IllegalArgumentException {
 		StringBuffer rs = new StringBuffer();
 		int off = 0, slen = s.length(), olen = 0;
 		byte ret[];
 		byte c1, c2, c3, c4, o;
 
-		if (maxolen <= 0)
+		if (maxolen <= 0) {
 			throw new IllegalArgumentException ("Invalid maxolen");
+		}
 
 		while (off < slen - 1 && olen < maxolen) {
 			c1 = char64(s.charAt(off++));
 			c2 = char64(s.charAt(off++));
-			if (c1 == -1 || c2 == -1)
+			if (c1 == -1 || c2 == -1) {
 				break;
+			}
 			o = (byte)(c1 << 2);
 			o |= (c2 & 0x30) >> 4;
 			rs.append((char)o);
-			if (++olen >= maxolen || off >= slen)
+			if (++olen >= maxolen || off >= slen) {
 				break;
+			}
 			c3 = char64(s.charAt(off++));
-			if (c3 == -1)
+			if (c3 == -1) {
 				break;
+			}
 			o = (byte)((c2 & 0x0f) << 4);
 			o |= (c3 & 0x3c) >> 2;
 			rs.append((char)o);
-			if (++olen >= maxolen || off >= slen)
+			if (++olen >= maxolen || off >= slen) {
 				break;
+			}
 			c4 = char64(s.charAt(off++));
 			o = (byte)((c3 & 0x03) << 6);
 			o |= c4;
@@ -473,8 +479,9 @@ public class BCRYPT implements EncryptionMethod {
 		}
 
 		ret = new byte[olen];
-		for (off = 0; off < olen; off++)
+		for (off = 0; off < olen; off++) {
 			ret[off] = (byte)rs.charAt(off);
+		}
 		return ret;
 	}
 
@@ -532,8 +539,8 @@ public class BCRYPT implements EncryptionMethod {
 	 * Initialise the Blowfish key schedule
 	 */
 	private void init_key() {
-		P = (int[])P_orig.clone();
-		S = (int[])S_orig.clone();
+		P = P_orig.clone();
+		S = S_orig.clone();
 	}
 
 	/**
@@ -546,8 +553,9 @@ public class BCRYPT implements EncryptionMethod {
 		int lr[] = { 0, 0 };
 		int plen = P.length, slen = S.length;
 
-		for (i = 0; i < plen; i++)
+		for (i = 0; i < plen; i++) {
 			P[i] = P[i] ^ streamtoword(key, koffp);
+		}
 
 		for (i = 0; i < plen; i += 2) {
 			encipher(lr, 0);
@@ -575,8 +583,9 @@ public class BCRYPT implements EncryptionMethod {
 		int lr[] = { 0, 0 };
 		int plen = P.length, slen = S.length;
 
-		for (i = 0; i < plen; i++)
+		for (i = 0; i < plen; i++) {
 			P[i] = P[i] ^ streamtoword(key, koffp);
+		}
 
 		for (i = 0; i < plen; i += 2) {
 			lr[0] ^= streamtoword(data, doffp);
@@ -606,15 +615,17 @@ public class BCRYPT implements EncryptionMethod {
 	 */
 	private byte[] crypt_raw(byte password[], byte salt[], int log_rounds) {
 		int rounds, i, j;
-		int cdata[] = (int[])bf_crypt_ciphertext.clone();
+		int cdata[] = bf_crypt_ciphertext.clone();
 		int clen = cdata.length;
 		byte ret[];
 
-		if (log_rounds < 4 || log_rounds > 31)
+		if (log_rounds < 4 || log_rounds > 31) {
 			throw new IllegalArgumentException ("Bad number of rounds");
+		}
 		rounds = 1 << log_rounds;
-		if (salt.length != BCRYPT_SALT_LEN)
+		if (salt.length != BCRYPT_SALT_LEN) {
 			throw new IllegalArgumentException ("Bad salt length");
+		}
 
 		init_key();
 		ekskey(salt, password);
@@ -624,8 +635,9 @@ public class BCRYPT implements EncryptionMethod {
 		}
 
 		for (i = 0; i < 64; i++) {
-			for (j = 0; j < (clen >> 1); j++)
+			for (j = 0; j < (clen >> 1); j++) {
 				encipher(cdata, j << 1);
+			}
 		}
 
 		ret = new byte[clen * 4];
@@ -653,20 +665,23 @@ public class BCRYPT implements EncryptionMethod {
 		int rounds, off = 0;
 		StringBuffer rs = new StringBuffer();
 
-		if (salt.charAt(0) != '$' || salt.charAt(1) != '2')
+		if (salt.charAt(0) != '$' || salt.charAt(1) != '2') {
 			throw new IllegalArgumentException ("Invalid salt version");
-		if (salt.charAt(2) == '$')
+		}
+		if (salt.charAt(2) == '$') {
 			off = 3;
-		else {
+		} else {
 			minor = salt.charAt(2);
-			if (minor != 'a' || salt.charAt(3) != '$')
+			if (minor != 'a' || salt.charAt(3) != '$') {
 				throw new IllegalArgumentException ("Invalid salt revision");
+			}
 			off = 4;
 		}
 
 		// Extract number of rounds
-		if (salt.charAt(off + 2) > '$')
+		if (salt.charAt(off + 2) > '$') {
 			throw new IllegalArgumentException ("Missing salt rounds");
+		}
 		rounds = Integer.parseInt(salt.substring(off, off + 2));
 
 		real_salt = salt.substring(off + 3, off + 25);
@@ -682,16 +697,18 @@ public class BCRYPT implements EncryptionMethod {
 		hashed = B.crypt_raw(passwordb, saltb, rounds);
 
 		rs.append("$2");
-		if (minor >= 'a')
+		if (minor >= 'a') {
 			rs.append(minor);
+		}
 		rs.append("$");
-		if (rounds < 10)
+		if (rounds < 10) {
 			rs.append("0");
+		}
 		rs.append(Integer.toString(rounds));
 		rs.append("$");
 		rs.append(encode_base64(saltb, saltb.length));
 		rs.append(encode_base64(hashed,
-		    bf_crypt_ciphertext.length * 4 - 1));
+				bf_crypt_ciphertext.length * 4 - 1));
 		return rs.toString();
 	}
 
@@ -710,8 +727,9 @@ public class BCRYPT implements EncryptionMethod {
 		random.nextBytes(rnd);
 
 		rs.append("$2a$");
-		if (log_rounds < 10)
+		if (log_rounds < 10) {
 			rs.append("0");
+		}
 		rs.append(Integer.toString(log_rounds));
 		rs.append("$");
 		rs.append(encode_base64(rnd, rnd.length));
@@ -759,6 +777,6 @@ public class BCRYPT implements EncryptionMethod {
 	@Override
 	public boolean comparePassword(String hash, String password,
 			String playerName) throws NoSuchAlgorithmException {
-    	return checkpw(password, hash);
+		return checkpw(password, hash);
 	}
 }

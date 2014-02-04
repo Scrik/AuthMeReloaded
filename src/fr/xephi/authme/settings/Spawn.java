@@ -8,9 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 /**
-*
-* @author Xephi59
-*/
+ *
+ * @author Xephi59
+ */
 public class Spawn extends CustomConfiguration {
 
 	private static Spawn spawn;
@@ -38,11 +38,11 @@ public class Spawn extends CustomConfiguration {
 	}
 
 	public static Spawn getInstance() {
-        if (spawn == null) {
-            spawn = new Spawn();
-        }        
-        return spawn;
-    }
+		if (spawn == null) {
+			spawn = new Spawn();
+		}
+		return spawn;
+	}
 
 	public boolean setSpawn(Location location) {
 		try {
@@ -61,7 +61,9 @@ public class Spawn extends CustomConfiguration {
 
 	public Location getLocation() {
 		try {
-			if (this.getString("spawn.world").isEmpty()) return null;
+			if (this.getString("spawn.world").isEmpty()) {
+				return null;
+			}
 			Location location = new Location(Bukkit.getWorld(this.getString("spawn.world")), this.getDouble("spawn.x"), this.getDouble("spawn.y"), this.getDouble("spawn.z"), Float.parseFloat(this.getString("spawn.yaw")), Float.parseFloat(this.getString("spawn.pitch")));
 			return location;
 		} catch (NullPointerException npe) {

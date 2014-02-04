@@ -11,31 +11,31 @@ import fr.xephi.authme.settings.Messages;
 
 public class LoginCommand implements CommandExecutor {
 
-    private AuthMe plugin;
-    private Messages m = Messages.getInstance();
+	private AuthMe plugin;
+	private Messages m = Messages.getInstance();
 
-    public LoginCommand(AuthMe plugin) {
-    	this.plugin = plugin;
-    }
+	public LoginCommand(AuthMe plugin) {
+		this.plugin = plugin;
+	}
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmnd, String label, final String[] args) {
-        if (!(sender instanceof Player)) {
-            return true;
-        }
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmnd, String label, final String[] args) {
+		if (!(sender instanceof Player)) {
+			return true;
+		}
 
-        final Player player = (Player) sender;
+		final Player player = (Player) sender;
 
-        if (args.length == 0) {
-            player.sendMessage(m._("usage_log"));
-            return true;
-        }
+		if (args.length == 0) {
+			player.sendMessage(m._("usage_log"));
+			return true;
+		}
 
-        if (!plugin.authmePermissible(player, "authme." + label.toLowerCase())) {
-            player.sendMessage(m._("no_perm"));
-            return true;
-        }
-    	plugin.management.performLogin(player, args[0], false, false);
-        return true;
-    }
+		if (!plugin.authmePermissible(player, "authme." + label.toLowerCase())) {
+			player.sendMessage(m._("no_perm"));
+			return true;
+		}
+		plugin.management.performLogin(player, args[0], false, false);
+		return true;
+	}
 }

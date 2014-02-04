@@ -16,56 +16,56 @@ import fr.xephi.authme.settings.Settings;
 
 public class AuthMeBlockListener implements Listener {
 
-    private DataSource data;
-    public AuthMe instance;
+	private DataSource data;
+	public AuthMe instance;
 
-    public AuthMeBlockListener(DataSource data, AuthMe instance) {
-        this.data = data;
-        this.instance = instance;
-    }
+	public AuthMeBlockListener(DataSource data, AuthMe instance) {
+		this.data = data;
+		this.instance = instance;
+	}
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBlockPlace(BlockPlaceEvent event) {
 
-        Player player = event.getPlayer();
-        String name = player.getName().toLowerCase();
+		Player player = event.getPlayer();
+		String name = player.getName().toLowerCase();
 
-        if(Utils.getInstance().isUnrestricted(player)) {
-            return;
-        }
+		if(Utils.getInstance().isUnrestricted(player)) {
+			return;
+		}
 
-        if (PlayerCache.getInstance().isAuthenticated(name)) {
-            return;
-        }
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			return;
+		}
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
-        event.setCancelled(true);
-    }
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+		event.setCancelled(true);
+	}
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBlockBreak(BlockBreakEvent event) {
 
-        Player player = event.getPlayer();
-        String name = player.getName().toLowerCase();
+		Player player = event.getPlayer();
+		String name = player.getName().toLowerCase();
 
-        if(Utils.getInstance().isUnrestricted(player)) {
-            return;
-        }
+		if(Utils.getInstance().isUnrestricted(player)) {
+			return;
+		}
 
-        if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-            return;
-        }
+		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
+			return;
+		}
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
-        event.setCancelled(true);
-    }
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+		event.setCancelled(true);
+	}
 
 }

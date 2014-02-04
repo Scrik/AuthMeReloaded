@@ -3,9 +3,9 @@ package fr.xephi.authme.events;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 
 /**
-*
-* @author Xephi59
-*/
+ *
+ * @author Xephi59
+ */
 public class SessionEvent extends CustomEvent {
 
 	private PlayerAuth player;

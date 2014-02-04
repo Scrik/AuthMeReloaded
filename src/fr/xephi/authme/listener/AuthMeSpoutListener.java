@@ -12,9 +12,9 @@ import fr.xephi.authme.settings.SpoutCfg;
 public class AuthMeSpoutListener implements Listener {
 	private DataSource data;
 
-    public AuthMeSpoutListener(DataSource data) {
-        this.data = data; 
-    }
+	public AuthMeSpoutListener(DataSource data) {
+		this.data = data;
+	}
 
 	@EventHandler
 	public void onSpoutCraftEnable(final SpoutCraftEnableEvent event) {

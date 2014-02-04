@@ -56,7 +56,7 @@ public class RegisterCommand implements CommandExecutor {
 		final Player player = (Player) sender;
 		final String name = player.getName().toLowerCase();
 		final String ip = player.getAddress().getAddress().getHostAddress();
-		
+
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			player.sendMessage(m._("logged_in"));
 			return true;
@@ -107,54 +107,54 @@ public class RegisterCommand implements CommandExecutor {
 			if (!thePass.isEmpty()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin,
 						new Runnable() {
-							@Override
-							public void run() {
-								if (PasswordSecurity.userSalt.containsKey(name)) {
-									try {
-										final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
-										final PlayerAuth fAuth = new PlayerAuth(
-												name, 
-												hashnew,
-												PasswordSecurity.userSalt.get(name), 
-												ip,
-												new Date().getTime(),
-												(int) player.getLocation().getX(), 
-												(int) player.getLocation().getY(),
-												(int) player.getLocation().getZ(), 
-												player.getLocation().getWorld().getName(),
-												email
+					@Override
+					public void run() {
+						if (PasswordSecurity.userSalt.containsKey(name)) {
+							try {
+								final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
+								final PlayerAuth fAuth = new PlayerAuth(
+										name,
+										hashnew,
+										PasswordSecurity.userSalt.get(name),
+										ip,
+										new Date().getTime(),
+										(int) player.getLocation().getX(),
+										(int) player.getLocation().getY(),
+										(int) player.getLocation().getZ(),
+										player.getLocation().getWorld().getName(),
+										email
 										);
-										database.saveAuth(fAuth);
-										database.updateEmail(fAuth);
-										database.updateSession(fAuth);
-										plugin.mail.main(fAuth, thePass);
-									} catch (NoSuchAlgorithmException e) {
-										ConsoleLogger.showError(e.getMessage());
-									}
-								} else {
-									try {
-										final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
-										final PlayerAuth fAuth = new PlayerAuth(
-												name, 
-												hashnew, 
-												ip, 
-												new Date().getTime(),
-												(int) player.getLocation().getX(), 
-												(int) player.getLocation().getY(),
-												(int) player.getLocation().getZ(), 
-												player.getLocation().getWorld().getName(),
-												email
-										);
-										database.saveAuth(fAuth);
-										database.updateEmail(fAuth);
-										database.updateSession(fAuth);
-										plugin.mail.main(fAuth, thePass);
-									} catch (NoSuchAlgorithmException e) {
-										ConsoleLogger.showError(e.getMessage());
-									}
-								}
+								database.saveAuth(fAuth);
+								database.updateEmail(fAuth);
+								database.updateSession(fAuth);
+								plugin.mail.main(fAuth, thePass);
+							} catch (NoSuchAlgorithmException e) {
+								ConsoleLogger.showError(e.getMessage());
 							}
-						});
+						} else {
+							try {
+								final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
+								final PlayerAuth fAuth = new PlayerAuth(
+										name,
+										hashnew,
+										ip,
+										new Date().getTime(),
+										(int) player.getLocation().getX(),
+										(int) player.getLocation().getY(),
+										(int) player.getLocation().getZ(),
+										player.getLocation().getWorld().getName(),
+										email
+										);
+								database.saveAuth(fAuth);
+								database.updateEmail(fAuth);
+								database.updateSession(fAuth);
+								plugin.mail.main(fAuth, thePass);
+							} catch (NoSuchAlgorithmException e) {
+								ConsoleLogger.showError(e.getMessage());
+							}
+						}
+					}
+				});
 
 				player.sendMessage(m._("vb_nonActiv"));
 				String msg = m._("login_msg");
@@ -178,7 +178,7 @@ public class RegisterCommand implements CommandExecutor {
 				if (!Settings.noConsoleSpam) {
 					ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
 				}
-				if (plugin.notifications != null) { 
+				if (plugin.notifications != null) {
 					plugin.notifications.showNotification(new Notification("[AuthMe] "+ player.getName() + " has registered!"));
 				}
 				return true;
@@ -203,8 +203,9 @@ public class RegisterCommand implements CommandExecutor {
 					player.sendMessage(m._("password_error"));
 					return true;
 				}
-			} else
+			} else {
 				hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[0], name);
+			}
 			if (Settings.getMySQLColumnSalt.isEmpty()) {
 				auth = new PlayerAuth(name, hash, ip, new Date().getTime(), "your@email.com");
 			} else {

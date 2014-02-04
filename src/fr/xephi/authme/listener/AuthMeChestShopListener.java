@@ -25,28 +25,28 @@ public class AuthMeChestShopListener implements Listener {
 		this.plugin = plugin;
 	}
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPreTransaction(PreTransactionEvent event) {
-        if (event.isCancelled() || event.getClient() == null || event == null) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPreTransaction(PreTransactionEvent event) {
+		if (event.isCancelled() || event.getClient() == null || event == null) {
+			return;
+		}
 
-        Player player = event.getClient();
-        String name = player.getName().toLowerCase();
+		Player player = event.getClient();
+		String name = player.getName().toLowerCase();
 
-        if (Utils.getInstance().isUnrestricted(player)) {
-            return;
-        }
+		if (Utils.getInstance().isUnrestricted(player)) {
+			return;
+		}
 
-        if (PlayerCache.getInstance().isAuthenticated(name)) {
-            return;
-        }
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			return;
+		}
 
-        if (!database.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
-        event.setCancelled(TransactionOutcome.OTHER);
-    }
+		if (!database.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+		event.setCancelled(TransactionOutcome.OTHER);
+	}
 }

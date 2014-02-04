@@ -20,126 +20,131 @@ import fr.xephi.authme.settings.Settings;
 
 public class AuthMeEntityListener implements Listener{
 
-    private DataSource data;
-    public AuthMe instance;
+	private DataSource data;
+	public AuthMe instance;
 
-    public AuthMeEntityListener(DataSource data, AuthMe instance) {
-        this.data = data;
-        this.instance = instance;
-    }
+	public AuthMeEntityListener(DataSource data, AuthMe instance) {
+		this.data = data;
+		this.instance = instance;
+	}
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event) {
-        Entity entity = event.getEntity();
- 
-        if (!(entity instanceof Player)) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		Entity entity = event.getEntity();
 
-        if(Utils.getInstance().isUnrestricted((Player)entity)) {
-            return;
-        }
-        
-        if(instance.citizens.isNPC(entity, instance))
-        	return;
+		if (!(entity instanceof Player)) {
+			return;
+		}
 
-        Player player = (Player) entity;
-        String name = player.getName().toLowerCase();
-        
-        if(CombatTagComunicator.isNPC(player))
-        	return;
+		if(Utils.getInstance().isUnrestricted((Player)entity)) {
+			return;
+		}
 
-        if (PlayerCache.getInstance().isAuthenticated(name)) {
-            return;
-        }
+		if(instance.citizens.isNPC(entity, instance)) {
+			return;
+		}
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
-        player.setFireTicks(0);
-        event.setCancelled(true);
-    }
+		Player player = (Player) entity;
+		String name = player.getName().toLowerCase();
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+		if(CombatTagComunicator.isNPC(player)) {
+			return;
+		}
 
-        Entity entity = event.getEntity();
-        if (!(entity instanceof Player)) {
-            return;
-        }
-        
-        if(instance.citizens.isNPC(entity, instance))
-        	return;
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			return;
+		}
 
-        Player player = (Player) entity;
-        String name = player.getName().toLowerCase();
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+		player.setFireTicks(0);
+		event.setCancelled(true);
+	}
 
-        if (PlayerCache.getInstance().isAuthenticated(name)) {
-            return;
-        }
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
+		Entity entity = event.getEntity();
+		if (!(entity instanceof Player)) {
+			return;
+		}
 
-        event.setCancelled(true);
+		if(instance.citizens.isNPC(entity, instance)) {
+			return;
+		}
 
-    }
-    
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void EntityRegainHealthEvent(EntityRegainHealthEvent event) {
+		Player player = (Player) entity;
+		String name = player.getName().toLowerCase();
 
-        Entity entity = event.getEntity();
-        if (!(entity instanceof Player)) {
-            return;
-        }
-        
-        if(instance.citizens.isNPC(entity, instance))
-        	return;
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			return;
+		}
 
-        Player player = (Player) entity;
-        String name = player.getName().toLowerCase();
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
 
-        if (PlayerCache.getInstance().isAuthenticated(name)) {
-            return;
-        }
+		event.setCancelled(true);
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
+	}
 
-        event.setCancelled(true);       
-    }
- 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntityInteract(PlayerInteractEntityEvent event) {
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void EntityRegainHealthEvent(EntityRegainHealthEvent event) {
 
-        Player player = event.getPlayer();
-        String name = player.getName().toLowerCase();
+		Entity entity = event.getEntity();
+		if (!(entity instanceof Player)) {
+			return;
+		}
 
-        if (Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
-            return;
-        }
+		if(instance.citizens.isNPC(entity, instance)) {
+			return;
+		}
 
-        if(instance.citizens.isNPC(player, instance))
-        	return;
+		Player player = (Player) entity;
+		String name = player.getName().toLowerCase();
 
-        if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-            return;
-        }
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			return;
+		}
 
-        if (!data.isAuthAvailable(name)) {
-            if (!Settings.isForcedRegistrationEnabled) {
-                return;
-            }
-        }
-        event.setCancelled(true);
-    }
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+
+		event.setCancelled(true);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityInteract(PlayerInteractEntityEvent event) {
+
+		Player player = event.getPlayer();
+		String name = player.getName().toLowerCase();
+
+		if (Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
+			return;
+		}
+
+		if(instance.citizens.isNPC(player, instance)) {
+			return;
+		}
+
+		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
+			return;
+		}
+
+		if (!data.isAuthAvailable(name)) {
+			if (!Settings.isForcedRegistrationEnabled) {
+				return;
+			}
+		}
+		event.setCancelled(true);
+	}
 
 }

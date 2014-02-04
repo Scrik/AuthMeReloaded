@@ -18,15 +18,17 @@ public class EssSpawn extends CustomConfiguration {
 	}
 
 	public static EssSpawn getInstance() {
-        if (spawn == null) {
-            spawn = new EssSpawn();
-        }        
-        return spawn;
-    }
+		if (spawn == null) {
+			spawn = new EssSpawn();
+		}
+		return spawn;
+	}
 
 	public Location getLocation() {
 		try {
-			if (this.getString("spawns.default.world").isEmpty()) return null;
+			if (this.getString("spawns.default.world").isEmpty()) {
+				return null;
+			}
 			Location location = new Location(Bukkit.getWorld(this.getString("spawns.default.world")), this.getDouble("spawns.default.x"), this.getDouble("spawns.default.y"), this.getDouble("spawns.default.z"), Float.parseFloat(this.getString("spawns.default.yaw")), Float.parseFloat(this.getString("spawns.default.pitch")));
 			return location;
 		} catch (NullPointerException npe) {

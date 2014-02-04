@@ -19,9 +19,9 @@ public class CustomButton extends GenericButton
 	public CustomButton setMidPos(int x, int y)
 	{
 		this.setX(x)
-			.setY(y)
-			.shiftXPos(-(width / 2))
-			.shiftYPos(-(height / 2));
+		.setY(y)
+		.shiftXPos(-(width / 2))
+		.shiftYPos(-(height / 2));
 		return this;
 	}
 

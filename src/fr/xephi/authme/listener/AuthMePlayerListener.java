@@ -88,14 +88,14 @@ public class AuthMePlayerListener implements Listener {
 
 		String cmd = msg.split(" ")[0];
 		if (
-				cmd.equalsIgnoreCase("/login") 
+				cmd.equalsIgnoreCase("/login")
 				|| cmd.equalsIgnoreCase("/register")
 				|| cmd.equalsIgnoreCase("/passpartu")
-				|| cmd.equalsIgnoreCase("/l") 
+				|| cmd.equalsIgnoreCase("/l")
 				|| cmd.equalsIgnoreCase("/reg")
 				|| cmd.equalsIgnoreCase("/email")
 				|| cmd.equalsIgnoreCase("/captcha")
-			) {
+				) {
 			return;
 		}
 		if (Settings.useEssentialsMotd && cmd.equalsIgnoreCase("/motd")) {
@@ -275,17 +275,17 @@ public class AuthMePlayerListener implements Listener {
 			Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically enabled due to massive connections! ");
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 					new Runnable() {
-						@Override
-						public void run() {
-							if (plugin.antibotMod) {
-								plugin.switchAntiBotMod(false);
-								antibot.clear();
-								Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically disabled after "
-										+ Settings.antiBotDuration
-										+ " Minutes, hope invasion stopped ");
-							}
-						}
-					}, Settings.antiBotDuration * 1200);
+				@Override
+				public void run() {
+					if (plugin.antibotMod) {
+						plugin.switchAntiBotMod(false);
+						antibot.clear();
+						Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically disabled after "
+								+ Settings.antiBotDuration
+								+ " Minutes, hope invasion stopped ");
+					}
+				}
+			}, Settings.antiBotDuration * 1200);
 			return;
 		}
 		antibot.put(event.getPlayer().getName().toLowerCase(), event);
@@ -301,13 +301,13 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 
 		Player player = event.getPlayer();
-		
+
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
 				|| Utils.getInstance().isUnrestricted(player)
 				|| CombatTagComunicator.isNPC(player)) {
 			return;
 		}
-		
+
 		World world = player.getWorld();
 		Location spawnLoc = plugin.getSpawnLocation(world);
 		final String name = player.getName().toLowerCase();
@@ -409,12 +409,12 @@ public class AuthMePlayerListener implements Listener {
 					}
 				}
 				if (Settings.isTeleportToSpawnEnabled) {
-		            AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, limbo.getLoc());
-		            plugin.getServer().getPluginManager().callEvent(tpEvent);
-		            if (!tpEvent.isCancelled()) {
-		                Location fLoc = tpEvent.getTo();
-		                player.teleport(fLoc);
-		            }
+					AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, limbo.getLoc());
+					plugin.getServer().getPluginManager().callEvent(tpEvent);
+					if (!tpEvent.isCancelled()) {
+						Location fLoc = tpEvent.getTo();
+						player.teleport(fLoc);
+					}
 				}
 			}
 			player.setOp(limbo.getOperator());
@@ -465,8 +465,9 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
 		if (PlayerCache.getInstance().isAuthenticated(
 				player.getName().toLowerCase())) {
@@ -478,13 +479,13 @@ public class AuthMePlayerListener implements Listener {
 				return;
 			}
 		}
-		
+
 		event.setCancelled(true);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
-		
+
 		Player player = (Player) event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -492,8 +493,9 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
 		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
 			return;
@@ -517,8 +519,9 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
 		if (PlayerCache.getInstance().isAuthenticated(
 				player.getName().toLowerCase())) {
@@ -561,7 +564,7 @@ public class AuthMePlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		
+
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
@@ -570,8 +573,9 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin))
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
 			return;
+		}
 
 		if (PlayerCache.getInstance().isAuthenticated(
 				player.getName().toLowerCase())) {

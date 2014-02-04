@@ -7,39 +7,39 @@ import fr.xephi.authme.cache.auth.PlayerAuth;
 
 public interface DataSource {
 
-    public enum DataSourceType {
+	public enum DataSourceType {
 
-        MYSQL, FILE, SQLITE
-    }
-    
-    public boolean isAuthAvailable(String user);
+		MYSQL, FILE, SQLITE
+	}
 
-    PlayerAuth getAuth(String user);
+	public boolean isAuthAvailable(String user);
 
-    boolean saveAuth(PlayerAuth auth);
+	PlayerAuth getAuth(String user);
 
-    boolean updateSession(PlayerAuth auth);
+	boolean saveAuth(PlayerAuth auth);
 
-    boolean updatePassword(PlayerAuth auth);
-    
-    List<String> autoPurgeDatabase(long until);
+	boolean updateSession(PlayerAuth auth);
 
-    boolean removeAuth(String user);
+	boolean updatePassword(PlayerAuth auth);
 
-    List<String> getAllAuthsByIp(String ip);
+	List<String> autoPurgeDatabase(long until);
 
-    List<String> getAllAuthsByEmail(String email);
+	boolean removeAuth(String user);
 
-    boolean updateEmail(PlayerAuth auth);
+	List<String> getAllAuthsByIp(String ip);
 
-    boolean updateSalt(PlayerAuth auth);
+	List<String> getAllAuthsByEmail(String email);
 
-    void close();
+	boolean updateEmail(PlayerAuth auth);
 
-    void reload();
+	boolean updateSalt(PlayerAuth auth);
 
-    void purgeBanned(List<String> banned);
-    
-    List<PlayerAuth> getAllAuths();
+	void close();
+
+	void reload();
+
+	void purgeBanned(List<String> banned);
+
+	List<PlayerAuth> getAllAuths();
 
 }

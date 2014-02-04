@@ -17,13 +17,13 @@ public class SHA256 implements EncryptionMethod {
 		String[] line = hash.split("\\$");
 		return hash.equals(getHash(password, line[2]));
 	}
-	
+
 	private String getSha256(String password) throws NoSuchAlgorithmException {
-        MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-        sha256.reset();
-        sha256.update(password.getBytes());
-        byte[] digest = sha256.digest();
-        return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
+		MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
+		sha256.reset();
+		sha256.update(password.getBytes());
+		byte[] digest = sha256.digest();
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
 	}
 
 }

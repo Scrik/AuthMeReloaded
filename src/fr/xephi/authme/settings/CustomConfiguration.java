@@ -43,16 +43,18 @@ public class CustomConfiguration extends YamlConfiguration{
 		{
 			out = loadRessource(configFile);
 		}
-		if (out) load();
+		if (out) {
+			load();
+		}
 		return out;
 	}
 
 	public void save() {
-	    try {
-	        super.save(configFile);
-	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + configFile.getName(), ex);
-	    }
+		try {
+			super.save(configFile);
+		} catch (IOException ex) {
+			Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + configFile.getName(), ex);
+		}
 	}
 
 	public boolean loadRessource(File file) {
@@ -78,7 +80,7 @@ public class CustomConfiguration extends YamlConfiguration{
 					if (fos != null) {
 						fos.close();
 					}
-				} catch (Exception e) {                         
+				} catch (Exception e) {
 				}
 			}
 		}

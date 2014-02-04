@@ -4,9 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
-*
-* @author Xephi59
-*/
+ *
+ * @author Xephi59
+ */
 public class StoreInventoryEvent extends CustomEvent {
 
 	private ItemStack[] inventory;

@@ -18,12 +18,12 @@ public class DOUBLEMD5 implements EncryptionMethod {
 		return hash.equals(getHash(password, ""));
 	}
 
-    private String getMD5(String message) throws NoSuchAlgorithmException {
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-        md5.reset();
-        md5.update(message.getBytes());
-        byte[] digest = md5.digest();
-        return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
-    }
+	private String getMD5(String message) throws NoSuchAlgorithmException {
+		MessageDigest md5 = MessageDigest.getInstance("MD5");
+		md5.reset();
+		md5.update(message.getBytes());
+		byte[] digest = md5.digest();
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
+	}
 
 }

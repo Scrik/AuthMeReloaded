@@ -5,9 +5,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
-*
-* @author Xephi59
-*/
+ *
+ * @author Xephi59
+ */
 public class LoginEvent extends Event {
 
 	private Player player;
@@ -41,8 +41,8 @@ public class LoginEvent extends Event {
 		return handlers;
 	}
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
 }

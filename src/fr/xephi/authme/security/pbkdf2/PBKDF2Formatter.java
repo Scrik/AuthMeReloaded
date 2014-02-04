@@ -32,23 +32,23 @@ package fr.xephi.authme.security.pbkdf2;
  */
 public interface PBKDF2Formatter
 {
-    /**
-     * Convert parameters to String.
-     * 
-     * @param p
-     *            Parameters object to output.
-     * @return String representation
-     */
-    public abstract String toString(PBKDF2Parameters p);
+	/**
+	 * Convert parameters to String.
+	 * 
+	 * @param p
+	 *            Parameters object to output.
+	 * @return String representation
+	 */
+	public abstract String toString(PBKDF2Parameters p);
 
-    /**
-     * Convert String to parameters. Depending on actual implementation, it may
-     * be required to set further fields externally.
-     * 
-     * @param s
-     *            String representation of parameters to decode.
-     * @return <code>false</code> syntax OK, <code>true</code> some syntax
-     *         issue.
-     */
-    public abstract boolean fromString(PBKDF2Parameters p, String s);
+	/**
+	 * Convert String to parameters. Depending on actual implementation, it may
+	 * be required to set further fields externally.
+	 * 
+	 * @param s
+	 *            String representation of parameters to decode.
+	 * @return <code>false</code> syntax OK, <code>true</code> some syntax
+	 *         issue.
+	 */
+	public abstract boolean fromString(PBKDF2Parameters p, String s);
 }

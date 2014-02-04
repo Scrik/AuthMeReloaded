@@ -18,11 +18,11 @@ public class SMF implements EncryptionMethod {
 		return hash.equals(getHash(password, playerName.toLowerCase()));
 	}
 
-    private String getSHA1(String message) throws NoSuchAlgorithmException {
-        MessageDigest sha1 = MessageDigest.getInstance("SHA1");
-        sha1.reset();
-        sha1.update(message.getBytes());
-        byte[] digest = sha1.digest();
-        return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
-    }
+	private String getSHA1(String message) throws NoSuchAlgorithmException {
+		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
+		sha1.reset();
+		sha1.update(message.getBytes());
+		byte[] digest = sha1.digest();
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
+	}
 }

@@ -24,15 +24,17 @@ public class SpoutCfg extends CustomConfiguration{
 		this.set("LoginScreen.login button", "Login");
 		this.set("LoginScreen.title", "LOGIN");
 		this.set("LoginScreen.text", new ArrayList<String>() {{
-		    add("Sample text");
-		    add("Change this at spout.yml");
-		    add("--- AuthMe Reloaded by ---");
-		    add("Xephi59");
+			add("Sample text");
+			add("Change this at spout.yml");
+			add("--- AuthMe Reloaded by ---");
+			add("Xephi59");
 		}});
 	}
 
 	public static SpoutCfg getInstance() {
-		if (instance == null) instance = new SpoutCfg(new File("plugins/AuthMe", "spout.yml"));
+		if (instance == null) {
+			instance = new SpoutCfg(new File("plugins/AuthMe", "spout.yml"));
+		}
 		return instance;
 	}
 }
