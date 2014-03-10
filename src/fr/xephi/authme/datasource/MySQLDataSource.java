@@ -33,7 +33,6 @@ public class MySQLDataSource implements DataSource {
 	private String columnIp;
 	private String columnLastLogin;
 	private String columnSalt;
-	private String columnGroup;
 	private String lastlocX;
 	private String lastlocY;
 	private String lastlocZ;
@@ -59,7 +58,6 @@ public class MySQLDataSource implements DataSource {
 		this.lastlocZ = Settings.getMySQLlastlocZ;
 		this.lastlocWorld = Settings.getMySQLlastlocWorld;
 		this.columnSalt = Settings.getMySQLColumnSalt;
-		this.columnGroup = Settings.getMySQLColumnGroup;
 		this.columnEmail = "email";
 		this.columnOthers = Settings.getMySQLOtherUsernameColumn;
 		this.columnID = Settings.getMySQLColumnId;
@@ -182,11 +180,7 @@ public class MySQLDataSource implements DataSource {
 					return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
 				} else {
 					if(!columnSalt.isEmpty()){
-						if(!columnGroup.isEmpty()) {
-							return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
-						} else {
-							return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
-						}
+						return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
 					} else {
 						return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
 					}
@@ -657,11 +651,7 @@ public class MySQLDataSource implements DataSource {
 					pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
 				} else {
 					if(!columnSalt.isEmpty()) {
-						if(!columnGroup.isEmpty()) {
-							pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
-						} else {
-							pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
-						}
+						pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld),rs.getString(columnEmail));
 					} else {
 						pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld), rs.getString(columnEmail));
 					}

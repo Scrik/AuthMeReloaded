@@ -19,10 +19,9 @@ public class FileDataSource implements DataSource {
 
 	/* file layout:
 	 *
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD:EMAIL
+	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
 	 *
 	 * Old but compatible:
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
 	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
 	 * PLAYERNAME:HASHSUM:IP
 	 * PLAYERNAME:HASHSUM
@@ -72,7 +71,7 @@ public class FileDataSource implements DataSource {
 		BufferedWriter bw = null;
 		try {
 			bw = new BufferedWriter(new FileWriter(source, true));
-			bw.write(auth.getNickname() + ":" + auth.getHash() + ":" + auth.getIp() + ":" + auth.getLastLogin() + ":" + auth.getQuitLocX() + ":" + auth.getQuitLocY() + ":" + auth.getQuitLocZ() + ":" + auth.getWorld() + ":" + auth.getEmail() + "\n");
+			bw.write(auth.getNickname() + ":" + auth.getHash() + ":" + auth.getIp() + ":" + auth.getLastLogin() + ":" + auth.getQuitLocX() + ":" + auth.getQuitLocY() + ":" + auth.getQuitLocZ() + ":" + auth.getWorld() + "\n");
 		} catch (IOException ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return false;

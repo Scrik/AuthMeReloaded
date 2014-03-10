@@ -270,19 +270,6 @@ public class AdminCommand implements CommandExecutor {
 				}
 			}
 			return true;
-		} else if (args[0].equalsIgnoreCase("getemail")) {
-			if (args.length != 2) {
-				sender.sendMessage("Usage: /authme getemail playername");
-				return true;
-			}
-			String playername = args[1].toLowerCase();
-			PlayerAuth getAuth = database.getAuth(playername);
-			if (getAuth == null) {
-				sender.sendMessage("This player does not exist");
-				return true;
-			}
-			sender.sendMessage("[AuthMe] " + args[1] + " email : " + getAuth.getEmail());
-			return true;
 		} else if (args[0].equalsIgnoreCase("convertfromrakamak")) {
 			try {
 				RakamakConverter.RakamakConvert();

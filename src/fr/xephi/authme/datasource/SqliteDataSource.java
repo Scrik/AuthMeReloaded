@@ -45,7 +45,6 @@ public class SqliteDataSource implements DataSource {
 		this.columnIp = Settings.getMySQLColumnIp;
 		this.columnLastLogin = Settings.getMySQLColumnLastLogin;
 		this.columnSalt = Settings.getMySQLColumnSalt;
-		this.columnGroup = Settings.getMySQLColumnGroup;
 		this.lastlocX = Settings.getMySQLlastlocX;
 		this.lastlocY = Settings.getMySQLlastlocY;
 		this.lastlocZ = Settings.getMySQLlastlocZ;
@@ -152,11 +151,7 @@ public class SqliteDataSource implements DataSource {
 				if (rs.getString(columnIp).isEmpty() ) {
 					return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
 				} else {
-					if(!columnSalt.isEmpty()){
-						return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
-					} else {
-						return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
-					}
+					return new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
 				}
 			} else {
 				return null;
@@ -392,11 +387,7 @@ public class SqliteDataSource implements DataSource {
 				if (rs.getString(columnIp).isEmpty()) {
 					pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), "198.18.0.1", rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
 				} else {
-					if(!columnSalt.isEmpty()) {
-						pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword),rs.getString(columnSalt), rs.getInt(columnGroup), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
-					} else {
-						pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
-					}
+					pa = new PlayerAuth(rs.getString(columnName), rs.getString(columnPassword), rs.getString(columnIp), rs.getLong(columnLastLogin), rs.getInt(lastlocX), rs.getInt(lastlocY), rs.getInt(lastlocZ), rs.getString(lastlocWorld) , rs.getString(columnEmail));
 				}
 				if (pa != null) {
 					auths.add(pa);

@@ -86,10 +86,6 @@ public class AsyncLogin extends Thread {
 			player.sendMessage(m._("user_unknown"));
 			return null;
 		}
-		if (!Settings.getMySQLColumnGroup.isEmpty() && pAuth.getGroupId() == Settings.getNonActivatedGroup) {
-			player.sendMessage(m._("vb_nonActiv"));
-			return null;
-		}
 		return pAuth;
 	}
 
@@ -101,7 +97,6 @@ public class AsyncLogin extends Thread {
 		}
 
 		String hash = pAuth.getHash();
-		String email = pAuth.getEmail();
 		boolean passwordVerified = true;
 		if (!forceLogin) {
 			try {
@@ -113,7 +108,7 @@ public class AsyncLogin extends Thread {
 			}
 		}
 		if (passwordVerified && player.isOnline()) {
-			PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), email);
+			PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), "mail");
 			database.updateSession(auth);
 
 			if (Settings.useCaptcha) {

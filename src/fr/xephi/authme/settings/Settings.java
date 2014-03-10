@@ -50,14 +50,14 @@ public final class Settings extends YamlConfiguration {
 	public static String getNickRegex, getMySQLHost, getMySQLPort,
 	getMySQLUsername, getMySQLPassword, getMySQLDatabase, getMySQLTablename,
 	getMySQLColumnName, getMySQLColumnPassword, getMySQLColumnIp, getMySQLColumnLastLogin,
-	getMySQLColumnSalt, getMySQLColumnGroup,
+	getMySQLColumnSalt,
 	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
 	rakamakUsers, rakamakUsersIp, getMySQLColumnId,
 	getMySQLlastlocWorld, defaultWorld,
 	getPhpbbPrefix, getWordPressPrefix;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
-	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
+	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
 	passwordMaxLength, maxLoginTry, captchaLength, saltLength,
 	bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
 
@@ -114,12 +114,10 @@ public final class Settings extends YamlConfiguration {
 		getMySQLColumnIp = configFile.getString("DataSource.mySQLColumnIp","ip");
 		getMySQLColumnLastLogin = configFile.getString("DataSource.mySQLColumnLastLogin","lastlogin");
 		getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt");
-		getMySQLColumnGroup = configFile.getString("ExternalBoardOptions.mySQLColumnGroup","");
 		getMySQLlastlocX = configFile.getString("DataSource.mySQLlastlocX","x");
 		getMySQLlastlocY = configFile.getString("DataSource.mySQLlastlocY","y");
 		getMySQLlastlocZ = configFile.getString("DataSource.mySQLlastlocZ","z");
 		getMySQLlastlocWorld = configFile.getString("DataSource.mySQLlastlocWorld", "world");
-		getNonActivatedGroup = configFile.getInt("ExternalBoardOptions.nonActivedUserGroup", -1);
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
@@ -226,8 +224,6 @@ public final class Settings extends YamlConfiguration {
 		getMySQLlastlocZ = configFile.getString("DataSource.mySQLlastlocZ","z");
 		getMySQLlastlocWorld = configFile.getString("DataSource.mySQLlastlocWorld", "world");
 		getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt","");
-		getMySQLColumnGroup = configFile.getString("ExternalBoardOptions.mySQLColumnGroup","");
-		getNonActivatedGroup = configFile.getInt("ExternalBoardOptions.nonActivedUserGroup", -1);
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);

@@ -15,15 +15,12 @@ public class PlayerAuth {
 	private String world = "world";
 	private String salt = "";
 	private String vBhash = null;
-	private int groupId;
-	private String email = "your@email.com";
 
 	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, String email) {
 		this.nickname = nickname;
 		this.hash = hash;
 		this.ip = ip;
 		this.lastLogin = lastLogin;
-		this.email = email;
 	}
 
 	public PlayerAuth(String nickname, int x, int y, int z, String world) {
@@ -43,30 +40,6 @@ public class PlayerAuth {
 		this.y = y;
 		this.z = z;
 		this.world = world;
-		this.email = email;
-	}
-
-	public PlayerAuth(String nickname, String hash, String salt, int groupId, String ip, long lastLogin, int x, int y, int z, String world,  String email) {
-		this.nickname = nickname;
-		this.hash = hash;
-		this.ip = ip;
-		this.lastLogin = lastLogin;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.world = world;
-		this.salt = salt;
-		this.groupId = groupId;
-		this.email = email;
-	}
-
-	public PlayerAuth(String nickname, String hash, String salt, int groupId , String ip, long lastLogin) {
-		this.nickname = nickname;
-		this.hash = hash;
-		this.ip = ip;
-		this.lastLogin = lastLogin;
-		this.salt = salt;
-		this.groupId = groupId;
 	}
 
 	public PlayerAuth(String nickname, String hash, String salt, String ip, long lastLogin) {
@@ -87,7 +60,6 @@ public class PlayerAuth {
 		this.z = z;
 		this.world = world;
 		this.salt = salt;
-		this.email = email;
 	}
 
 	public String getIp() {
@@ -112,10 +84,6 @@ public class PlayerAuth {
 		return this.salt;
 	}
 
-	public int getGroupId() {
-		return groupId;
-	}
-
 	public int getQuitLocX() {
 		return x;
 	}
@@ -124,9 +92,6 @@ public class PlayerAuth {
 	}
 	public int getQuitLocZ() {
 		return z;
-	}
-	public String getEmail() {
-		return email;
 	}
 	public void setQuitLocX(int x) {
 		this.x = x;
@@ -151,10 +116,6 @@ public class PlayerAuth {
 
 	public void setLastLogin(long lastLogin) {
 		this.lastLogin = lastLogin;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public void setSalt(String salt) {
@@ -189,7 +150,7 @@ public class PlayerAuth {
 	@Override
 	public String toString() {
 		String s = "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! LastPosition : " + x + "," + y + "," + z + "," + world
-				+ " ! Email : " + email + " ! Hash : " + hash + " ! Salt : " + salt;
+				+ " ! Hash : " + hash + " ! Salt : " + salt;
 		return s;
 
 	}
