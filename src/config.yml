@@ -75,11 +75,9 @@ settings:
         minPasswordLength: 4
         # possible values: MD5, SHA1, SHA256, WHIRLPOOL, XAUTH, MD5VB, PHPBB,
         # PLAINTEXT ( unhashed password),
-        # MYBB, IPB3, PHPFUSION, SMF, XENFORO, SALTED2MD5, JOOMLA, BCRYPT, WBB3, SHA512,
-        # DOUBLEMD5, PBKDF2, WORDPRESS, CUSTOM(for developers only)
+        # SMF, SHA512,
+        # DOUBLEMD5, PBKDF2, CUSTOM(for developers only)
         passwordHash: SHA256
-        # salt length for the SALTED2MD5 MD5(MD5(password)+salt)
-        doubleMD5SaltLength: 8
         # If password checking return false , do we need to check with all
         # other password algorithm to check an old password ?
         # AuthMe will update the password to the new passwordHash !

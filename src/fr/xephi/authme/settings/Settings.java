@@ -2,7 +2,6 @@ package fr.xephi.authme.settings;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,7 +24,6 @@ public final class Settings extends YamlConfiguration {
 	public static List<String> getJoinPermissions = null;
 	public static List<String> getUnrestrictedName = null;
 	private static List<String> getRestrictedIp;
-	public static List<String> getMySQLOtherUsernameColumn = null;
 	public static List<String> countries = null;
 	public final Plugin plugin;
 	private final File file;
@@ -47,13 +45,12 @@ public final class Settings extends YamlConfiguration {
 	public static String getNickRegex,
 	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
 	rakamakUsers, rakamakUsersIp, getMySQLColumnId,
-	getMySQLlastlocWorld, defaultWorld,
-	getPhpbbPrefix, getWordPressPrefix;
+	defaultWorld;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
 	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
-	passwordMaxLength, maxLoginTry, captchaLength, saltLength,
-	bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
+	passwordMaxLength, maxLoginTry, captchaLength, 
+	antiBotSensibility, antiBotDuration;
 
 	protected static YamlConfiguration configFile;
 
@@ -131,27 +128,20 @@ public final class Settings extends YamlConfiguration {
 		rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-		getMySQLOtherUsernameColumn = (List<String>) configFile.getList("ExternalBoardOptions.mySQLOtherUsernameColumns", new ArrayList<String>());
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
 		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		saltLength = configFile.getInt("settings.security.doubleMD5SaltLength", 8);
 		multiverse = configFile.getBoolean("Hooks.multiverse", true);
 		chestshop = configFile.getBoolean("Hooks.chestshop", true);
 		notifications = configFile.getBoolean("Hooks.notifications", true);
 		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
-		bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
 		useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
 		defaultWorld = configFile.getString("Purge.defaultWorld", "world");
-		getPhpbbPrefix = configFile.getString("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
-		getPhpbbGroup = configFile.getInt("ExternalBoardOptions.phpbbActivatedGroupId", 2);
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
-		getWordPressPrefix = configFile.getString("ExternalBoardOptions.wordpressTablePrefix", "wp_");
-		//purgePermissions = configFile.getBoolean("Purge.removePermissions", false);
 		enableProtection = configFile.getBoolean("Protection.enableProtection", false);
 		countries = (List<String>) configFile.getList("Protection.countries");
 		enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
@@ -221,26 +211,20 @@ public final class Settings extends YamlConfiguration {
 		rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-		getMySQLOtherUsernameColumn = (List<String>) configFile.getList("ExternalBoardOptions.mySQLOtherUsernameColumns", new ArrayList<String>());
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
 		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		saltLength = configFile.getInt("settings.security.doubleMD5SaltLength", 8);
 		multiverse = configFile.getBoolean("Hooks.multiverse", true);
 		chestshop = configFile.getBoolean("Hooks.chestshop", true);
 		notifications = configFile.getBoolean("Hooks.notifications", true);
 		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
-		bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
 		useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
 		defaultWorld = configFile.getString("Purge.defaultWorld", "world");
-		getPhpbbPrefix = configFile.getString("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
-		getPhpbbGroup = configFile.getInt("ExternalBoardOptions.phpbbActivatedGroupId", 2);
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
-		getWordPressPrefix = configFile.getString("ExternalBoardOptions.wordpressTablePrefix", "wp_");
 		enableProtection = configFile.getBoolean("Protection.enableProtection", false);
 		countries = (List<String>) configFile.getList("Protection.countries");
 		enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
