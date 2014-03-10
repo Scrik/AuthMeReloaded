@@ -6,21 +6,6 @@ public class PlayerAuth {
 	private String hash = "";
 	private String ip = "198.18.0.1";
 	private long lastLogin = 0;
-	private int x = 0;
-	private int y = 0;
-	private int z = 0;
-	private String world = "world";
-	
-	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, int x, int y, int z, String world) {
-		this.nickname = nickname;
-		this.hash = hash;
-		this.ip = ip;
-		this.lastLogin = lastLogin;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.world = world;
-	}
 
 	public PlayerAuth(String nickname, String hash, String ip, long lastLogin) {
 		this.nickname = nickname;
@@ -41,24 +26,6 @@ public class PlayerAuth {
 		return hash;
 	}
 
-	public int getQuitLocX() {
-		return x;
-	}
-	public int getQuitLocY() {
-		return y;
-	}
-	public int getQuitLocZ() {
-		return z;
-	}
-	public void setQuitLocX(int x) {
-		this.x = x;
-	}
-	public void setQuitLocY(int y) {
-		this.y = y;
-	}
-	public void setQuitLocZ(int z) {
-		this.z = z;
-	}
 	public long getLastLogin() {
 		return lastLogin;
 	}
@@ -92,18 +59,9 @@ public class PlayerAuth {
 		return hashCode;
 	}
 
-	public void setWorld(String world) {
-		this.world = world;
-	}
-
-	public String getWorld() {
-		return world;
-	}
-
 	@Override
 	public String toString() {
-		String s = "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! LastPosition : " + x + "," + y + "," + z + "," + world
-				+ " ! Hash : " + hash;
+		String s = "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! Hash : " + hash;
 		return s;
 
 	}

@@ -292,31 +292,6 @@ public class AdminCommand implements CommandExecutor {
 			sender.sendMessage("unregistered");
 			ConsoleLogger.info(args[1] + " unregistered");
 			return true;
-		} else if (args[0].equalsIgnoreCase("purgelastpos")){
-			if (args.length != 2) {
-				sender.sendMessage("Usage: /authme purgelastpos playername");
-				return true;
-			}
-			try {
-				String name = args[1].toLowerCase();
-				PlayerAuth auth = database.getAuth(name);
-				if (auth == null) {
-					sender.sendMessage("The player " + name + " is not registered ");
-					return true;
-				}
-				auth.setQuitLocX(0);
-				auth.setQuitLocY(0);
-				auth.setQuitLocZ(0);
-				auth.setWorld("world");
-				sender.sendMessage(name + " 's last pos location is now reset");
-			} catch (Exception e) {
-				ConsoleLogger.showError("An error occured while trying to reset location or player do not exist, please see below: ");
-				ConsoleLogger.showError(e.getMessage());
-				if (sender instanceof Player) {
-					sender.sendMessage("An error occured while trying to reset location or player do not exist, please see logs");
-				}
-			}
-			return true;
 		} else if (args[0].equalsIgnoreCase("switchantibot")) {
 			if (args.length != 2) {
 				sender.sendMessage("Usage : /authme switchantibot on/off");

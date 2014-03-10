@@ -85,19 +85,7 @@ public class API {
 	}
 
 	public static Location getLastLocation(Player player) {
-		try {
-			PlayerAuth auth = PlayerCache.getInstance().getAuth(player.getName().toLowerCase());
-
-			if (auth != null) {
-				Location loc = new Location(Bukkit.getWorld(auth.getWorld()), auth.getQuitLocX(), auth.getQuitLocY() , auth.getQuitLocZ());
-				return loc;
-			} else {
-				return null;
-			}
-
-		} catch (NullPointerException ex) {
-			return null;
-		}
+		return null;
 	}
 
 	public static void setPlayerInventory(Player player, ItemStack[] content, ItemStack[] armor) {
