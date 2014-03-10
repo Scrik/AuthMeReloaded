@@ -273,23 +273,6 @@ public class SqliteDataSource implements DataSource {
 	}
 
 	@Override
-	public boolean updateEmail(PlayerAuth auth) {
-		PreparedStatement pst = null;
-		try {
-			pst = con.prepareStatement("UPDATE " + tableName + " SET " + columnEmail + "=? WHERE " + columnName + "=?;");
-			pst.setString(1, auth.getEmail());
-			pst.setString(2, auth.getNickname());
-			pst.executeUpdate();
-		} catch (SQLException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			close(pst);
-		}
-		return true;
-	}
-
-	@Override
 	public boolean updateSalt(PlayerAuth auth) {
 		if(columnSalt.isEmpty()) {
 			return false;
@@ -366,34 +349,6 @@ public class SqliteDataSource implements DataSource {
 				countIp.add(rs.getString(columnName));
 			}
 			return countIp;
-		} catch (SQLException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} catch (TimeoutException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} catch (NullPointerException npe) {
-			return new ArrayList<String>();
-		} finally {
-			close(rs);
-			close(pst);
-		}
-	}
-
-	@Override
-	public List<String> getAllAuthsByEmail(String email) {
-		PreparedStatement pst = null;
-		ResultSet rs = null;
-		List<String> countEmail = new ArrayList<String>();
-		try {
-			pst = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "
-					+ columnEmail + "=?;");
-			pst.setString(1, email);
-			rs = pst.executeQuery();
-			while(rs.next()) {
-				countEmail.add(rs.getString(columnName));
-			}
-			return countEmail;
 		} catch (SQLException ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return new ArrayList<String>();

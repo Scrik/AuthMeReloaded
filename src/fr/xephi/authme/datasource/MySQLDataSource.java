@@ -469,29 +469,6 @@ public class MySQLDataSource implements DataSource {
 	}
 
 	@Override
-	public synchronized boolean updateEmail(PlayerAuth auth) {
-		Connection con = null;
-		PreparedStatement pst = null;
-		try {
-			con = makeSureConnectionIsReady();
-			pst = con.prepareStatement("UPDATE " + tableName + " SET "+ columnEmail + " =? WHERE " + columnName + "=?;");
-			pst.setString(1, auth.getEmail());
-			pst.setString(2, auth.getNickname());
-			pst.executeUpdate();
-		} catch (SQLException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} catch (TimeoutException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			close(pst);
-			close(con);
-		}
-		return true;
-	}
-
-	@Override
 	public synchronized boolean updateSalt(PlayerAuth auth) {
 		if (columnSalt.isEmpty() || auth.getSalt() == null || auth.getSalt().isEmpty()) {
 			return false;
@@ -576,35 +553,6 @@ public class MySQLDataSource implements DataSource {
 				countIp.add(rs.getString(columnName));
 			}
 			return countIp;
-		} catch (SQLException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} catch (TimeoutException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} finally {
-			close(rs);
-			close(pst);
-			close(con);
-		}
-	}
-
-	@Override
-	public synchronized List<String> getAllAuthsByEmail(String email) {
-		Connection con = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
-		List<String> countEmail = new ArrayList<String>();
-		try {
-			con = makeSureConnectionIsReady();
-			pst = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "
-					+ columnEmail + "=?;");
-			pst.setString(1, email);
-			rs = pst.executeQuery();
-			while(rs.next()) {
-				countEmail.add(rs.getString(columnName));
-			}
-			return countEmail;
 		} catch (SQLException ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return new ArrayList<String>();

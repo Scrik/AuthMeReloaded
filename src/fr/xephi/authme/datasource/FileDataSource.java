@@ -331,42 +331,6 @@ public class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public boolean updateEmail(PlayerAuth auth) {
-		if (!isAuthAvailable(auth.getNickname())) {
-			return false;
-		}
-		PlayerAuth newAuth = null;
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(source));
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args[0].equals(auth.getNickname())) {
-					newAuth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7], auth.getEmail());
-					break;
-				}
-			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
-		}
-		removeAuth(auth.getNickname());
-		saveAuth(newAuth);
-		return true;
-	}
-
-	@Override
 	public boolean updateSalt(PlayerAuth auth) {
 		return false;
 	}
@@ -385,36 +349,6 @@ public class FileDataSource implements DataSource {
 				}
 			}
 			return countIp;
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
-		}
-	}
-
-	@Override
-	public List<String> getAllAuthsByEmail(String email) {
-		BufferedReader br = null;
-		List<String> countEmail = new ArrayList<String>();
-		try {
-			br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args.length > 8 && args[8].equals(email)) {
-					countEmail.add(args[0]);
-				}
-			}
-			return countEmail;
 		} catch (FileNotFoundException ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return new ArrayList<String>();

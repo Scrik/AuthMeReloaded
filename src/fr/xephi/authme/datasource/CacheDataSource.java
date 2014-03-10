@@ -15,7 +15,6 @@ public class CacheDataSource implements DataSource {
 	public AuthMe plugin;
 	private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
 	private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
-	private HashMap<String, List<String>> emailCache = new HashMap<String, List<String>>();
 
 	public CacheDataSource(AuthMe plugin, DataSource source) {
 		this.plugin = plugin;
@@ -72,16 +71,6 @@ public class CacheDataSource implements DataSource {
 	}
 
 	@Override
-	public synchronized boolean updateEmail(PlayerAuth auth) {
-		if(source.updateEmail(auth)) {
-			clearAuth(auth.getNickname());
-			cacheAuth(auth);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public synchronized boolean updateSalt(PlayerAuth auth) {
 		if(source.updateSalt(auth)) {
 			authCache.get(auth.getNickname()).setSalt(auth.getSalt());
@@ -94,15 +83,6 @@ public class CacheDataSource implements DataSource {
 	public synchronized List<String> getAllAuthsByIp(String ip) {
 		if (ipCache.containsKey(ip)) {
 			return ipCache.get(ip);
-		} else {
-			return new ArrayList<String>();
-		}
-	}
-
-	@Override
-	public synchronized List<String> getAllAuthsByEmail(String email) {
-		if (emailCache.containsKey(email)) {
-			return emailCache.get(email);
 		} else {
 			return new ArrayList<String>();
 		}
@@ -140,7 +120,6 @@ public class CacheDataSource implements DataSource {
 	public void reload() {
 		authCache.clear();
 		ipCache.clear();
-		emailCache.clear();
 		cacheAllAuths();
 	}
 
@@ -160,20 +139,12 @@ public class CacheDataSource implements DataSource {
 			ipCache.put(ip, new ArrayList<String>());
 		}
 		ipCache.get(ip).add(nick);
-		String email = auth.getEmail();
-		if (!emailCache.containsKey(email)) {
-			emailCache.put(email, new ArrayList<String>());
-		}
-		emailCache.get(email).add(nick);
 	}
 
 	private void clearAuth(String nick) {
 		authCache.remove(nick);
 		for (List<String> ipauths : ipCache.values()) {
 			ipauths.remove(nick);
-		}
-		for (List<String> emailAuths : emailCache.values()) {
-			emailAuths.remove(nick);
 		}
 	}
 

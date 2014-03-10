@@ -28,10 +28,6 @@ public interface DataSource {
 
 	List<String> getAllAuthsByIp(String ip);
 
-	List<String> getAllAuthsByEmail(String email);
-
-	boolean updateEmail(PlayerAuth auth);
-
 	boolean updateSalt(PlayerAuth auth);
 
 	void close();

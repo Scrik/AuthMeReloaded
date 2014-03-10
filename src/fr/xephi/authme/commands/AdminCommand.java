@@ -283,26 +283,6 @@ public class AdminCommand implements CommandExecutor {
 			}
 			sender.sendMessage("[AuthMe] " + args[1] + " email : " + getAuth.getEmail());
 			return true;
-		} else if (args[0].equalsIgnoreCase("chgemail")) {
-			if (args.length != 3) {
-				sender.sendMessage("Usage: /authme chgemail playername email");
-				return true;
-			}
-			String playername = args[1].toLowerCase();
-			PlayerAuth getAuth = database.getAuth(playername);
-			if (getAuth == null) {
-				sender.sendMessage("This player does not exist");
-				return true;
-			}
-			getAuth.setEmail(args[2]);
-			if (!database.updateEmail(getAuth)) {
-				sender.sendMessage(m._("error"));
-				return true;
-			}
-			if (PlayerCache.getInstance().getAuth(playername) != null) {
-				PlayerCache.getInstance().updatePlayer(getAuth);
-			}
-			return true;
 		} else if (args[0].equalsIgnoreCase("convertfromrakamak")) {
 			try {
 				RakamakConverter.RakamakConvert();
