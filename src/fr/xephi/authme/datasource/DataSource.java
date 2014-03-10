@@ -25,8 +25,6 @@ public interface DataSource {
 
 	void reload();
 
-	void purgeBanned(List<String> banned);
-	
 	void convertDatabase();
 
 	List<PlayerAuth> getAllAuths();

@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -234,23 +232,6 @@ public class AdminCommand implements CommandExecutor {
 				}
 			} catch (NullPointerException ex) {
 				ConsoleLogger.showError(ex.getMessage());
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("purgebannedplayers")) {
-			List<String> bannedPlayers = new ArrayList<String>();
-			for (OfflinePlayer off : plugin.getServer().getBannedPlayers()) {
-				bannedPlayers.add(off.getName().toLowerCase());
-			}
-			final List<String> bP = bannedPlayers;
-			if (database instanceof Thread) {
-				database.purgeBanned(bP);
-			} else {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-					@Override
-					public void run() {
-						database.purgeBanned(bP);
-					}
-				});
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("spawn")) {

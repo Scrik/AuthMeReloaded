@@ -346,50 +346,6 @@ public class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public void purgeBanned(List<String> banned) {
-		BufferedReader br = null;
-		BufferedWriter bw = null;
-		ArrayList<String> lines = new ArrayList<String>();
-		try {
-			br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				try {
-					if (banned.contains(args[0])) {
-						lines.add(line);
-					}
-				} catch (NullPointerException npe) {}
-				catch (ArrayIndexOutOfBoundsException aioobe) {}
-			}
-			bw = new BufferedWriter(new FileWriter(source));
-			for (String l : lines) {
-				bw.write(l + "\n");
-			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException ex) {
-				}
-			}
-		}
-		return;
-	}
-
-	@Override
 	public List<PlayerAuth> getAllAuths() {
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
 		BufferedReader br = null;
@@ -419,7 +375,8 @@ public class FileDataSource implements DataSource {
 	
 	@Override
 	public void convertDatabase() {
-		
+		List<PlayerAuth> auths = getAllAuths();
+		source.canExecute();
 	}
 
 	private PlayerAuth parseAuth(String line) {

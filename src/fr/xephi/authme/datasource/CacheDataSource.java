@@ -93,16 +93,6 @@ public class CacheDataSource implements DataSource {
 	}
 
 	@Override
-	public synchronized void purgeBanned(List<String> banned) {
-		source.purgeBanned(banned);
-		for (PlayerAuth auth : authCache.values()) {
-			if (banned.contains(auth.getNickname())) {
-				clearAuth(auth.getNickname());
-			}
-		}
-	}
-
-	@Override
 	public void convertDatabase() {
 		source.convertDatabase();
 	}
