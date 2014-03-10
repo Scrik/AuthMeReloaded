@@ -32,6 +32,7 @@ public class FileDataSource implements DataSource {
 	public FileDataSource() throws IOException {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
+		convertDatabase();
 	}
 
 	@Override
@@ -311,6 +312,7 @@ public class FileDataSource implements DataSource {
 
 	@Override
 	public void reload() {
+		convertDatabase();
 	}
 
 	@Override

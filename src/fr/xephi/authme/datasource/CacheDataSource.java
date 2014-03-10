@@ -114,6 +114,7 @@ public class CacheDataSource implements DataSource {
 
 	@Override
 	public void reload() {
+		source.reload();
 		authCache.clear();
 		ipCache.clear();
 		cacheAllAuths();
