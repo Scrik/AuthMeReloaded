@@ -30,5 +30,9 @@ public class Management {
 	public void performLogin(final Player player, final String password, final boolean forceLogin) {
 		new AsyncLogin(plugin, database, player, password, forceLogin).start();
 	}
+	
+	public void performRegister(final Player layer, final String password) {
+		
+	}
 
 }

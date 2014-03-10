@@ -35,7 +35,9 @@ public class LoginCommand implements CommandExecutor {
 			player.sendMessage(m._("no_perm"));
 			return true;
 		}
+
 		plugin.management.performLogin(player, args[0], false);
+
 		return true;
 	}
 }
