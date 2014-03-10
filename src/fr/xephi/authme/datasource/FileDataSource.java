@@ -310,16 +310,7 @@ public class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public synchronized void close() {
-	}
-
-	@Override
 	public void reload() {
-	}
-
-	@Override
-	public boolean updateSalt(PlayerAuth auth) {
-		return false;
 	}
 
 	@Override
@@ -422,6 +413,11 @@ public class FileDataSource implements DataSource {
 			}
 		}
 		return auths;
+	}
+	
+	@Override
+	public void convertDatabase() {
+		
 	}
 
 	private PlayerAuth parseAuth(String line) {

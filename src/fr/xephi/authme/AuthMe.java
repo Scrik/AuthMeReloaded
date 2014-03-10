@@ -284,10 +284,6 @@ public class AuthMe extends JavaPlugin {
 			}
 		}
 
-		if (database != null) {
-			database.close();
-		}
-
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " disabled");
 	}
 

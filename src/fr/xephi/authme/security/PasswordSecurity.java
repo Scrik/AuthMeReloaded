@@ -4,14 +4,11 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.events.PasswordEncryptionEvent;
-import fr.xephi.authme.security.crypts.BCRYPT;
 import fr.xephi.authme.security.crypts.EncryptionMethod;
 import fr.xephi.authme.settings.Settings;
 
@@ -19,7 +16,6 @@ import fr.xephi.authme.settings.Settings;
 public class PasswordSecurity {
 
 	private static SecureRandom rnd = new SecureRandom();
-	public static HashMap<String, String> userSalt = new HashMap<String, String>();
 
 	private static String createSalt(int length) throws NoSuchAlgorithmException {
 		byte[] msg = new byte[40];
@@ -54,49 +50,14 @@ public class PasswordSecurity {
 		case XAUTH:
 			salt = createSalt(12);
 			break;
-		case MYBB:
-			salt = createSalt(8);
-			userSalt.put(playerName, salt);
-			break;
-		case IPB3:
-			salt = createSalt(5);
-			userSalt.put(playerName, salt);
-			break;
-		case PHPFUSION:
-			salt = createSalt(12);
-			userSalt.put(playerName, salt);
-			break;
-		case SALTED2MD5:
-			salt = createSalt(Settings.saltLength);
-			userSalt.put(playerName, salt);
-			break;
-		case JOOMLA:
-			salt = createSalt(32);
-			userSalt.put(playerName, salt);
-			break;
-		case BCRYPT:
-			salt = BCRYPT.gensalt(Settings.bCryptLog2Rounds);
-			userSalt.put(playerName, salt);
-			break;
-		case WBB3:
-			salt = createSalt(40);
-			userSalt.put(playerName, salt);
-			break;
-		case PBKDF2:
-			salt = createSalt(12);
-			userSalt.put(playerName, salt);
-			break;
 		case SMF:
 			return method.getHash(password, playerName.toLowerCase());
 		case MD5:
 		case SHA1:
 		case WHIRLPOOL:
-		case PHPBB:
 		case PLAINTEXT:
-		case XENFORO:
 		case SHA512:
 		case DOUBLEMD5:
-		case WORDPRESS:
 		case CUSTOM:
 			break;
 		default:
@@ -154,9 +115,7 @@ public class PasswordSecurity {
 						PlayerAuth nAuth = AuthMe.getInstance().database.getAuth(playerName);
 						if (nAuth != null) {
 							nAuth.setHash(getHash(Settings.getPasswordHash, password, playerName));
-							nAuth.setSalt(userSalt.get(playerName));
 							AuthMe.getInstance().database.updatePassword(nAuth);
-							AuthMe.getInstance().database.updateSalt(nAuth);
 						}
 						return true;
 					}

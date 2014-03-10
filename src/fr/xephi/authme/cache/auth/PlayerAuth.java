@@ -1,8 +1,5 @@
 package fr.xephi.authme.cache.auth;
 
-import fr.xephi.authme.security.HashAlgorithm;
-import fr.xephi.authme.settings.Settings;
-
 public class PlayerAuth {
 
 	private String nickname = "";
@@ -13,8 +10,6 @@ public class PlayerAuth {
 	private int y = 0;
 	private int z = 0;
 	private String world = "world";
-	private String salt = "";
-	private String vBhash = null;
 	
 	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, int x, int y, int z, String world) {
 		this.nickname = nickname;
@@ -33,26 +28,6 @@ public class PlayerAuth {
 		this.ip = ip;
 		this.lastLogin = lastLogin;
 	}
-	
-	public PlayerAuth(String nickname, String hash, String salt, String ip, long lastLogin, int x, int y, int z, String world) {
-		this.nickname = nickname;
-		this.hash = hash;
-		this.ip = ip;
-		this.lastLogin = lastLogin;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.world = world;
-		this.salt = salt;
-	}
-
-	public PlayerAuth(String nickname, String hash, String salt, String ip, long lastLogin) {
-		this.nickname = nickname;
-		this.hash = hash;
-		this.ip = ip;
-		this.lastLogin = lastLogin;
-		this.salt = salt;
-	}
 
 	public String getIp() {
 		return ip;
@@ -63,17 +38,7 @@ public class PlayerAuth {
 	}
 
 	public String getHash() {
-		if(salt != null && !salt.isEmpty() && Settings.getPasswordHash == HashAlgorithm.MD5VB) {
-			vBhash = "$MD5vb$"+salt+"$"+hash;
-			return vBhash;
-		}
-		else {
-			return hash;
-		}
-	}
-
-	public String getSalt() {
-		return this.salt;
+		return hash;
 	}
 
 	public int getQuitLocX() {
@@ -110,10 +75,6 @@ public class PlayerAuth {
 		this.lastLogin = lastLogin;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof PlayerAuth)) {
@@ -142,7 +103,7 @@ public class PlayerAuth {
 	@Override
 	public String toString() {
 		String s = "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! LastPosition : " + x + "," + y + "," + z + "," + world
-				+ " ! Hash : " + hash + " ! Salt : " + salt;
+				+ " ! Hash : " + hash;
 		return s;
 
 	}

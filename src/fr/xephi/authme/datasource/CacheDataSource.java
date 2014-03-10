@@ -71,15 +71,6 @@ public class CacheDataSource implements DataSource {
 	}
 
 	@Override
-	public synchronized boolean updateSalt(PlayerAuth auth) {
-		if(source.updateSalt(auth)) {
-			authCache.get(auth.getNickname()).setSalt(auth.getSalt());
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public synchronized List<String> getAllAuthsByIp(String ip) {
 		if (ipCache.containsKey(ip)) {
 			return ipCache.get(ip);
@@ -111,6 +102,11 @@ public class CacheDataSource implements DataSource {
 		}
 	}
 
+	@Override
+	public void convertDatabase() {
+		source.convertDatabase();
+	}
+	
 	@Override
 	public List<PlayerAuth> getAllAuths() {
 		return source.getAllAuths();
@@ -146,11 +142,6 @@ public class CacheDataSource implements DataSource {
 		for (List<String> ipauths : ipCache.values()) {
 			ipauths.remove(nick);
 		}
-	}
-
-	@Override
-	public synchronized void close() {
-		source.close();
 	}
 
 }

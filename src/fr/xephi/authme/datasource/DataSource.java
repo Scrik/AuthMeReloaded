@@ -7,11 +7,6 @@ import fr.xephi.authme.cache.auth.PlayerAuth;
 
 public interface DataSource {
 
-	public enum DataSourceType {
-
-		MYSQL, FILE, SQLITE
-	}
-
 	public boolean isAuthAvailable(String user);
 
 	PlayerAuth getAuth(String user);
@@ -28,13 +23,11 @@ public interface DataSource {
 
 	List<String> getAllAuthsByIp(String ip);
 
-	boolean updateSalt(PlayerAuth auth);
-
-	void close();
-
 	void reload();
 
 	void purgeBanned(List<String> banned);
+	
+	void convertDatabase();
 
 	List<PlayerAuth> getAllAuths();
 

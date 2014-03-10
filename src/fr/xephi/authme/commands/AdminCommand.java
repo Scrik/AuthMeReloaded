@@ -210,11 +210,6 @@ public class AdminCommand implements CommandExecutor {
 				}
 				String hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[2], name);
 				PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", 0L);
-				if (PasswordSecurity.userSalt.containsKey(name) && PasswordSecurity.userSalt.get(name) != null) {
-					auth.setSalt(PasswordSecurity.userSalt.get(name));
-				} else {
-					auth.setSalt("");
-				}
 				if (!database.saveAuth(auth)) {
 					sender.sendMessage(m._("error"));
 					return true;
@@ -291,12 +286,10 @@ public class AdminCommand implements CommandExecutor {
 					return true;
 				}
 				auth.setHash(hash);
-				auth.setSalt(PasswordSecurity.userSalt.get(name));
 				if (!database.updatePassword(auth)) {
 					sender.sendMessage(m._("error"));
 					return true;
 				}
-				database.updateSalt(auth);
 				sender.sendMessage("pwd_changed");
 				ConsoleLogger.info(args[1] + "'s password changed");
 			} catch (NoSuchAlgorithmException ex) {
