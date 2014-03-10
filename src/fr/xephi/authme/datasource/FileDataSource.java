@@ -3,7 +3,6 @@ package fr.xephi.authme.datasource;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,9 +18,10 @@ public class FileDataSource implements DataSource {
 
 	/* file layout:
 	 *
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
+	 * DBVER$1:PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
 	 *
 	 * Old but compatible:
+	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
 	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
 	 * PLAYERNAME:HASHSUM:IP
 	 * PLAYERNAME:HASHSUM
@@ -29,6 +29,8 @@ public class FileDataSource implements DataSource {
 	 */
 	private File source;
 
+	private int dbvers = 1;
+	
 	public FileDataSource() throws IOException {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
@@ -37,103 +39,53 @@ public class FileDataSource implements DataSource {
 
 	@Override
 	public synchronized boolean isAuthAvailable(String user) {
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args.length > 1 && args[0].equals(user)) {
+				PlayerAuth auth = convertDBStringToAuth(line);
+				if (auth.getNickname().equals(user)) {
+					br.close();
 					return true;
 				}
 			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
+			br.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			return false;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		return false;
 	}
 
 	@Override
 	public synchronized boolean saveAuth(PlayerAuth auth) {
-		if (isAuthAvailable(auth.getNickname())) {
-			return false;
-		}
-		BufferedWriter bw = null;
 		try {
-			bw = new BufferedWriter(new FileWriter(source, true));
-			bw.write(auth.getNickname() + ":" + auth.getHash() + ":" + auth.getIp() + ":" + auth.getLastLogin() + ":" + auth.getQuitLocX() + ":" + auth.getQuitLocY() + ":" + auth.getQuitLocZ() + ":" + auth.getWorld() + "\n");
+			BufferedWriter bw = new BufferedWriter(new FileWriter(source, true));
+			bw.write(convertAuthToDBString(auth));
+			bw.close();
 		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
+			ex.printStackTrace();
 			return false;
-		} finally {
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		return true;
 	}
 
 	@Override
 	public synchronized boolean updatePassword(PlayerAuth auth) {
-		if (!isAuthAvailable(auth.getNickname())) {
-			return false;
-		}
 		PlayerAuth newAuth = null;
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(source));
-			String line = "";
+			BufferedReader br = new BufferedReader(new FileReader(source));
+			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args[0].equals(auth.getNickname())) {
-					switch (args.length) {
-						case 9: case 8: {
-							newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
-							break;
-						}
-						case 7: {
-							newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world");
-							break;
-						}
-						case 4: {
-							newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], Long.parseLong(args[3]), 0, 0, 0, "world");
-							break;
-						}
-						default: {
-							newAuth = new PlayerAuth(args[0], auth.getHash(), args[2], 0, 0, 0, 0, "world");
-							break;
-						}
-					}
-					break;
+				PlayerAuth oldauth = convertDBStringToAuth(line);
+				if (oldauth.getNickname().equals(auth.getNickname())) {
+					newAuth = new PlayerAuth(oldauth.getNickname(), auth.getHash(), oldauth.getIp(), oldauth.getLastLogin());
 				}
 			}
-		} catch (FileNotFoundException ex) {
+			br.close();
+		} catch (Exception ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return false;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		removeAuth(auth.getNickname());
 		saveAuth(newAuth);
@@ -142,47 +94,20 @@ public class FileDataSource implements DataSource {
 
 	@Override
 	public boolean updateSession(PlayerAuth auth) {
-		if (!isAuthAvailable(auth.getNickname())) {
-			return false;
-		}
 		PlayerAuth newAuth = null;
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(source));
-			String line = "";
+			BufferedReader br = new BufferedReader(new FileReader(source));
+			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args[0].equals(auth.getNickname())) {
-					switch (args.length) {
-						case 8: case 9: {
-							newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
-							break;
-						}
-						case 7: {
-							newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "world");
-							break;
-						}
-						default: {
-							newAuth = new PlayerAuth(args[0], args[1], auth.getIp(), auth.getLastLogin(), 0, 0, 0, "world");
-							break;
-						}
-					}
-					break;
+				PlayerAuth oldauth = convertDBStringToAuth(line);
+				if (oldauth.getNickname().equals(auth.getNickname())) {
+					newAuth = new PlayerAuth(oldauth.getNickname(), oldauth.getHash(), auth.getIp(), auth.getLastLogin());
 				}
 			}
-		} catch (FileNotFoundException ex) {
+			br.close();
+		} catch (Exception ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return false;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		removeAuth(auth.getNickname());
 		saveAuth(newAuth);
@@ -191,121 +116,73 @@ public class FileDataSource implements DataSource {
 
 	@Override
 	public List<String> autoPurgeDatabase(long until) {
-		BufferedReader br = null;
-		BufferedWriter bw = null;
-		ArrayList<String> lines = new ArrayList<String>();
+		List<String> lines = new ArrayList<String>();
 		List<String> cleared = new ArrayList<String>();
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args.length >= 4) {
-					if (Long.parseLong(args[3]) >= until) {
-						lines.add(line);
-						continue;
-					} else {
-						cleared.add(args[0]);
-					}
+				PlayerAuth auth = convertDBStringToAuth(line);
+				if (auth.getLastLogin() >= until) {
+					lines.add(line);
+				} else {
+					cleared.add(auth.getNickname());
 				}
-
 			}
-			bw = new BufferedWriter(new FileWriter(source));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(source));
 			for (String l : lines) {
 				bw.write(l + "\n");
 			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
+			br.close();
+			bw.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			return cleared;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return cleared;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		return cleared;
 	}
 
 	@Override
 	public synchronized boolean removeAuth(String user) {
-		if (!isAuthAvailable(user)) {
-			return false;
-		}
-		BufferedReader br = null;
-		BufferedWriter bw = null;
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args.length > 1 && !args[0].equals(user)) {
+				PlayerAuth auth = convertDBStringToAuth(line);
+				if (!auth.getNickname().equals(user)) {
 					lines.add(line);
 				}
 			}
-			bw = new BufferedWriter(new FileWriter(source));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(source));
 			for (String l : lines) {
 				bw.write(l + "\n");
 			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
+			br.close();
+			bw.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			return false;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
-			if (bw != null) {
-				try {
-					bw.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		return true;
 	}
 
 	@Override
 	public synchronized PlayerAuth getAuth(String user) {
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = parseAuth(line);
+				PlayerAuth auth = convertDBStringToAuth(line);
 				if (auth.getNickname().equals(user)) {
+					br.close();
 					return auth;
 				}
 			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
+			br.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			return null;
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return null;
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 		return null;
 	}
@@ -317,81 +194,90 @@ public class FileDataSource implements DataSource {
 
 	@Override
 	public List<String> getAllAuthsByIp(String ip) {
-		BufferedReader br = null;
 		List<String> countIp = new ArrayList<String>();
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				String[] args = line.split(":");
-				if (args.length > 3 && args[2].equals(ip)) {
-					countIp.add(args[0]);
+				PlayerAuth auth = convertDBStringToAuth(line);
+				if (auth.getIp().equals(ip)) {
+					countIp.add(auth.getIp());
 				}
 			}
+			br.close();
 			return countIp;
-		} catch (FileNotFoundException ex) {
+		} catch (Exception ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			return new ArrayList<String>();
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
 		}
 	}
 
 	@Override
 	public List<PlayerAuth> getAllAuths() {
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
-		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(source));
+			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = parseAuth(line);
-				if (auth != null) {
-					auths.add(auth);
-				}
+				auths.add(convertDBStringToAuth(line));
 			}
-		} catch (FileNotFoundException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-		} catch (IOException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException ex) {
-				}
-			}
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return auths;
 	}
 	
+	private String convertAuthToDBString(PlayerAuth auth) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("DBVER$");
+		sb.append(dbvers);
+		sb.append(":");
+		sb.append(auth.getNickname());
+		sb.append(":");
+		sb.append(auth.getHash());
+		sb.append(":");
+		sb.append(auth.getIp());
+		sb.append(":");
+		sb.append(auth.getLastLogin());
+		sb.append("\n");
+		return sb.toString();
+	}
+	
+	private PlayerAuth convertDBStringToAuth(String dbstring) {
+		String[] args = dbstring.split(":");
+		return new PlayerAuth(args[1], args[2], args[3], Long.parseLong(args[4]));
+	}
+	
 	@Override
 	public void convertDatabase() {
-		List<PlayerAuth> auths = getAllAuths();
-		source.canExecute();
+		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(source));
+			String line;
+			while ((line = br.readLine()) != null) {
+				auths.add(parseOldAuth(line));
+			}
+			br.close();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(source, false));
+			for (PlayerAuth auth : auths) {
+				try {
+					writer.write(convertAuthToDBString(auth));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private PlayerAuth parseAuth(String line) {
+	private PlayerAuth parseOldAuth(String line) {
 		PlayerAuth auth = null;
 		String[] args = line.split(":");
 		switch (args.length) {
-			case 9: case 8: {
-				auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), args[7]);
-				break;
-			}
-			case 7: {
-				auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]), Integer.parseInt(args[4]), Integer.parseInt(args[5]), Integer.parseInt(args[6]), "unavailableworld");
-				break;
-			}
-			case 4: {
+			case 9: case 8: case 7: case 4: {
 				auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]));
 				break;
 			}
