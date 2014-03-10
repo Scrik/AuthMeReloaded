@@ -93,7 +93,7 @@ public class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public boolean updateSession(PlayerAuth auth) {
+	public synchronized boolean updateSession(PlayerAuth auth) {
 		PlayerAuth newAuth = null;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
