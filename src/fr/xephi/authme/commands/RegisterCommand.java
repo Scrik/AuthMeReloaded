@@ -95,11 +95,7 @@ public class RegisterCommand implements CommandExecutor {
 			} else {
 				hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[0], name);
 			}
-			if (Settings.getMySQLColumnSalt.isEmpty()) {
-				auth = new PlayerAuth(name, hash, ip, new Date().getTime());
-			} else {
-				auth = new PlayerAuth(name, hash, PasswordSecurity.userSalt.get(name), ip, new Date().getTime());
-			}
+			auth = new PlayerAuth(name, hash, ip, new Date().getTime());
 			if (!database.saveAuth(auth)) {
 				player.sendMessage(m._("error"));
 				return true;

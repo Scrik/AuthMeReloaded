@@ -11,8 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import fr.xephi.authme.ConsoleLogger;
-import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.datasource.DataSource.DataSourceType;
 import fr.xephi.authme.security.HashAlgorithm;
 
 
@@ -46,10 +44,7 @@ public final class Settings extends YamlConfiguration {
 	supportOldPassword,
 	enableProtection, enableAntiBot;
 
-	public static String getNickRegex, getMySQLHost, getMySQLPort,
-	getMySQLUsername, getMySQLPassword, getMySQLDatabase, getMySQLTablename,
-	getMySQLColumnName, getMySQLColumnPassword, getMySQLColumnIp, getMySQLColumnLastLogin,
-	getMySQLColumnSalt,
+	public static String getNickRegex,
 	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
 	rakamakUsers, rakamakUsersIp, getMySQLColumnId,
 	getMySQLlastlocWorld, defaultWorld,
@@ -191,7 +186,6 @@ public final class Settings extends YamlConfiguration {
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		getPasswordHash = getPasswordHash();
 		isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
-		getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt","");
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
