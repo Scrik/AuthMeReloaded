@@ -40,8 +40,6 @@ import fr.xephi.authme.commands.UnregisterCommand;
 import fr.xephi.authme.datasource.CacheDataSource;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.datasource.FileDataSource;
-import fr.xephi.authme.datasource.MySQLDataSource;
-import fr.xephi.authme.datasource.SqliteDataSource;
 import fr.xephi.authme.listener.AuthMeBlockListener;
 import fr.xephi.authme.listener.AuthMeChestShopListener;
 import fr.xephi.authme.listener.AuthMeEntityListener;
@@ -118,54 +116,20 @@ public class AuthMe extends JavaPlugin {
 		checkEssentials();
 
 		/*
-		 * Backend MYSQL - FILE - SQLITE
+		 * Backend
 		 */
-		switch (Settings.getDataSource) {
-		case FILE:
-			try {
-				database = new FileDataSource();
-			} catch (Exception ex) {
-				ConsoleLogger.showError(ex.getMessage());
-				if (Settings.isStopEnabled) {
-					ConsoleLogger.showError("Can't use FLAT FILE... SHUTDOWN...");
-					server.shutdown();
-				}
-				if (!Settings.isStopEnabled) {
-					this.getServer().getPluginManager().disablePlugin(this);
-				}
-				return;
+		try {
+			database = new FileDataSource();
+		} catch (Exception ex) {
+			ConsoleLogger.showError(ex.getMessage());
+			if (Settings.isStopEnabled) {
+				ConsoleLogger.showError("Can't use FLAT FILE... SHUTDOWN...");
+				server.shutdown();
 			}
-			break;
-		case MYSQL:
-			try {
-				database = new MySQLDataSource();
-			} catch (Exception ex) {
-				ConsoleLogger.showError(ex.getMessage());
-				if (Settings.isStopEnabled) {
-					ConsoleLogger.showError("Can't use MySQL... Please input correct MySQL informations ! SHUTDOWN...");
-					server.shutdown();
-				}
-				if (!Settings.isStopEnabled) {
-					this.getServer().getPluginManager().disablePlugin(this);
-				}
-				return;
+			if (!Settings.isStopEnabled) {
+				this.getServer().getPluginManager().disablePlugin(this);
 			}
-			break;
-		case SQLITE:
-			try {
-				database = new SqliteDataSource();
-			} catch (Exception ex) {
-				ConsoleLogger.showError(ex.getMessage());
-				if (Settings.isStopEnabled) {
-					ConsoleLogger.showError("Can't use SQLITE... ! SHUTDOWN...");
-					server.shutdown();
-				}
-				if (!Settings.isStopEnabled) {
-					this.getServer().getPluginManager().disablePlugin(this);
-				}
-				return;
-			}
-			break;
+			return;
 		}
 
 		if (Settings.isCachingEnabled) {

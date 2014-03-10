@@ -147,7 +147,7 @@ public class API {
 			 if (isRegistered(name)) {
 				 return false;
 			 }
-			 PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", 0, "your@email.com");
+			 PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", 0);
 			 if (!database.saveAuth(auth)) {
 				 return false;
 			 }

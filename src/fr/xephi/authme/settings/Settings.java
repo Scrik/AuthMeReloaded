@@ -31,7 +31,6 @@ public final class Settings extends YamlConfiguration {
 	public static List<String> countries = null;
 	public final Plugin plugin;
 	private final File file;
-	public static DataSourceType getDataSource;
 	public static HashAlgorithm getPasswordHash;
 	public static HashAlgorithm rakamakHash;
 	public static Boolean useLogging = false;
@@ -101,23 +100,7 @@ public final class Settings extends YamlConfiguration {
 		isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		getPasswordHash = getPasswordHash();
-		getDataSource = getDataSource();
 		isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
-		getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
-		getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
-		getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");
-		getMySQLPassword = configFile.getString("DataSource.mySQLPassword","12345");
-		getMySQLDatabase = configFile.getString("DataSource.mySQLDatabase","authme");
-		getMySQLTablename = configFile.getString("DataSource.mySQLTablename","authme");
-		getMySQLColumnName = configFile.getString("DataSource.mySQLColumnName","username");
-		getMySQLColumnPassword = configFile.getString("DataSource.mySQLColumnPassword","password");
-		getMySQLColumnIp = configFile.getString("DataSource.mySQLColumnIp","ip");
-		getMySQLColumnLastLogin = configFile.getString("DataSource.mySQLColumnLastLogin","lastlogin");
-		getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt");
-		getMySQLlastlocX = configFile.getString("DataSource.mySQLlastlocX","x");
-		getMySQLlastlocY = configFile.getString("DataSource.mySQLlastlocY","y");
-		getMySQLlastlocZ = configFile.getString("DataSource.mySQLlastlocZ","z");
-		getMySQLlastlocWorld = configFile.getString("DataSource.mySQLlastlocWorld", "world");
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
@@ -207,22 +190,7 @@ public final class Settings extends YamlConfiguration {
 		isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		getPasswordHash = getPasswordHash();
-		getDataSource = getDataSource();
 		isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
-		getMySQLHost = configFile.getString("DataSource.mySQLHost","127.0.0.1");
-		getMySQLPort = configFile.getString("DataSource.mySQLPort","3306");
-		getMySQLUsername = configFile.getString("DataSource.mySQLUsername","authme");
-		getMySQLPassword = configFile.getString("DataSource.mySQLPassword","12345");
-		getMySQLDatabase = configFile.getString("DataSource.mySQLDatabase","authme");
-		getMySQLTablename = configFile.getString("DataSource.mySQLTablename","authme");
-		getMySQLColumnName = configFile.getString("DataSource.mySQLColumnName","username");
-		getMySQLColumnPassword = configFile.getString("DataSource.mySQLColumnPassword","password");
-		getMySQLColumnIp = configFile.getString("DataSource.mySQLColumnIp","ip");
-		getMySQLColumnLastLogin = configFile.getString("DataSource.mySQLColumnLastLogin","lastlogin");
-		getMySQLlastlocX = configFile.getString("DataSource.mySQLlastlocX","x");
-		getMySQLlastlocY = configFile.getString("DataSource.mySQLlastlocY","y");
-		getMySQLlastlocZ = configFile.getString("DataSource.mySQLlastlocZ","z");
-		getMySQLlastlocWorld = configFile.getString("DataSource.mySQLlastlocWorld", "world");
 		getMySQLColumnSalt = configFile.getString("ExternalBoardOptions.mySQLColumnSalt","");
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
@@ -304,16 +272,6 @@ public final class Settings extends YamlConfiguration {
 		} catch (IllegalArgumentException ex) {
 			ConsoleLogger.showError("Unknown Hash Algorithm; defaulting to SHA256");
 			return HashAlgorithm.SHA256;
-		}
-	}
-
-	private static DataSourceType getDataSource() {
-		String key = "DataSource.backend";
-		try {
-			return DataSource.DataSourceType.valueOf(configFile.getString(key).toUpperCase());
-		} catch (IllegalArgumentException ex) {
-			ConsoleLogger.showError("Unknown database backend; defaulting to file database");
-			return DataSource.DataSourceType.FILE;
 		}
 	}
 

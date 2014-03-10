@@ -1,40 +1,6 @@
 DataSource:
-    # Can be set to : file, sqlite, mysql
-    backend: file
     # Do we need to cache all things ?
     caching: true
-    # Column for storing or checking players nickname
-    mySQLColumnName: username
-    # Table of the database
-    mySQLTablename: authme
-    # Username about Database Connection Infos
-    mySQLUsername: authme
-    # Column for storing players lastlogins
-    mySQLColumnLastLogin: lastlogin
-    # Database Name, use with converters or as SQLITE database name
-    mySQLDatabase: authme
-    # Database Port
-    mySQLPort: '3306'
-    # Column for storing players IPs
-    mySQLColumnIp: ip
-    # Database location
-    mySQLHost: 127.0.0.1
-    # Column for storing players passwords
-    mySQLColumnPassword: password
-    # Password about Database Connection Infos
-    mySQLPassword: '12345'
-    # Column for SaveQuitLocation - X
-    mySQLlastlocX: x
-    # Column for SaveQuitLocation - Y
-    mySQLlastlocY: y
-    # Column for SaveQuitLocation - Z
-    mySQLlastlocZ: z
-    # Column for SaveQuitLocation - World name
-    mySQLlastlocWorld: world
-    # Column for storing players emails
-    mySQLColumnEmail: email
-    # Column of IDs to sort data
-    mySQLColumnId: id
 settings:
     restrictions:
         # Can unregistered players chat, care , that block all commands except followers

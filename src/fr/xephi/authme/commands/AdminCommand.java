@@ -2,7 +2,6 @@ package fr.xephi.authme.commands;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -26,11 +25,6 @@ import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.converter.FlatToSql;
-import fr.xephi.authme.converter.FlatToSqlite;
-import fr.xephi.authme.converter.RakamakConverter;
-import fr.xephi.authme.converter.newxAuthToFlat;
-import fr.xephi.authme.converter.oldxAuthToFlat;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
@@ -230,56 +224,6 @@ public class AdminCommand implements CommandExecutor {
 			} catch (NoSuchAlgorithmException ex) {
 				ConsoleLogger.showError(ex.getMessage());
 				sender.sendMessage(m._("error"));
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("convertflattosql")) {
-			try {
-				FlatToSql.FlatToSqlConverter();
-				if (sender instanceof Player) {
-					sender.sendMessage("[AuthMe] FlatFile converted to authme.sql file");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (NullPointerException ex) {
-				System.out.println(ex.getMessage());
-			}
-		} else if (args[0].equalsIgnoreCase("flattosqlite")) {
-			try {
-				String s = FlatToSqlite.convert();
-				if (sender instanceof Player) {
-					sender.sendMessage(s);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (NullPointerException ex) {
-				System.out.println(ex.getMessage());
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("xauthimport")) {
-			try {
-				Class.forName("com.cypherx.xauth.xAuth");
-				oldxAuthToFlat converter = new oldxAuthToFlat(plugin, database, sender);
-				converter.convert();
-			} catch (ClassNotFoundException e) {
-				try {
-					Class.forName("de.luricos.bukkit.xAuth.xAuth");
-					newxAuthToFlat converter = new newxAuthToFlat(plugin, database, sender);
-					converter.convert();
-				} catch (ClassNotFoundException ce) {
-					sender.sendMessage("[AuthMe] No version of xAuth found or xAuth isn't enable! ");
-				}
-			}
-			return true;
-		} else if (args[0].equalsIgnoreCase("convertfromrakamak")) {
-			try {
-				RakamakConverter.RakamakConvert();
-				if (sender instanceof Player) {
-					sender.sendMessage("[AuthMe] Rakamak database converted to auths.db");
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (NullPointerException ex) {
-				ConsoleLogger.showError(ex.getMessage());
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("setspawn")) {
