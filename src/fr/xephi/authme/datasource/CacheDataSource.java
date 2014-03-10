@@ -82,12 +82,8 @@ public class CacheDataSource implements DataSource {
 	@Override
 	public List<String> autoPurgeDatabase(long until) {
 		List<String> cleared = source.autoPurgeDatabase(until);
-		if (cleared.size() > 0) {
-			for (PlayerAuth auth : authCache.values()) {
-				if(auth.getLastLogin() < until) {
-					clearAuth(auth.getNickname());
-				}
-			}
+		for (String nickname : cleared) {
+			clearAuth(nickname);
 		}
 		return cleared;
 	}
