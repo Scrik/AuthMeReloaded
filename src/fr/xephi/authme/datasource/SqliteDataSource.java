@@ -50,7 +50,7 @@ public class SqliteDataSource implements DataSource {
 		this.lastlocY = Settings.getMySQLlastlocY;
 		this.lastlocZ = Settings.getMySQLlastlocZ;
 		this.lastlocWorld = Settings.getMySQLlastlocWorld;
-		this.columnEmail = Settings.getMySQLColumnEmail;
+		this.columnEmail = "email";
 		this.columnID = Settings.getMySQLColumnId;
 
 		connect();

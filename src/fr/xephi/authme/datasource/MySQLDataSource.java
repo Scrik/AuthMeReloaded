@@ -60,7 +60,7 @@ public class MySQLDataSource implements DataSource {
 		this.lastlocWorld = Settings.getMySQLlastlocWorld;
 		this.columnSalt = Settings.getMySQLColumnSalt;
 		this.columnGroup = Settings.getMySQLColumnGroup;
-		this.columnEmail = Settings.getMySQLColumnEmail;
+		this.columnEmail = "email";
 		this.columnOthers = Settings.getMySQLOtherUsernameColumn;
 		this.columnID = Settings.getMySQLColumnId;
 

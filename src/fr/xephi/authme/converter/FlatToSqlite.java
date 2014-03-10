@@ -45,7 +45,7 @@ public class FlatToSqlite {
 		lastlocY = Settings.getMySQLlastlocY;
 		lastlocZ = Settings.getMySQLlastlocZ;
 		lastlocWorld = Settings.getMySQLlastlocWorld;
-		columnEmail = Settings.getMySQLColumnEmail;
+		columnEmail = "email";
 		columnID = Settings.getMySQLColumnId;
 		ConsoleLogger.info("Converting FlatFile to SQLite ...");
 		if (new File(AuthMe.getInstance().getDataFolder() + File.separator + database + ".db").exists()) {

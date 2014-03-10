@@ -40,9 +40,9 @@ public final class Settings extends YamlConfiguration {
 	isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
 	isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
 	isCachingEnabled, isKickOnWrongPasswordEnabled,
-	getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, isBackupActivated, isBackupOnStart,
-	isBackupOnStop, enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
-	useCaptcha, emailRegistration, multiverse, notifications, chestshop, banUnsafeIp, doubleEmailCheck,
+	getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
+	enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
+	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
 	disableSocialSpy, useEssentialsMotd,
 	supportOldPassword,
 	enableProtection, enableAntiBot;
@@ -50,15 +50,15 @@ public final class Settings extends YamlConfiguration {
 	public static String getNickRegex, getMySQLHost, getMySQLPort,
 	getMySQLUsername, getMySQLPassword, getMySQLDatabase, getMySQLTablename,
 	getMySQLColumnName, getMySQLColumnPassword, getMySQLColumnIp, getMySQLColumnLastLogin,
-	getMySQLColumnSalt, getMySQLColumnGroup, getMySQLColumnEmail, backupWindowsPath,
+	getMySQLColumnSalt, getMySQLColumnGroup,
 	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
-	rakamakUsers, rakamakUsersIp, getmailAccount, getmailPassword, getmailSMTP, getMySQLColumnId, getmailSenderName,
-	getMailSubject, getMailText, getMySQLlastlocWorld, defaultWorld,
+	rakamakUsers, rakamakUsersIp, getMySQLColumnId,
+	getMySQLlastlocWorld, defaultWorld,
 	getPhpbbPrefix, getWordPressPrefix;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
 	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, getNonActivatedGroup,
-	passwordMaxLength, getRecoveryPassLength, getMailPort, maxLoginTry, captchaLength, saltLength, getmaxRegPerEmail,
+	passwordMaxLength, maxLoginTry, captchaLength, saltLength,
 	bCryptLog2Rounds, getPhpbbGroup, antiBotSensibility, antiBotDuration;
 
 	protected static YamlConfiguration configFile;
@@ -79,7 +79,6 @@ public final class Settings extends YamlConfiguration {
 	@SuppressWarnings("unchecked")
 	public void loadConfigOptions() {
 		plugin.getLogger().info("Loading Configuration File...");
-		mergeConfig();
 
 		messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
 		isForcedRegistrationEnabled  = configFile.getBoolean("settings.registration.force", true);
@@ -110,7 +109,6 @@ public final class Settings extends YamlConfiguration {
 		getMySQLPassword = configFile.getString("DataSource.mySQLPassword","12345");
 		getMySQLDatabase = configFile.getString("DataSource.mySQLDatabase","authme");
 		getMySQLTablename = configFile.getString("DataSource.mySQLTablename","authme");
-		getMySQLColumnEmail = configFile.getString("DataSource.mySQLColumnEmail","email");
 		getMySQLColumnName = configFile.getString("DataSource.mySQLColumnName","username");
 		getMySQLColumnPassword = configFile.getString("DataSource.mySQLColumnPassword","password");
 		getMySQLColumnIp = configFile.getString("DataSource.mySQLColumnIp","ip");
@@ -126,10 +124,6 @@ public final class Settings extends YamlConfiguration {
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
 		passwordMaxLength = configFile.getInt("settings.security.passwordMaxLength", 20);
-		isBackupActivated = configFile.getBoolean("BackupSystem.ActivateBackup",false);
-		isBackupOnStart = configFile.getBoolean("BackupSystem.OnServerStart",false);
-		isBackupOnStop = configFile.getBoolean("BackupSystem.OnServeStop",false);
-		backupWindowsPath = configFile.getString("BackupSystem.MysqlWindowsPath", "C:\\Program Files\\MySQL\\MySQL Server 5.1\\");
 		enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu",false);
 		isStopEnabled = configFile.getBoolean("Security.SQLProblem.stopServer", true);
 		allowCommands = (List<String>) configFile.getList("settings.restrictions.allowCommands");
@@ -161,28 +155,17 @@ public final class Settings extends YamlConfiguration {
 		rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-		getmailAccount = configFile.getString("Email.mailAccount", "");
-		getmailPassword = configFile.getString("Email.mailPassword", "");
-		getmailSMTP = configFile.getString("Email.mailSMTP", "smtp.gmail.com");
-		getMailPort = configFile.getInt("Email.mailPort", 465);
-		getRecoveryPassLength = configFile.getInt("Email.RecoveryPasswordLength", 8);
 		getMySQLOtherUsernameColumn = (List<String>) configFile.getList("ExternalBoardOptions.mySQLOtherUsernameColumns", new ArrayList<String>());
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
 		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
-		getmailSenderName = configFile.getString("Email.mailSenderName", "");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		getMailSubject = configFile.getString("Email.mailSubject", "Your new AuthMe Password");
-		getMailText = configFile.getString("Email.mailText", "Dear <playername>, <br /><br /> This is your new AuthMe password for the server <br /><br /> <servername> : <br /><br /> <generatedpass><br /><br />Do not forget to change password after login! <br /> /changepassword <generatedpass> newPassword");
-		emailRegistration = configFile.getBoolean("settings.registration.enableEmailRegistrationSystem", false);
 		saltLength = configFile.getInt("settings.security.doubleMD5SaltLength", 8);
-		getmaxRegPerEmail = configFile.getInt("Email.maxRegPerEmail", 1);
 		multiverse = configFile.getBoolean("Hooks.multiverse", true);
 		chestshop = configFile.getBoolean("Hooks.chestshop", true);
 		notifications = configFile.getBoolean("Hooks.notifications", true);
 		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
-		doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
 		bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
@@ -234,7 +217,6 @@ public final class Settings extends YamlConfiguration {
 		getMySQLPassword = configFile.getString("DataSource.mySQLPassword","12345");
 		getMySQLDatabase = configFile.getString("DataSource.mySQLDatabase","authme");
 		getMySQLTablename = configFile.getString("DataSource.mySQLTablename","authme");
-		getMySQLColumnEmail = configFile.getString("DataSource.mySQLColumnEmail","email");
 		getMySQLColumnName = configFile.getString("DataSource.mySQLColumnName","username");
 		getMySQLColumnPassword = configFile.getString("DataSource.mySQLColumnPassword","password");
 		getMySQLColumnIp = configFile.getString("DataSource.mySQLColumnIp","ip");
@@ -250,10 +232,6 @@ public final class Settings extends YamlConfiguration {
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
 		passwordMaxLength = configFile.getInt("settings.security.passwordMaxLength", 20);
-		isBackupActivated = configFile.getBoolean("BackupSystem.ActivateBackup",false);
-		isBackupOnStart = configFile.getBoolean("BackupSystem.OnServerStart",false);
-		isBackupOnStop = configFile.getBoolean("BackupSystem.OnServeStop",false);
-		backupWindowsPath = configFile.getString("BackupSystem.MysqlWindowsPath", "C:\\Program Files\\MySQL\\MySQL Server 5.1\\");
 		enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu",false);
 		isStopEnabled = configFile.getBoolean("Security.SQLProblem.stopServer", true);
 		allowCommands = (List<String>) configFile.getList("settings.restrictions.allowCommands");
@@ -285,28 +263,17 @@ public final class Settings extends YamlConfiguration {
 		rakamakUseIp = configFile.getBoolean("Converter.Rakamak.useIp", false);
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-		getmailAccount = configFile.getString("Email.mailAccount", "");
-		getmailPassword = configFile.getString("Email.mailPassword", "");
-		getmailSMTP = configFile.getString("Email.mailSMTP", "smtp.gmail.com");
-		getMailPort = configFile.getInt("Email.mailPort", 465);
-		getRecoveryPassLength = configFile.getInt("Email.RecoveryPasswordLength", 8);
 		getMySQLOtherUsernameColumn = (List<String>) configFile.getList("ExternalBoardOptions.mySQLOtherUsernameColumns", new ArrayList<String>());
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
 		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
-		getmailSenderName = configFile.getString("Email.mailSenderName", "");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		getMailSubject = configFile.getString("Email.mailSubject", "Your new AuthMe Password");
-		getMailText = configFile.getString("Email.mailText", "Dear <playername>, <br /><br /> This is your new AuthMe password for the server <br /><br /> <servername> : <br /><br /> <generatedpass><br /><br />Do not forget to change password after login! <br /> /changepassword <generatedpass> newPassword");
-		emailRegistration = configFile.getBoolean("settings.registration.enableEmailRegistrationSystem", false);
 		saltLength = configFile.getInt("settings.security.doubleMD5SaltLength", 8);
-		getmaxRegPerEmail = configFile.getInt("Email.maxRegPerEmail", 1);
 		multiverse = configFile.getBoolean("Hooks.multiverse", true);
 		chestshop = configFile.getBoolean("Hooks.chestshop", true);
 		notifications = configFile.getBoolean("Hooks.notifications", true);
 		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
-		doubleEmailCheck = configFile.getBoolean("settings.registration.doubleEmailCheck", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
 		bCryptLog2Rounds = configFile.getInt("ExternalBoardOptions.bCryptLog2Round", 10);
@@ -321,137 +288,6 @@ public final class Settings extends YamlConfiguration {
 		enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
 		antiBotSensibility = configFile.getInt("Protection.antiBotSensibility", 5);
 		antiBotDuration = configFile.getInt("Protection.antiBotDuration", 10);
-	}
-
-	public void mergeConfig() {
-		if(!contains("DataSource.mySQLColumnEmail")) {
-			set("DataSource.mySQLColumnEmail","email");
-		}
-		if(!contains("Email.RecoveryPasswordLength")) {
-			set("Email.RecoveryPasswordLength", 8);
-		}
-		if(!contains("Email.mailPort")) {
-			set("Email.mailPort", 465);
-		}
-		if(!contains("Email.mailSMTP")) {
-			set("Email.mailSMTP", "smtp.gmail.com");
-		}
-		if(!contains("Email.mailAccount")) {
-			set("Email.mailAccount", "");
-		}
-		if(!contains("Email.mailPassword")) {
-			set("Email.mailPassword", "");
-		}
-		if(!contains("ExternalBoardOptions.mySQLOtherUsernameColumns")) {
-			set("ExternalBoardOptions.mySQLOtherUsernameColumns", new ArrayList<String>());
-		}
-		if(!contains("settings.restrictions.displayOtherAccounts")) {
-			set("settings.restrictions.displayOtherAccounts", true);
-		}
-		if(!contains("DataSource.mySQLColumnId")) {
-			set("DataSource.mySQLColumnId", "id");
-		}
-		if(!contains("Email.mailSenderName")) {
-			set("Email.mailSenderName", "");
-		}
-		if(!contains("Security.captcha.useCaptcha")) {
-			set("Security.captcha.useCaptcha", false);
-		}
-		if(!contains("Security.captcha.maxLoginTry")) {
-			set("Security.captcha.maxLoginTry", 5);
-		}
-		if(!contains("Security.captcha.captchaLength")) {
-			set("Security.captcha.captchaLength", 5);
-		}
-		if(!contains("Email.mailSubject")) {
-			set("Email.mailSubject", "");
-		}
-		if(!contains("Email.mailText")) {
-			set("Email.mailText", "Dear <playername>, <br /><br /> This is your new AuthMe password for the server <br /><br /> <servername> : <br /><br /> <generatedpass><br /><br />Do not forget to change password after login! <br /> /changepassword <generatedpass> newPassword");
-		}
-		if(contains("Email.mailText")) {
-			try {
-				String s = getString("Email.mailText");
-				s = s.replaceAll("\n", "<br />");
-				set("Email.mailText", null);
-				set("Email.mailText", s);
-			} catch (Exception e) {}
-		}
-		if(!contains("settings.registration.enableEmailRegistrationSystem")) {
-			set("settings.registration.enableEmailRegistrationSystem", false);
-		}
-		if(!contains("settings.security.doubleMD5SaltLength")) {
-			set("settings.security.doubleMD5SaltLength", 8);
-		}
-		if(!contains("Email.maxRegPerEmail")) {
-			set("Email.maxRegPerEmail", 1);
-		}
-		if(!contains("Hooks.multiverse")) {
-			set("Hooks.multiverse", true);
-			set("Hooks.chestshop", true);
-			set("Hooks.notifications", true);
-			set("Hooks.bungeecord", false);
-		}
-		if(!contains("settings.restrictions.banUnsafedIP")) {
-			set("settings.restrictions.banUnsafedIP", false);
-		}
-		if(!contains("settings.registration.doubleEmailCheck")) {
-			set("settings.registration.doubleEmailCheck", false);
-		}
-		if(!contains("Security.console.logConsole")) {
-			set("Security.console.logConsole", false);
-		}
-		if(!contains("Hooks.disableSocialSpy")) {
-			set("Hooks.disableSocialSpy", true);
-		}
-		if(!contains("ExternalBoardOptions.bCryptLog2Round")) {
-			set("ExternalBoardOptions.bCryptLog2Round", 10);
-		}
-		if(!contains("DataSource.mySQLlastlocWorld")) {
-			set("DataSource.mySQLlastlocWorld", "world");
-		}
-		if(!contains("Hooks.useEssentialsMotd")) {
-			set("Hooks.useEssentialsMotd", false);
-		}
-		if(!contains("ExternalBoardOptions.phpbbTablePrefix")) {
-			set("ExternalBoardOptions.phpbbTablePrefix", "phpbb_");
-			set("ExternalBoardOptions.phpbbActivatedGroupId", 2);
-		}
-		if(!contains("settings.security.supportOldPasswordHash")) {
-			set("settings.security.supportOldPasswordHash", false);
-		}
-		if(!contains("ExternalBoardOptions.wordpressTablePrefix")) {
-			set("ExternalBoardOptions.wordpressTablePrefix", "wp_");
-		}
-		if(contains("Xenoforo.predefinedSalt")) {
-			set("Xenoforo.predefinedSalt", null);
-		}
-		if(configFile.getString("settings.security.passwordHash","SHA256").toUpperCase().equals("XFSHA1") || configFile.getString("settings.security.passwordHash","SHA256").toUpperCase().equals("XFSHA256")) {
-			set("settings.security.passwordHash", "XENFORO");
-		}
-		if(!contains("Protection.enableProtection")) {
-			set("Protection.enableProtection", false);
-		}
-		if(!contains("Protection.countries")) {
-			countries = new ArrayList<String>();
-			countries.add("US");
-			countries.add("GB");
-			set("Protection.countries", countries);
-		}
-		if(!contains("Protection.enableAntiBot")) {
-			set("Protection.enableAntiBot", false);
-		}
-		if(!contains("Protection.antiBotSensibility")) {
-			set("Protection.antiBotSensibility", 5);
-		}
-		if(!contains("Protection.antiBotDuration")) {
-			set("Protection.antiBotDuration", 10);
-		}
-
-		plugin.getLogger().info("Merge new Config Options if needed..");
-		plugin.saveConfig();
-
-		return;
 	}
 
 	private static HashAlgorithm getPasswordHash() {
@@ -570,7 +406,6 @@ public final class Settings extends YamlConfiguration {
 		if(stream == null) {
 			return;
 		}
-
 		setDefaults(YamlConfiguration.loadConfiguration(stream));
 	}
 

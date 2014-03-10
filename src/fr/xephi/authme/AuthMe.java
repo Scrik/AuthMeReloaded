@@ -35,7 +35,6 @@ import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.commands.AdminCommand;
 import fr.xephi.authme.commands.CaptchaCommand;
 import fr.xephi.authme.commands.ChangePasswordCommand;
-import fr.xephi.authme.commands.EmailCommand;
 import fr.xephi.authme.commands.LoginCommand;
 import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
@@ -49,7 +48,6 @@ import fr.xephi.authme.listener.AuthMeBlockListener;
 import fr.xephi.authme.listener.AuthMeChestShopListener;
 import fr.xephi.authme.listener.AuthMeEntityListener;
 import fr.xephi.authme.listener.AuthMePlayerListener;
-import fr.xephi.authme.listener.AuthMeSpoutListener;
 import fr.xephi.authme.managment.Management;
 import fr.xephi.authme.plugin.manager.CitizensCommunicator;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
@@ -67,7 +65,6 @@ public class AuthMe extends JavaPlugin {
 	public static Permission permission;
 	private static AuthMe instance;
 	public CitizensCommunicator citizens;
-	public SendMailSSL mail = null;
 	public int CitizensVersion = 0;
 	public int CombatTag = 0;
 	public double ChestShop = 0;
@@ -105,11 +102,6 @@ public class AuthMe extends JavaPlugin {
 
 		server = getServer();
 
-		//Load MailApi
-		if(!Settings.getmailAccount.isEmpty() && !Settings.getmailPassword.isEmpty()) {
-			mail = new SendMailSSL(this);
-		}
-
 		//Check Citizens Version
 		citizensVersion();
 
@@ -127,18 +119,6 @@ public class AuthMe extends JavaPlugin {
 
 		//Check Essentials
 		checkEssentials();
-
-		/*
-		 *  Back style on start if avaible
-		 */
-		if(Settings.isBackupActivated && Settings.isBackupOnStart) {
-			Boolean Backup = new PerformBackup(this).DoBackup();
-			if(Backup) {
-				ConsoleLogger.info("Backup Complete");
-			} else {
-				ConsoleLogger.showError("Error while making Backup");
-			}
-		}
 
 		/*
 		 * Backend MYSQL - FILE - SQLITE
@@ -202,10 +182,6 @@ public class AuthMe extends JavaPlugin {
 		management = new Management(database, this);
 
 		PluginManager pm = getServer().getPluginManager();
-		if (pm.isPluginEnabled("Spout")) {
-			pm.registerEvents(new AuthMeSpoutListener(database), this);
-			ConsoleLogger.info("Successfully hook with Spout!");
-		}
 		pm.registerEvents(new AuthMePlayerListener(this,database),this);
 		pm.registerEvents(new AuthMeBlockListener(database, this),this);
 		pm.registerEvents(new AuthMeEntityListener(database, this),this);
@@ -231,7 +207,6 @@ public class AuthMe extends JavaPlugin {
 		this.getCommand("changepassword").setExecutor(new ChangePasswordCommand(database, this));
 		this.getCommand("unregister").setExecutor(new UnregisterCommand(this, database));
 		this.getCommand("passpartu").setExecutor(new PasspartuCommand(this));
-		this.getCommand("email").setExecutor(new EmailCommand(this, database));
 		this.getCommand("captcha").setExecutor(new CaptchaCommand(this));
 
 		if(!Settings.isForceSingleSessionEnabled) {
@@ -363,14 +338,6 @@ public class AuthMe extends JavaPlugin {
 			database.close();
 		}
 
-		if(Settings.isBackupActivated && Settings.isBackupOnStop) {
-			Boolean Backup = new PerformBackup(this).DoBackup();
-			if(Backup) {
-				ConsoleLogger.info("Backup Complete");
-			} else {
-				ConsoleLogger.showError("Error while making Backup");
-			}
-		}
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " disabled");
 	}
 

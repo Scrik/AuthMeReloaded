@@ -131,13 +131,8 @@ public class AuthMePlayerListener implements Listener {
 			if (!Settings.isForcedRegistrationEnabled) {
 				return;
 			}
-			if (Settings.emailRegistration) {
-				player.sendMessage(m._("reg_email_msg"));
-				return;
-			} else {
-				player.sendMessage(m._("reg_msg"));
-				return;
-			}
+			player.sendMessage(m._("reg_msg"));
+			return;
 		}
 
 		if (!Settings.isChatAllowed && !(Settings.allowCommands.contains(cmd))) {
@@ -350,12 +345,7 @@ public class AuthMePlayerListener implements Listener {
 				return;
 			}
 		}
-		String msg = "";
-		if (Settings.emailRegistration) {
-			msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_email_msg");
-		} else {
-			msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_msg");
-		}
+		String msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_msg");
 		int time = Settings.getRegistrationTimeout * 20;
 		int msgInterval = Settings.getWarnMessageInterval;
 		if (time != 0) {

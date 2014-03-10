@@ -36,14 +36,12 @@ import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.settings.Spawn;
-import fr.xephi.authme.settings.SpoutCfg;
 
 
 public class AdminCommand implements CommandExecutor {
 
 	public AuthMe plugin;
 	private Messages m = Messages.getInstance();
-	private SpoutCfg s = SpoutCfg.getInstance();
 	public DataSource database;
 
 	public AdminCommand(AuthMe plugin, DataSource database) {
@@ -140,7 +138,6 @@ public class AdminCommand implements CommandExecutor {
 			YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(newConfigFile);
 			Settings.reloadConfigOptions(newConfig);
 			m.reLoad();
-			s.reLoad();
 			sender.sendMessage(m._("reload"));
 		} else if (args[0].equalsIgnoreCase("lastlogin")) {
 			if (args.length != 2) {

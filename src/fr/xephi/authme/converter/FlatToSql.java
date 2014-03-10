@@ -42,7 +42,7 @@ public class FlatToSql {
 		lastlocY = Settings.getMySQLlastlocY;
 		lastlocZ = Settings.getMySQLlastlocZ;
 		lastlocWorld = Settings.getMySQLlastlocWorld;
-		columnEmail = Settings.getMySQLColumnEmail;
+		columnEmail = "email";
 
 		try {
 			source = new File(AuthMe.getInstance().getDataFolder() + File.separator + "auths.db");

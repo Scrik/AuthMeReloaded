@@ -5,7 +5,6 @@ import java.util.Date;
 
 import me.muizers.Notifications.Notification;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
@@ -24,11 +22,8 @@ import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.events.RegisterTeleportEvent;
 import fr.xephi.authme.security.PasswordSecurity;
-import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
-import fr.xephi.authme.task.MessageTask;
-import fr.xephi.authme.task.TimeoutTask;
 
 public class RegisterCommand implements CommandExecutor {
 
@@ -75,112 +70,6 @@ public class RegisterCommand implements CommandExecutor {
 		if (Settings.getmaxRegPerIp > 0) {
 			if (!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ip).size() >= Settings.getmaxRegPerIp) {
 				player.sendMessage(m._("max_reg"));
-				return true;
-			}
-		}
-
-		if (Settings.emailRegistration && !Settings.getmailAccount.isEmpty()) {
-			if (!args[0].contains("@")) {
-				player.sendMessage(m._("usage_reg"));
-				return true;
-			}
-			if (Settings.doubleEmailCheck) {
-				if (args.length < 2) {
-					player.sendMessage(m._("usage_reg"));
-					return true;
-				}
-				if (!args[0].equals(args[1])) {
-					player.sendMessage(m._("usage_reg"));
-					return true;
-				}
-			}
-			final String email = args[0];
-			if (Settings.getmaxRegPerEmail > 0) {
-				if (!plugin.authmePermissible(sender, "authme.allow2accounts")
-						&& database.getAllAuthsByEmail(email).size() >= Settings.getmaxRegPerEmail) {
-					player.sendMessage(m._("max_reg"));
-					return true;
-				}
-			}
-			RandomString rand = new RandomString(Settings.getRecoveryPassLength);
-			final String thePass = rand.nextString();
-			if (!thePass.isEmpty()) {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin,
-						new Runnable() {
-					@Override
-					public void run() {
-						if (PasswordSecurity.userSalt.containsKey(name)) {
-							try {
-								final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
-								final PlayerAuth fAuth = new PlayerAuth(
-										name,
-										hashnew,
-										PasswordSecurity.userSalt.get(name),
-										ip,
-										new Date().getTime(),
-										(int) player.getLocation().getX(),
-										(int) player.getLocation().getY(),
-										(int) player.getLocation().getZ(),
-										player.getLocation().getWorld().getName(),
-										email
-										);
-								database.saveAuth(fAuth);
-								database.updateEmail(fAuth);
-								database.updateSession(fAuth);
-								plugin.mail.main(fAuth, thePass);
-							} catch (NoSuchAlgorithmException e) {
-								ConsoleLogger.showError(e.getMessage());
-							}
-						} else {
-							try {
-								final String hashnew = PasswordSecurity.getHash(Settings.getPasswordHash,thePass, name);
-								final PlayerAuth fAuth = new PlayerAuth(
-										name,
-										hashnew,
-										ip,
-										new Date().getTime(),
-										(int) player.getLocation().getX(),
-										(int) player.getLocation().getY(),
-										(int) player.getLocation().getZ(),
-										player.getLocation().getWorld().getName(),
-										email
-										);
-								database.saveAuth(fAuth);
-								database.updateEmail(fAuth);
-								database.updateSession(fAuth);
-								plugin.mail.main(fAuth, thePass);
-							} catch (NoSuchAlgorithmException e) {
-								ConsoleLogger.showError(e.getMessage());
-							}
-						}
-					}
-				});
-
-				player.sendMessage(m._("vb_nonActiv"));
-				String msg = m._("login_msg");
-				int time = Settings.getRegistrationTimeout * 20;
-				int msgInterval = Settings.getWarnMessageInterval;
-				if (time != 0) {
-					Bukkit.getScheduler().cancelTask(LimboCache.getInstance().getLimboPlayer(name).getTimeoutTaskId());
-					BukkitTask id = Bukkit.getScheduler().runTaskLater(plugin, new TimeoutTask(plugin, name), time);
-					LimboCache.getInstance().getLimboPlayer(name).setTimeoutTaskId(id.getTaskId());
-				}
-
-				Bukkit.getScheduler().cancelTask(LimboCache.getInstance().getLimboPlayer(name).getMessageTaskId());
-				BukkitTask nwMsg = Bukkit.getScheduler().runTask(plugin, new MessageTask(plugin, name, msg, msgInterval));
-				LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(nwMsg.getTaskId());
-
-				LimboCache.getInstance().deleteLimboPlayer(name);
-				if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
-					player.setAllowFlight(false);
-					player.setFlying(false);
-				}
-				if (!Settings.noConsoleSpam) {
-					ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
-				}
-				if (plugin.notifications != null) {
-					plugin.notifications.showNotification(new Notification("[AuthMe] "+ player.getName() + " has registered!"));
-				}
 				return true;
 			}
 		}
@@ -234,9 +123,7 @@ public class RegisterCommand implements CommandExecutor {
 			}
 
 			player.sendMessage(m._("registered"));
-			if (!Settings.getmailAccount.isEmpty()) {
-				player.sendMessage(m._("add_email"));
-			}
+
 			if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
 				player.setAllowFlight(false);
 				player.setFlying(false);
