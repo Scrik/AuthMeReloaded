@@ -16,7 +16,7 @@ public class PlayerAuth {
 	private String salt = "";
 	private String vBhash = null;
 	
-	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, int x, int y, int z, String world, String email) {
+	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, int x, int y, int z, String world) {
 		this.nickname = nickname;
 		this.hash = hash;
 		this.ip = ip;
@@ -27,7 +27,7 @@ public class PlayerAuth {
 		this.world = world;
 	}
 
-	public PlayerAuth(String nickname, String hash, String ip, long lastLogin, String email) {
+	public PlayerAuth(String nickname, String hash, String ip, long lastLogin) {
 		this.nickname = nickname;
 		this.hash = hash;
 		this.ip = ip;

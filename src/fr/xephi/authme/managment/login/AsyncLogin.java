@@ -108,7 +108,7 @@ public class AsyncLogin extends Thread {
 			}
 		}
 		if (passwordVerified && player.isOnline()) {
-			PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime(), "mail");
+			PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime());
 			database.updateSession(auth);
 
 			if (Settings.useCaptcha) {
