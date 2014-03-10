@@ -49,8 +49,26 @@ public class RegisterCommand implements CommandExecutor {
 			sender.sendMessage(m._("reg_disabled"));
 			return true;
 		}
+		
+		if (args.length == 0 || (Settings.getEnablePasswordVerifier && args.length < 2)) {
+			sender.sendMessage(m._("usage_reg"));
+			return true;
+		}
+
+		if (args[0].length() < Settings.getPasswordMinLen || args[0].length() > Settings.passwordMaxLength) {
+			sender.sendMessage(m._("pass_len"));
+			return true;
+		}
+		
+		if (Settings.getEnablePasswordVerifier) {
+			if (!args[0].equals(args[1])) {
+				sender.sendMessage(m._("password_error"));
+				return true;
+			}
+		}
 
 		final Player player = (Player) sender;
+		final String password = args[0];
 		final String name = player.getName().toLowerCase();
 		final String ip = player.getAddress().getAddress().getHostAddress();
 
@@ -71,27 +89,8 @@ public class RegisterCommand implements CommandExecutor {
 			}
 		}
 
-		if (args.length == 0 || (Settings.getEnablePasswordVerifier && args.length < 2)) {
-			player.sendMessage(m._("usage_reg"));
-			return true;
-		}
-
-		if (args[0].length() < Settings.getPasswordMinLen || args[0].length() > Settings.passwordMaxLength) {
-			player.sendMessage(m._("pass_len"));
-			return true;
-		}
 		try {
-			String hash;
-			if (Settings.getEnablePasswordVerifier) {
-				if (args[0].equals(args[1])) {
-					hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[0], name);
-				} else {
-					player.sendMessage(m._("password_error"));
-					return true;
-				}
-			} else {
-				hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[0], name);
-			}
+			String hash = PasswordSecurity.getHash(Settings.getPasswordHash, password, name);
 			auth = new PlayerAuth(name, hash, ip, new Date().getTime());
 			if (!database.saveAuth(auth)) {
 				player.sendMessage(m._("error"));

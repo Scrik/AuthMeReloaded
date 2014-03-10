@@ -6,6 +6,7 @@ import org.bukkit.plugin.PluginManager;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.managment.login.AsyncLogin;
+import fr.xephi.authme.managment.register.AsyncRegister;
 import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Settings;
 
@@ -31,8 +32,8 @@ public class Management {
 		new AsyncLogin(plugin, database, player, password, forceLogin).start();
 	}
 	
-	public void performRegister(final Player layer, final String password) {
-		
+	public void performRegister(final Player player, final String password) {
+		new AsyncRegister(plugin, database, player, password).start();
 	}
 
 }
