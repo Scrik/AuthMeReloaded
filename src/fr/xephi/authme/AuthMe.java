@@ -12,7 +12,6 @@ import java.util.zip.GZIPInputStream;
 
 import me.muizers.Notifications.Notifications;
 import net.citizensnpcs.Citizens;
-import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +20,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
@@ -62,7 +60,6 @@ public class AuthMe extends JavaPlugin {
 	private Settings settings;
 	private Messages m;
 	public static Server server;
-	public static Permission permission;
 	private static AuthMe instance;
 	public CitizensCommunicator citizens;
 	public int CitizensVersion = 0;
@@ -188,17 +185,6 @@ public class AuthMe extends JavaPlugin {
 		if (ChestShop != 0) {
 			pm.registerEvents(new AuthMeChestShopListener(database, this), this);
 			ConsoleLogger.info("Successfully hook with ChestShop!");
-		}
-		//Find Permissions
-		if (pm.getPlugin("Vault") != null) {
-			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-			if (permissionProvider != null) {
-				permission = permissionProvider.getProvider();
-				ConsoleLogger.info("Vault plugin detected, hook with " + permission.getName() + " system");
-			}
-			else {
-				ConsoleLogger.showError("Vault plugin is detected but not the permissions plugin!");
-			}
 		}
 
 		this.getCommand("authme").setExecutor(new AdminCommand(this, database));
@@ -385,8 +371,6 @@ public class AuthMe extends JavaPlugin {
 	public boolean authmePermissible(Player player, String perm) {
 		if (player.hasPermission(perm)) {
 			return true;
-		} else if (permission != null) {
-			return permission.playerHas(player, perm);
 		}
 		return false;
 	}
@@ -394,8 +378,6 @@ public class AuthMe extends JavaPlugin {
 	public boolean authmePermissible(CommandSender sender, String perm) {
 		if (sender.hasPermission(perm)) {
 			return true;
-		} else if (permission != null) {
-			return permission.has(sender, perm);
 		}
 		return false;
 	}
