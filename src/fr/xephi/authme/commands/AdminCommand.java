@@ -54,9 +54,6 @@ public class AdminCommand implements CommandExecutor {
 			sender.sendMessage("/authme accounts <playername> - Display all player's accounts");
 			sender.sendMessage("/authme setSpawn - Set AuthMe spawn to your current pos");
 			sender.sendMessage("/authme spawn - Teleport you to the AuthMe SpawnPoint");
-			sender.sendMessage("/authme chgemail <playername> <email> - Change player email");
-			sender.sendMessage("/authme getemail <playername> - Get player email");
-			sender.sendMessage("/authme purgelastpos <playername> - Purge last position for a player");
 			sender.sendMessage("/authme switchantibot on/off - Enable/Disable antibot method");
 			return true;
 		}
