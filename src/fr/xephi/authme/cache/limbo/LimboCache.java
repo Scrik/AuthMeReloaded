@@ -30,7 +30,6 @@ public class LimboCache {
 		ItemStack[] arm = null;
 		ItemStack[] inv = null;
 		boolean operator = player.isOp();
-		String playerGroup = "";
 		boolean flying = player.isFlying();
 
 		StoreInventoryEvent storeevent = new StoreInventoryEvent(player);
@@ -43,18 +42,7 @@ public class LimboCache {
 		if(player.isDead()) {
 			loc = plugin.getSpawnLocation(player.getWorld());
 		}
-		try {
-			if(cache.containsKey(name) && playerGroup.isEmpty()) {
-				LimboPlayer groupLimbo = cache.get(name);
-				playerGroup = groupLimbo.getGroup();
-			}
-		} catch (NullPointerException ex) {
-		}
-		cache.put(player.getName().toLowerCase(), new LimboPlayer(name, loc, inv, arm, gameMode, operator, playerGroup, flying));
-	}
-
-	public void addLimboPlayer(Player player, String group) {
-		cache.put(player.getName().toLowerCase(), new LimboPlayer(player.getName().toLowerCase(), group));
+		cache.put(player.getName().toLowerCase(), new LimboPlayer(name, loc, inv, arm, gameMode, operator, flying));
 	}
 
 	public void deleteLimboPlayer(String name) {
