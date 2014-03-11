@@ -53,7 +53,7 @@ public class DataSource {
 		return false;
 	}
 
-	public boolean updateSession(PlayerAuth auth) {
+	public synchronized boolean updateSession(PlayerAuth auth) {
 		if (source.updateSession(auth)) {
 			authCache.get(auth.getNickname()).setIp(auth.getIp());
 			authCache.get(auth.getNickname()).setLastLogin(auth.getLastLogin());
