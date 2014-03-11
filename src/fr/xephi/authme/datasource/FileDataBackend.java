@@ -38,27 +38,7 @@ public class FileDataBackend implements DataBackend {
 	}
 
 	@Override
-	public synchronized boolean isAuthAvailable(String user) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = convertDBStringToAuth(line);
-				if (auth.getNickname().equals(user)) {
-					br.close();
-					return true;
-				}
-			}
-			br.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		return false;
-	}
-
-	@Override
-	public synchronized boolean saveAuth(PlayerAuth auth) {
+	public boolean saveAuth(PlayerAuth auth) {
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(source, true));
 			bw.write(convertAuthToDBString(auth));
@@ -71,7 +51,7 @@ public class FileDataBackend implements DataBackend {
 	}
 
 	@Override
-	public synchronized boolean updatePassword(PlayerAuth auth) {
+	public boolean updatePassword(PlayerAuth auth) {
 		PlayerAuth newAuth = null;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
@@ -93,7 +73,7 @@ public class FileDataBackend implements DataBackend {
 	}
 
 	@Override
-	public synchronized boolean updateSession(PlayerAuth auth) {
+	public boolean updateSession(PlayerAuth auth) {
 		PlayerAuth newAuth = null;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
@@ -115,35 +95,7 @@ public class FileDataBackend implements DataBackend {
 	}
 
 	@Override
-	public List<String> autoPurgeDatabase(long until) {
-		List<String> lines = new ArrayList<String>();
-		List<String> cleared = new ArrayList<String>();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = convertDBStringToAuth(line);
-				if (auth.getLastLogin() >= until) {
-					lines.add(line);
-				} else {
-					cleared.add(auth.getNickname());
-				}
-			}
-			BufferedWriter bw = new BufferedWriter(new FileWriter(source));
-			for (String l : lines) {
-				bw.write(l + "\n");
-			}
-			br.close();
-			bw.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return cleared;
-		}
-		return cleared;
-	}
-
-	@Override
-	public synchronized boolean removeAuth(String user) {
+	public boolean removeAuth(String user) {
 		ArrayList<String> lines = new ArrayList<String>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
@@ -165,51 +117,6 @@ public class FileDataBackend implements DataBackend {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public synchronized PlayerAuth getAuth(String user) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = convertDBStringToAuth(line);
-				if (auth.getNickname().equals(user)) {
-					br.close();
-					return auth;
-				}
-			}
-			br.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-
-	@Override
-	public void reload() {
-		convertDatabase();
-	}
-
-	@Override
-	public List<String> getAllAuthsByIp(String ip) {
-		List<String> countIp = new ArrayList<String>();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = convertDBStringToAuth(line);
-				if (auth.getIp().equals(ip)) {
-					countIp.add(auth.getIp());
-				}
-			}
-			br.close();
-			return countIp;
-		} catch (Exception ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return new ArrayList<String>();
-		}
 	}
 
 	@Override
