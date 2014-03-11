@@ -70,7 +70,7 @@ public class DataSource {
 		}
 	}
 
-	public synchronized List<String> autoPurgeDatabase(long until) {
+	public synchronized List<String> purgeDatabase(long until) {
 		return null;
 	}
 	
