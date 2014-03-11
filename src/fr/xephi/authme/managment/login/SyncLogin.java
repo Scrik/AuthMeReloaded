@@ -5,25 +5,20 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.events.AuthMeTeleportEvent;
 import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
-import fr.xephi.authme.events.SpawnTeleportEvent;
 import fr.xephi.authme.settings.Settings;
 
 public class SyncLogin implements Runnable {
 
-	private AuthMe plugin;
-
 	private LimboPlayer limbo;
 	private Player player;
 	private String name;
-	public SyncLogin(AuthMe plugin, Player player) {
-		this.plugin = plugin;
+	public SyncLogin(Player player) {
 		this.player = player;
 		this.name = player.getName().toLowerCase();
 		this.limbo = LimboCache.getInstance().getLimboPlayer(name);
@@ -49,18 +44,7 @@ public class SyncLogin implements Runnable {
 			player.teleport(fLoc);
 		}
 	}
-	protected void teleportToSpawn() {
-		Location spawnL = plugin.getSpawnLocation(player.getWorld());
-		SpawnTeleportEvent tpEvent = new SpawnTeleportEvent(player, player.getLocation(), spawnL, true);
-		Bukkit.getPluginManager().callEvent(tpEvent);
-		if (!tpEvent.isCancelled()) {
-			Location fLoc = tpEvent.getTo();
-			if (!fLoc.getChunk().isLoaded()) {
-				fLoc.getChunk().load();
-			}
-			player.teleport(fLoc);
-		}
-	}
+
 	protected void restoreInventory() {
 		RestoreInventoryEvent event = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
 		Bukkit.getServer().getPluginManager().callEvent(event);

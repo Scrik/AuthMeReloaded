@@ -135,7 +135,7 @@ public class AsyncLogin extends Thread {
 
 			// As the scheduling executes the Task most likely after the current task, we schedule it in the end
 			// so that we can be sure, and have not to care if it might be processed in other order.
-			SyncLogin syncronousPlayerLogin = new SyncLogin(plugin, player);
+			SyncLogin syncronousPlayerLogin = new SyncLogin(player);
 			if (syncronousPlayerLogin.getLimbo() != null) {
 				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLimbo().getTimeoutTaskId());
 				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLimbo().getMessageTaskId());
