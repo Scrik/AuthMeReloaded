@@ -1,24 +1,14 @@
 package fr.xephi.authme.commands;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-
-import me.muizers.Notifications.Notification;
-
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.limbo.LimboCache;
-import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
@@ -88,38 +78,9 @@ public class RegisterCommand implements CommandExecutor {
 				return true;
 			}
 		}
+		
+		plugin.management.performRegister(player, password);
 
-		try {
-			String hash = PasswordSecurity.getHash(Settings.getPasswordHash, password, name);
-			auth = new PlayerAuth(name, hash, ip, new Date().getTime());
-			if (!database.saveAuth(auth)) {
-				player.sendMessage(m._("error"));
-				return true;
-			}
-			PlayerCache.getInstance().addPlayer(auth);
-			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-			if (limbo != null) {
-				sender.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
-				sender.getServer().getScheduler().cancelTask(limbo.getMessageTaskId());
-				LimboCache.getInstance().deleteLimboPlayer(name);
-			}
-
-			player.sendMessage(m._("registered"));
-
-			if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
-				player.setAllowFlight(false);
-				player.setFlying(false);
-			}
-			if (!Settings.noConsoleSpam) {
-				ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
-			}
-			if (plugin.notifications != null) {
-				plugin.notifications.showNotification(new Notification("[AuthMe] " + player.getName() + " has registered!"));
-			}
-		} catch (NoSuchAlgorithmException ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			sender.sendMessage(m._("error"));
-		}
 		return true;
 	}
 
