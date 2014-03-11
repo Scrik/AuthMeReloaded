@@ -70,8 +70,16 @@ public class DataSource {
 		}
 	}
 
-	public synchronized List<String> purgeDatabase(long until) {
-		return null;
+	public synchronized int purgeDatabase(long until) {
+		int cleared = 0;
+		List<PlayerAuth> list = new ArrayList<PlayerAuth>(authCache.values());
+		for (PlayerAuth auth : list) {
+			if (auth.getLastLogin() < until) {
+				removeAuth(auth.getNickname());
+				cleared++;
+			}
+		}
+		return cleared;
 	}
 	
 	public synchronized void reload() {
