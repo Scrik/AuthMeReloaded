@@ -3,7 +3,6 @@ package fr.xephi.authme.cache.limbo;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +25,6 @@ public class LimboCache {
 	public void addLimboPlayer(Player player) {
 		String name = player.getName().toLowerCase();
 		Location loc = player.getLocation();
-		GameMode gameMode = player.getGameMode();
 		ItemStack[] arm = null;
 		ItemStack[] inv = null;
 		boolean operator = player.isOp();
@@ -42,7 +40,7 @@ public class LimboCache {
 		if(player.isDead()) {
 			loc = plugin.getSpawnLocation(player.getWorld());
 		}
-		cache.put(player.getName().toLowerCase(), new LimboPlayer(name, loc, inv, arm, gameMode, operator, flying));
+		cache.put(player.getName().toLowerCase(), new LimboPlayer(name, loc, inv, arm, operator, flying));
 	}
 
 	public void deleteLimboPlayer(String name) {

@@ -48,7 +48,6 @@ import fr.xephi.authme.task.TimeoutTask;
 
 public class AuthMePlayerListener implements Listener {
 
-	public static HashMap<String, GameMode> gameMode = new HashMap<String, GameMode>();
 	public static HashMap<String, String> joinMessage = new HashMap<String, String>();
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
@@ -306,7 +305,6 @@ public class AuthMePlayerListener implements Listener {
 		World world = player.getWorld();
 		Location spawnLoc = plugin.getSpawnLocation(world);
 		final String name = player.getName().toLowerCase();
-		gameMode.put(name, player.getGameMode());
 		BukkitScheduler sched = plugin.getServer().getScheduler();
 
 		String ip = player.getAddress().getAddress().getHostAddress();
@@ -416,7 +414,6 @@ public class AuthMePlayerListener implements Listener {
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
 		PlayerCache.getInstance().removePlayer(name);
-		gameMode.remove(name);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)

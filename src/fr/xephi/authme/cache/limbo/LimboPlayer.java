@@ -1,6 +1,5 @@
 package fr.xephi.authme.cache.limbo;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,24 +11,21 @@ public class LimboPlayer {
 	private Location loc = null;
 	private int timeoutTaskId = -1;
 	private int messageTaskId = -1;
-	private GameMode gameMode = GameMode.SURVIVAL;
 	private boolean operator = false;
 	private boolean flying = false;
 
-	public LimboPlayer(String name, Location loc, ItemStack[] inventory, ItemStack[] armour, GameMode gameMode, boolean operator, boolean flying) {
+	public LimboPlayer(String name, Location loc, ItemStack[] inventory, ItemStack[] armour, boolean operator, boolean flying) {
 		this.name = name;
 		this.loc = loc;
 		this.inventory = inventory;
 		this.armour = armour;
-		this.gameMode = gameMode;
 		this.operator = operator;
 		this.flying = flying;
 	}
 
-	public LimboPlayer(String name, Location loc, GameMode gameMode, boolean operator, boolean flying) {
+	public LimboPlayer(String name, Location loc, boolean operator, boolean flying) {
 		this.name = name;
 		this.loc = loc;
-		this.gameMode = gameMode;
 		this.operator = operator;
 		this.flying = flying;
 	}
@@ -60,10 +56,6 @@ public class LimboPlayer {
 
 	public void setInventory(ItemStack[] inventory) {
 		this.inventory = inventory;
-	}
-
-	public GameMode getGameMode() {
-		return gameMode;
 	}
 
 	public boolean getOperator() {

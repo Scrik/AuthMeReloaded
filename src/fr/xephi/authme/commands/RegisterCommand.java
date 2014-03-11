@@ -99,7 +99,6 @@ public class RegisterCommand implements CommandExecutor {
 			PlayerCache.getInstance().addPlayer(auth);
 			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
 			if (limbo != null) {
-				player.setGameMode(limbo.getGameMode());
 				sender.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 				sender.getServer().getScheduler().cancelTask(limbo.getMessageTaskId());
 				LimboCache.getInstance().deleteLimboPlayer(name);

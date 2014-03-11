@@ -27,7 +27,6 @@ public class SyncRegister implements Runnable {
 		//cancel limbo tasks
 		LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(auth.getNickname());
 		if (limbo != null) {
-			player.setGameMode(limbo.getGameMode());
 			Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());

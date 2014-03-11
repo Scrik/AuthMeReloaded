@@ -12,7 +12,6 @@ import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.listener.AuthMePlayerListener;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
@@ -150,9 +149,6 @@ public class AsyncLogin extends Thread {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 					@Override
 					public void run() {
-						if (AuthMePlayerListener.gameMode != null && AuthMePlayerListener.gameMode.containsKey(name)) {
-							player.setGameMode(AuthMePlayerListener.gameMode.get(name));
-						}
 						player.kickPlayer(m._("wrong_pwd"));
 					}
 				});

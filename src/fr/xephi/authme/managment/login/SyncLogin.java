@@ -77,24 +77,23 @@ public class SyncLogin implements Runnable {
 			restoreOpState();
 
 			/*
-			 * Restore Inventories and GameMode
-			 * We need to restore them before teleport the player
-			 * Cause in AuthMePlayerListener, we call ProtectInventoryEvent after Teleporting
-			 * Also it's the current world inventory !
-			 */
-			 player.setGameMode(limbo.getGameMode());
+			* Restore Inventories
+			* We need to restore them before teleport the player
+			* Cause in AuthMePlayerListener, we call ProtectInventoryEvent after Teleporting
+			* Also it's the current world inventory !
+			*/
 			// Inventory - Make it after restore GameMode , cause we need to restore the
-			 // right inventory in the right gamemode
-			 if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
-				 restoreInventory();
-			 }
+			// right inventory in the right gamemode
+			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
+				restoreInventory();
+			}
 
-			 // Teleport
-			 if (Settings.isTeleportToSpawnEnabled) {
-				 teleportBackFromSpawn();
-			 }
-			 // Cleanup no longer used temporary data
-			 LimboCache.getInstance().deleteLimboPlayer(name);
+			// Teleport
+			if (Settings.isTeleportToSpawnEnabled) {
+				teleportBackFromSpawn();
+			}
+			// Cleanup no longer used temporary data
+			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
 
 		// The Loginevent now fires (as intended) after everything is processed
