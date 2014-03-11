@@ -256,7 +256,7 @@ public class FileDataSource implements DataSource {
 			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (line.startsWith("DBVER$"+dbvers)) {
+				if (!line.startsWith("DBVER$"+dbvers)) {
 					auths.add(parseOldAuth(line));
 				} else {
 					auths.add(convertDBStringToAuth(line));
