@@ -48,7 +48,6 @@ import fr.xephi.authme.task.TimeoutTask;
 
 public class AuthMePlayerListener implements Listener {
 
-	public static HashMap<String, String> joinMessage = new HashMap<String, String>();
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
@@ -369,9 +368,6 @@ public class AuthMePlayerListener implements Listener {
 		if (Settings.useEssentialsMotd) {
 			player.performCommand("motd");
 		}
-		// Remove the join message while the player isn't logging in
-		joinMessage.put(name, event.getJoinMessage());
-		event.setJoinMessage(null);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
