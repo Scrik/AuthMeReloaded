@@ -39,7 +39,7 @@ import fr.xephi.authme.commands.RegisterCommand;
 import fr.xephi.authme.commands.UnregisterCommand;
 import fr.xephi.authme.datasource.DataBackend;
 import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.datasource.FileDataSource;
+import fr.xephi.authme.datasource.FileDataBackend;
 import fr.xephi.authme.listener.AuthMeBlockListener;
 import fr.xephi.authme.listener.AuthMeChestShopListener;
 import fr.xephi.authme.listener.AuthMeEntityListener;
@@ -118,7 +118,7 @@ public class AuthMe extends JavaPlugin {
 		//Backend
 		DataBackend databackend = null;
 		try {
-			databackend = new FileDataSource();
+			databackend = new FileDataBackend();
 		} catch (Exception ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			if (Settings.isStopEnabled) {

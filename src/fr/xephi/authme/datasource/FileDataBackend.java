@@ -14,7 +14,7 @@ import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
 
-public class FileDataSource implements DataBackend {
+public class FileDataBackend implements DataBackend {
 
 	/* file layout:
 	 *
@@ -31,7 +31,7 @@ public class FileDataSource implements DataBackend {
 
 	private int dbvers = 1;
 
-	public FileDataSource() throws IOException {
+	public FileDataBackend() throws IOException {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
 		convertDatabase();
