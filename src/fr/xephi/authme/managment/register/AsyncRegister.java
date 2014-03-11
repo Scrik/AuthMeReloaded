@@ -12,6 +12,8 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
+import fr.xephi.authme.cache.limbo.LimboCache;
+import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
@@ -86,8 +88,17 @@ public class AsyncRegister extends Thread {
 		if (plugin.notifications != null) {
 			plugin.notifications.showNotification(new Notification("[AuthMe] " + player.getName() + " has registered!"));
 		}
+
+		PlayerCache.getInstance().addPlayer(auth);
+
+		LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(auth.getNickname());
+		if (limbo != null) {
+			Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
+			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
+			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());
+		}
 		
-		SyncRegister syncreg = new SyncRegister(auth, player);
+		SyncRegister syncreg = new SyncRegister(player);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, syncreg);
 	}
 
