@@ -67,7 +67,7 @@ public class RegisterCommand implements CommandExecutor {
 			return true;
 		}
 
-		if (database.isAuthAvailable(player.getName().toLowerCase())) {
+		if (database.isAuthAvailable(name)) {
 			player.sendMessage(m._("user_regged"));
 			return true;
 		}
