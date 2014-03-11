@@ -59,19 +59,10 @@ public class SyncLogin implements Runnable {
 		if (limbo != null) {
 			// Op & Flying
 			restoreOpState();
-
-			/*
-			* Restore Inventories
-			* We need to restore them before teleport the player
-			* Cause in AuthMePlayerListener, we call ProtectInventoryEvent after Teleporting
-			* Also it's the current world inventory !
-			*/
-			// Inventory - Make it after restore GameMode , cause we need to restore the
-			// right inventory in the right gamemode
+			// Restore inventory
 			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
 				restoreInventory();
 			}
-
 			// Teleport
 			if (Settings.isTeleportToSpawnEnabled) {
 				teleportBackFromSpawn();
@@ -79,7 +70,6 @@ public class SyncLogin implements Runnable {
 			// Cleanup no longer used temporary data
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
-
 		// The Loginevent now fires (as intended) after everything is processed
 		Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
 	}
