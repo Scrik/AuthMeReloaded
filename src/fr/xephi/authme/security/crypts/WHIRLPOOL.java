@@ -16,7 +16,7 @@ package fr.xephi.authme.security.crypts;
  *      ``The Whirlpool hashing function,''
  *      First NESSIE workshop, 2000 (tweaked version, 2003),
  *      <https://www.cosic.esat.kuleuven.ac.be/nessie/workshop/submissions/whirlpool.zip>
- * 
+ *
  * @author    Paulo S.L.M. Barreto
  * @author    Vincent Rijmen.
  *
@@ -256,10 +256,10 @@ public class WHIRLPOOL implements EncryptionMethod {
 
 	/**
 	 * Delivers input data to the hashing algorithm.
-	 * 
+	 *
 	 * @param    source        plaintext data to hash.
 	 * @param    sourceBits    how many bits of plaintext to process.
-	 * 
+	 *
 	 * This method maintains the invariant: bufferBits < 512
 	 */
 	public void NESSIEadd(byte[] source, long sourceBits) {
@@ -341,7 +341,7 @@ public class WHIRLPOOL implements EncryptionMethod {
 
 	/**
 	 * Get the hash value from the hashing state.
-	 * 
+	 *
 	 * This method uses the invariant: bufferBits < 512
 	 */
 	public void NESSIEfinalize(byte[] digest) {
@@ -381,9 +381,9 @@ public class WHIRLPOOL implements EncryptionMethod {
 
 	/**
 	 * Delivers string input data to the hashing algorithm.
-	 * 
+	 *
 	 * @param    source        plaintext data to hash (ASCII text string).
-	 * 
+	 *
 	 * This method maintains the invariant: bufferBits < 512
 	 */
 	public void NESSIEadd(String source) {

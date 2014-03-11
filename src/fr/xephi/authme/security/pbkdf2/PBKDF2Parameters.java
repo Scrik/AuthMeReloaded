@@ -4,7 +4,7 @@ package fr.xephi.authme.security.pbkdf2;
  * <p>
  * Parameter data holder for PBKDF2 configuration.
  * </p>
- * 
+ *
  * <hr />
  * <p>
  * A free Java implementation of Password Based Key Derivation Function 2 as
@@ -31,7 +31,7 @@ package fr.xephi.authme.security.pbkdf2;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -54,7 +54,7 @@ public class PBKDF2Parameters
 	/**
 	 * Constructor. Defaults to <code>null</code> for byte arrays, UTF-8 as
 	 * character set and 1000 for iteration count.
-	 * 
+	 *
 	 */
 	public PBKDF2Parameters()
 	{
@@ -67,7 +67,7 @@ public class PBKDF2Parameters
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param hashAlgorithm
 	 *            for example HMacSHA1 or HMacMD5
 	 * @param hashCharset
@@ -90,7 +90,7 @@ public class PBKDF2Parameters
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param hashAlgorithm
 	 *            for example HMacSHA1 or HMacMD5
 	 * @param hashCharset

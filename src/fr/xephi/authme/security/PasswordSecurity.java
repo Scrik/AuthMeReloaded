@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+
 import org.bukkit.Bukkit;
 
 import fr.xephi.authme.AuthMe;

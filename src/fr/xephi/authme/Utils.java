@@ -91,7 +91,7 @@ public class Utils {
 
 	/*
 	 * Random Token for passpartu
-	 * 
+	 *
 	 */
 	public boolean obtainToken() {
 		File file = new File("plugins/AuthMe/passpartu.token");

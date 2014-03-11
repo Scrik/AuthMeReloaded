@@ -11,7 +11,7 @@ import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Settings;
 
 /**
- * 
+ *
  * @authors Xephi59, <a href="http://dev.bukkit.org/profiles/Possible/">Possible</a>
  *
  */
@@ -31,7 +31,7 @@ public class Management {
 	public void performLogin(final Player player, final String password, final boolean forceLogin) {
 		new AsyncLogin(plugin, database, player, password, forceLogin).start();
 	}
-	
+
 	public void performRegister(final Player player, final String password) {
 		new AsyncRegister(plugin, database, player, password).start();
 	}

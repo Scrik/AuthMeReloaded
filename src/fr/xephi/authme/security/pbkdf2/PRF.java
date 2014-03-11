@@ -26,7 +26,7 @@ package fr.xephi.authme.security.pbkdf2;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -34,7 +34,7 @@ public interface PRF
 {
 	/**
 	 * Initialize this instance with the user-supplied password.
-	 * 
+	 *
 	 * @param P
 	 *            The password supplied as array of bytes. It is the caller's
 	 *            task to convert String passwords to bytes as appropriate.
@@ -43,7 +43,7 @@ public interface PRF
 
 	/**
 	 * Pseudo Random Function
-	 * 
+	 *
 	 * @param M
 	 *            Input data/message etc. Together with any data supplied during
 	 *            initilization.
@@ -53,7 +53,7 @@ public interface PRF
 
 	/**
 	 * Query block size of underlying algorithm/mechanism.
-	 * 
+	 *
 	 * @return block size
 	 */
 	public int getHLen();

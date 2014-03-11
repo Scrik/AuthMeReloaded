@@ -30,7 +30,7 @@ public class FileDataSource implements DataSource {
 	private File source;
 
 	private int dbvers = 1;
-	
+
 	public FileDataSource() throws IOException {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
@@ -227,7 +227,7 @@ public class FileDataSource implements DataSource {
 		}
 		return auths;
 	}
-	
+
 	private String convertAuthToDBString(PlayerAuth auth) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DBVER$");
@@ -243,12 +243,12 @@ public class FileDataSource implements DataSource {
 		sb.append("\n");
 		return sb.toString();
 	}
-	
+
 	private PlayerAuth convertDBStringToAuth(String dbstring) {
 		String[] args = dbstring.split(":");
 		return new PlayerAuth(args[1], args[2], args[3], Long.parseLong(args[4]));
 	}
-	
+
 	@Override
 	public void convertDatabase() {
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();

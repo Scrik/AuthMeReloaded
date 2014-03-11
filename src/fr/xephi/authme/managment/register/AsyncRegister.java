@@ -15,7 +15,7 @@ import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
 public class AsyncRegister extends Thread {
-	
+
 	private AuthMe plugin;
     private DataSource database;
 
@@ -32,7 +32,7 @@ public class AsyncRegister extends Thread {
 		this.password = password;
 		this.name = player.getName().toLowerCase();
 	}
-	
+
 	public boolean preRegister() {
     	if (PlayerCache.getInstance().isAuthenticated(name)) {
             player.sendMessage(m._("logged_in"));
@@ -54,7 +54,7 @@ public class AsyncRegister extends Thread {
 
 		return true;
 	}
-	
+
 	@Override
 	public void run() {
 		if (!preRegister()) {
@@ -74,8 +74,8 @@ public class AsyncRegister extends Thread {
 			player.sendMessage(m._("error"));
 			return;
 		}
+
 		player.sendMessage(m._("registered"));
-		
 	}
 
 }

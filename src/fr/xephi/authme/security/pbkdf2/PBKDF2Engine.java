@@ -10,17 +10,17 @@ import java.security.SecureRandom;
  * Request for Comments: 2898 PKCS #5: Password-Based Cryptography Specification
  * <p>
  * Version 2.0
- * 
+ *
  * <p>
  * PBKDF2 (P, S, c, dkLen)
- * 
+ *
  * <p>
  * Options:
  * <ul>
  * <li>PRF underlying pseudorandom function (hLen denotes the length in octets
  * of the pseudorandom function output). PRF is pluggable.</li>
  * </ul>
- * 
+ *
  * <p>
  * Input:
  * <ul>
@@ -30,13 +30,13 @@ import java.security.SecureRandom;
  * <li>dkLen intended length in octets of the derived key, a positive integer,
  * at most (2^32 - 1) * hLen</li>
  * </ul>
- * 
+ *
  * <p>
  * Output:
  * <ul>
  * <li>DK derived key, a dkLen-octet string</li>
  * </ul>
- * 
+ *
  * <hr />
  * <p>
  * A free Java implementation of Password Based Key Derivation Function 2 as
@@ -63,7 +63,7 @@ import java.security.SecureRandom;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @see <a href="http://tools.ietf.org/html/rfc2898">RFC 2898</a>
  * @author Matthias G&auml;rtner
  * @version 1.0
@@ -88,7 +88,7 @@ public class PBKDF2Engine implements PBKDF2
 	 * Constructor for PBKDF2 implementation object. PBKDF2 parameters are
 	 * passed so that this implementation knows iteration count, method to use
 	 * and String encoding.
-	 * 
+	 *
 	 * @param parameters
 	 *            Data holder for iteration count, method to use et cetera.
 	 */
@@ -102,7 +102,7 @@ public class PBKDF2Engine implements PBKDF2
 	 * Constructor for PBKDF2 implementation object. PBKDF2 parameters are
 	 * passed so that this implementation knows iteration count, method to use
 	 * and String encoding.
-	 * 
+	 *
 	 * @param parameters
 	 *            Data holder for iteration count, method to use et cetera.
 	 * @param prf
@@ -182,7 +182,7 @@ public class PBKDF2Engine implements PBKDF2
 	/**
 	 * Factory method. Default implementation is (H)MAC-based. To be overridden
 	 * in derived classes.
-	 * 
+	 *
 	 * @param P
 	 *            User-supplied candidate password as array of bytes.
 	 */
@@ -203,7 +203,7 @@ public class PBKDF2Engine implements PBKDF2
 
 	/**
 	 * Core Password Based Key Derivation Function 2.
-	 * 
+	 *
 	 * @see <a href="http://tools.ietf.org/html/rfc2898">RFC 2898 5.2</a>
 	 * @param prf
 	 *            Pseudo Random Function (i.e. HmacSHA1)
@@ -243,7 +243,7 @@ public class PBKDF2Engine implements PBKDF2
 
 	/**
 	 * Integer division with ceiling function.
-	 * 
+	 *
 	 * @see <a href="http://tools.ietf.org/html/rfc2898">RFC 2898 5.2 Step 2.</a>
 	 * @param a
 	 * @param b
@@ -261,7 +261,7 @@ public class PBKDF2Engine implements PBKDF2
 
 	/**
 	 * Function F.
-	 * 
+	 *
 	 * @see <a href="http://tools.ietf.org/html/rfc2898">RFC 2898 5.2 Step 3.</a>
 	 * @param dest
 	 *            Destination byte buffer
@@ -297,7 +297,7 @@ public class PBKDF2Engine implements PBKDF2
 	/**
 	 * Block-Xor. Xor source bytes into destination byte buffer. Destination
 	 * buffer must be same length or less than source buffer.
-	 * 
+	 *
 	 * @param dest
 	 * @param src
 	 */
@@ -311,7 +311,7 @@ public class PBKDF2Engine implements PBKDF2
 
 	/**
 	 * Four-octet encoding of the integer i, most significant octet first.
-	 * 
+	 *
 	 * @see <a href="http://tools.ietf.org/html/rfc2898">RFC 2898 5.2 Step 3.</a>
 	 * @param dest
 	 * @param offset
@@ -349,10 +349,10 @@ public class PBKDF2Engine implements PBKDF2
 	 * ISO-8559-1 encoding. Output result as
 	 * &quot;Salt:iteration-count:PBKDF2&quot; with binary data in hexadecimal
 	 * encoding.
-	 * 
+	 *
 	 * Example: Password &quot;password&quot; (without the quotes) leads to
 	 * 48290A0B96C426C3:1000:973899B1D4AFEB3ED371060D0797E0EE0142BD04
-	 * 
+	 *
 	 * @param args
 	 *            Supply the password as argument.
 	 * @throws IOException

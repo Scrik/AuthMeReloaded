@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Default PRF implementation based on standard javax.crypt.Mac mechanisms.
- * 
+ *
  * <hr />
  * <p>
  * A free Java implementation of Password Based Key Derivation Function 2 as
@@ -36,7 +36,7 @@ import javax.crypto.spec.SecretKeySpec;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -50,7 +50,7 @@ public class MacBasedPRF implements PRF
 
 	/**
 	 * Create Mac-based Pseudo Random Function.
-	 * 
+	 *
 	 * @param macAlgorithm
 	 *            Mac algorithm to use, i.e. HMacSHA1 or HMacMD5.
 	 */

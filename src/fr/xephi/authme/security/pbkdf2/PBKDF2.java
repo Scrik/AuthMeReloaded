@@ -26,7 +26,7 @@ package fr.xephi.authme.security.pbkdf2;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -35,7 +35,7 @@ public interface PBKDF2
 	/**
 	 * Convert String-based input to internal byte array, then invoke PBKDF2.
 	 * Desired key length defaults to Pseudo Random Function block size.
-	 * 
+	 *
 	 * @param inputPassword
 	 *            Candidate password to compute the derived key for.
 	 * @return internal byte array
@@ -44,7 +44,7 @@ public interface PBKDF2
 
 	/**
 	 * Convert String-based input to internal byte array, then invoke PBKDF2.
-	 * 
+	 *
 	 * @param inputPassword
 	 *            Candidate password to compute the derived key for.
 	 * @param dkLen
@@ -57,7 +57,7 @@ public interface PBKDF2
 	 * Convert String-based input to internal byte arrays, then invoke PBKDF2
 	 * and verify result against the reference data that is supplied in the
 	 * PBKDF2Parameters.
-	 * 
+	 *
 	 * @param inputPassword
 	 *            Candidate password to compute the derived key for.
 	 * @return <code>true</code> password match; <code>false</code>
@@ -67,21 +67,21 @@ public interface PBKDF2
 
 	/**
 	 * Allow reading of configured parameters.
-	 * 
+	 *
 	 * @return Currently set parameters.
 	 */
 	public abstract PBKDF2Parameters getParameters();
 
 	/**
 	 * Allow setting of configured parameters.
-	 * 
+	 *
 	 * @param parameters
 	 */
 	public abstract void setParameters(PBKDF2Parameters parameters);
 
 	/**
 	 * Get currently set Pseudo Random Function.
-	 * 
+	 *
 	 * @return Currently set Pseudo Random Function
 	 */
 	public abstract PRF getPseudoRandomFunction();
@@ -90,7 +90,7 @@ public interface PBKDF2
 	 * Set the Pseudo Random Function to use. Note that deriveKeys/getPRF does
 	 * init this object using the supplied candidate password. If this is
 	 * undesired, one has to override getPRF.
-	 * 
+	 *
 	 * @param prf
 	 *            Pseudo Random Function to set.
 	 */

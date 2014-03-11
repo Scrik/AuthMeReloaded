@@ -8,9 +8,9 @@ import fr.xephi.authme.security.crypts.EncryptionMethod;
 /**
  * <p>This event is called when we need to compare or get an hash password,
  * for set a custom EncryptionMethod</p>
- * 
+ *
  * @see fr.xephi.authme.security.crypts.EncryptionMethod
- * 
+ *
  * @author Xephi59
  */
 public class PasswordEncryptionEvent extends Event {

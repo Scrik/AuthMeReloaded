@@ -92,7 +92,7 @@ public class CacheDataSource implements DataSource {
 	public void convertDatabase() {
 		source.convertDatabase();
 	}
-	
+
 	@Override
 	public List<PlayerAuth> getAllAuths() {
 		return source.getAllAuths();

@@ -49,7 +49,7 @@ public final class Settings extends YamlConfiguration {
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
 	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
-	passwordMaxLength, maxLoginTry, captchaLength, 
+	passwordMaxLength, maxLoginTry, captchaLength,
 	antiBotSensibility, antiBotDuration;
 
 	protected static YamlConfiguration configFile;

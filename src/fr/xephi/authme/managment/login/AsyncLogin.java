@@ -164,5 +164,5 @@ public class AsyncLogin extends Thread {
 			ConsoleLogger.showError("Player " + name + " wasn't online during login process, aborted... ");
 		}
 	}
-	
+
 }

@@ -25,7 +25,7 @@ package fr.xephi.authme.security.pbkdf2;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -35,7 +35,7 @@ public class BinTools
 
 	/**
 	 * Simple binary-to-hexadecimal conversion.
-	 * 
+	 *
 	 * @param b
 	 *            Input bytes. May be <code>null</code>.
 	 * @return Hexadecimal representation of b. Uppercase A-F, two characters
@@ -59,7 +59,7 @@ public class BinTools
 
 	/**
 	 * Convert hex string to array of bytes.
-	 * 
+	 *
 	 * @param s
 	 *            String containing hexadecimal digits. May be <code>null</code>.
 	 *            On odd length leading zero will be assumed.
@@ -92,7 +92,7 @@ public class BinTools
 
 	/**
 	 * Convert hex digit to numerical value.
-	 * 
+	 *
 	 * @param c
 	 *            0-9, a-f, A-F allowd.
 	 * @return 0-15

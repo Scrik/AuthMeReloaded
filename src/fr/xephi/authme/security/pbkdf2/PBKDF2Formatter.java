@@ -26,7 +26,7 @@ package fr.xephi.authme.security.pbkdf2;
  * For Details, see <a
  * href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</a>.
  * </p>
- * 
+ *
  * @author Matthias G&auml;rtner
  * @version 1.0
  */
@@ -34,7 +34,7 @@ public interface PBKDF2Formatter
 {
 	/**
 	 * Convert parameters to String.
-	 * 
+	 *
 	 * @param p
 	 *            Parameters object to output.
 	 * @return String representation
@@ -44,7 +44,7 @@ public interface PBKDF2Formatter
 	/**
 	 * Convert String to parameters. Depending on actual implementation, it may
 	 * be required to set further fields externally.
-	 * 
+	 *
 	 * @param s
 	 *            String representation of parameters to decode.
 	 * @return <code>false</code> syntax OK, <code>true</code> some syntax

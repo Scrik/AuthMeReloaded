@@ -44,12 +44,12 @@ public class RegisterCommand implements CommandExecutor {
 			sender.sendMessage(m._("no_perm"));
 			return true;
 		}
-		
+
 		if (!Settings.isRegistrationEnabled) {
 			sender.sendMessage(m._("reg_disabled"));
 			return true;
 		}
-		
+
 		if (args.length == 0 || (Settings.getEnablePasswordVerifier && args.length < 2)) {
 			sender.sendMessage(m._("usage_reg"));
 			return true;
@@ -59,7 +59,7 @@ public class RegisterCommand implements CommandExecutor {
 			sender.sendMessage(m._("pass_len"));
 			return true;
 		}
-		
+
 		if (Settings.getEnablePasswordVerifier) {
 			if (!args[0].equals(args[1])) {
 				sender.sendMessage(m._("password_error"));

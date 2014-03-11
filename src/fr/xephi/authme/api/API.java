@@ -42,7 +42,7 @@ public class API {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param player
 	 * @return true if player is authenticate
 	 */
@@ -51,7 +51,7 @@ public class API {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param player
 	 * @return true if player is a npc
 	 */
@@ -64,7 +64,7 @@ public class API {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param player
 	 * @return true if player is a npc
 	 */
@@ -76,7 +76,7 @@ public class API {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param player
 	 * @return true if the player is unrestricted
 	 */
@@ -97,7 +97,7 @@ public class API {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param playerName
 	 * @return true if player is registered
 	 */
