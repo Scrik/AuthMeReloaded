@@ -70,27 +70,23 @@ public class DataSource {
 		}
 	}
 
-	public List<String> autoPurgeDatabase(long until) {
+	public synchronized List<String> autoPurgeDatabase(long until) {
 		List<String> cleared = source.autoPurgeDatabase(until);
 		for (String nickname : cleared) {
 			clearAuth(nickname);
 		}
 		return cleared;
 	}
-
-	public void convertDatabase() {
-		source.convertDatabase();
-	}
-
-	public List<PlayerAuth> getAllAuths() {
-		return source.getAllAuths();
-	}
-
-	public void reload() {
+	
+	public synchronized void reload() {
 		source.reload();
 		authCache.clear();
 		ipCache.clear();
 		cacheAllAuths();
+	}
+
+	private List<PlayerAuth> getAllAuths() {
+		return source.getAllAuths();
 	}
 
 	public void cacheAllAuths() {
