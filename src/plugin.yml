@@ -5,7 +5,7 @@ authors:
 description: AuthMe prevents people, which aren't logged in, from doing stuff like placing blocks, moving, typing commands or seeing the inventory of the current player.
 main: fr.xephi.authme.AuthMe
 version: 1.0
-softdepend: [Vault, ChestShop, Multiverse-Core, Notifications, Citizens, CombatTag, Essentials, EssentialsSpawn]
+softdepend: [ChestShop, Multiverse-Core, Notifications, Citizens, CombatTag, Essentials, EssentialsSpawn]
 commands:
     register:
         description: Register an account
@@ -30,9 +30,6 @@ commands:
     authme:
         description: AuthMe op commands
         usage: '/authme reload|register playername password|changepassword playername password|unregister playername|version'
-    email:
-        description: Add Email or recover password
-        usage: '/email add your@email.com your@email.com|change oldEmail newEmail|recovery your@email.com'
     captcha:
         description: Captcha
         usage: /captcha theCaptcha

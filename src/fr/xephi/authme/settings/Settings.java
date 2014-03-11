@@ -34,7 +34,7 @@ public final class Settings extends YamlConfiguration {
 	public static boolean isRegistrationEnabled, isForcedRegistrationEnabled,
 	isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
 	isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
-	isCachingEnabled, isKickOnWrongPasswordEnabled,
+	isKickOnWrongPasswordEnabled,
 	getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
 	enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
 	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
@@ -92,7 +92,6 @@ public final class Settings extends YamlConfiguration {
 		isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		getPasswordHash = getPasswordHash();
-		isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
@@ -175,7 +174,6 @@ public final class Settings extends YamlConfiguration {
 		isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		getPasswordHash = getPasswordHash();
-		isCachingEnabled = configFile.getBoolean("DataSource.caching",true);
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
 		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);

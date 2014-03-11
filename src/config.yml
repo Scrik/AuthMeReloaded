@@ -1,6 +1,3 @@
-DataSource:
-    # Do we need to cache all things ?
-    caching: true
 settings:
     restrictions:
         # Can unregistered players chat, care , that block all commands except followers

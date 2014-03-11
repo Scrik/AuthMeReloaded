@@ -14,7 +14,7 @@ import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
 
-public class FileDataSource implements DataSource {
+public class FileDataSource implements DataBackend {
 
 	/* file layout:
 	 *

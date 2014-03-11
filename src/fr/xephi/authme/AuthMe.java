@@ -37,7 +37,7 @@ import fr.xephi.authme.commands.LoginCommand;
 import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
 import fr.xephi.authme.commands.UnregisterCommand;
-import fr.xephi.authme.datasource.CacheDataSource;
+import fr.xephi.authme.datasource.DataBackend;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.datasource.FileDataSource;
 import fr.xephi.authme.listener.AuthMeBlockListener;
@@ -115,11 +115,10 @@ public class AuthMe extends JavaPlugin {
 		//Check Essentials
 		checkEssentials();
 
-		/*
-		 * Backend
-		 */
+		//Backend
+		DataBackend databackend = null;
 		try {
-			database = new FileDataSource();
+			databackend = new FileDataSource();
 		} catch (Exception ex) {
 			ConsoleLogger.showError(ex.getMessage());
 			if (Settings.isStopEnabled) {
@@ -131,10 +130,9 @@ public class AuthMe extends JavaPlugin {
 			}
 			return;
 		}
-
-		if (Settings.isCachingEnabled) {
-			database = new CacheDataSource(this, database);
-		}
+		
+		// DataSource
+		database = new DataSource(databackend);
 
 		// Setup API
 		api = new API(this, database);
