@@ -22,7 +22,7 @@ import fr.xephi.authme.settings.Settings;
 public class AsyncRegister extends Thread {
 
 	private AuthMe plugin;
-    private DataSource database;
+	private DataSource database;
 
 	private Player player;
 	private String name;
@@ -39,15 +39,15 @@ public class AsyncRegister extends Thread {
 	}
 
 	public boolean preRegister() {
-    	if (PlayerCache.getInstance().isAuthenticated(name)) {
-            player.sendMessage(m._("logged_in"));
-            return false;
-        }
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
+			player.sendMessage(m._("logged_in"));
+			return false;
+		}
 
-        if (database.isAuthAvailable(player.getName().toLowerCase())) {
-        	player.sendMessage(m._("user_regged"));
-        	return false;
-        }
+		if (database.isAuthAvailable(player.getName().toLowerCase())) {
+			player.sendMessage(m._("user_regged"));
+			return false;
+		}
 
 		final String ip = player.getAddress().getAddress().getHostAddress();
 		if (Settings.getmaxRegPerIp > 0) {
@@ -81,7 +81,7 @@ public class AsyncRegister extends Thread {
 		}
 
 		player.sendMessage(m._("registered"));
-		
+
 		if (!Settings.noConsoleSpam) {
 			ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
 		}
@@ -97,7 +97,7 @@ public class AsyncRegister extends Thread {
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());
 		}
-		
+
 		SyncRegister syncreg = new SyncRegister(player);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, syncreg);
 	}

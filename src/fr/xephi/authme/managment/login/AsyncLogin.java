@@ -20,7 +20,7 @@ import fr.xephi.authme.settings.Settings;
 public class AsyncLogin extends Thread {
 
 	private AuthMe plugin;
-    private DataSource database;
+	private DataSource database;
 
 	private Player player;
 	private String name;

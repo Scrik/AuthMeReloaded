@@ -78,7 +78,7 @@ public class RegisterCommand implements CommandExecutor {
 				return true;
 			}
 		}
-		
+
 		plugin.management.performRegister(player, password);
 
 		return true;

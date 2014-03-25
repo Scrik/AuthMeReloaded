@@ -3,13 +3,11 @@ package fr.xephi.authme.api;
 import java.security.NoSuchAlgorithmException;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.datasource.DataSource;
@@ -17,14 +15,13 @@ import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Settings;
 
-
-public class API {
+public class RecodedAPI {
 
 	public static final String newline = System.getProperty("line.separator");
 	public static AuthMe instance;
 	public static DataSource database;
 
-	public API(AuthMe instance, DataSource database) {
+	public RecodedAPI(AuthMe instance, DataSource database) {
 		API.instance = instance;
 		API.database = database;
 	}
@@ -55,37 +52,11 @@ public class API {
 	 * @param player
 	 * @return true if player is a npc
 	 */
-	@Deprecated
-	public boolean isaNPC(Player player) {
-		if (instance.getCitizensCommunicator().isNPC(player, instance)) {
-			return true;
-		}
-		return CombatTagComunicator.isNPC(player);
-	}
-
-	/**
-	 *
-	 * @param player
-	 * @return true if player is a npc
-	 */
 	public boolean isNPC(Player player) {
 		if (instance.getCitizensCommunicator().isNPC(player, instance)) {
 			return true;
 		}
 		return CombatTagComunicator.isNPC(player);
-	}
-
-	/**
-	 *
-	 * @param player
-	 * @return true if the player is unrestricted
-	 */
-	public static boolean isUnrestricted(Player player) {
-		return Utils.getInstance().isUnrestricted(player);
-	}
-
-	public static Location getLastLocation(Player player) {
-		return null;
 	}
 
 	public static void setPlayerInventory(Player player, ItemStack[] content, ItemStack[] armor) {
@@ -152,4 +123,14 @@ public class API {
 	public static void forceLogin(Player player) {
 		instance.management.performLogin(player, "dontneed", true);
 	}
+
+	/**
+	 * Check if can register from this ip
+	 * @param Player player
+	 */
+	public static boolean canRegister(Player player) {
+		String ip = player.getAddress().getAddress().getHostAddress();
+		return database.getAllAuthsByIp(ip).size() >= Settings.getmaxRegPerIp;
+	}
+
 }

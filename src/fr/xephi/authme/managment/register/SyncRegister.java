@@ -13,7 +13,7 @@ public class SyncRegister implements Runnable {
 	public SyncRegister(Player player) {
 		this.player = player;
 	}
-	
+
 	@Override
 	public void run() {
 		//restore flying state

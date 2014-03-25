@@ -27,6 +27,7 @@ import com.maxmind.geoip.LookupService;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import fr.xephi.authme.api.API;
+import fr.xephi.authme.api.RecodedAPI;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
@@ -65,7 +66,6 @@ public class AuthMe extends JavaPlugin {
 	public double ChestShop = 0;
 	public Essentials ess;
 	public Notifications notifications;
-	public API api;
 	public Management management;
 	public HashMap<String, Integer> captcha = new HashMap<String, Integer>();
 	public HashMap<String, String> cap = new HashMap<String, String>();
@@ -130,12 +130,13 @@ public class AuthMe extends JavaPlugin {
 			}
 			return;
 		}
-		
+
 		// DataSource
 		database = new DataSource(databackend);
 
 		// Setup API
-		api = new API(this, database);
+		new API(this, database);
+		new RecodedAPI(this, database);
 
 		// Setup Management
 		management = new Management(database, this);
