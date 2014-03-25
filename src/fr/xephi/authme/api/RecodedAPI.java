@@ -22,8 +22,8 @@ public class RecodedAPI {
 	public static DataSource database;
 
 	public RecodedAPI(AuthMe instance, DataSource database) {
-		API.instance = instance;
-		API.database = database;
+		RecodedAPI.instance = instance;
+		RecodedAPI.database = database;
 	}
 	/**
 	 * Hook into AuthMe
