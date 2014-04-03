@@ -282,7 +282,6 @@ public class AuthMe extends JavaPlugin {
 				this.savePlayer(player);
 			}
 		}
-
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " disabled");
 	}
 

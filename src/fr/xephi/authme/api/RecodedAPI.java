@@ -4,22 +4,19 @@ import java.security.NoSuchAlgorithmException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Settings;
 
 public class RecodedAPI {
 
-	public static final String newline = System.getProperty("line.separator");
-	public static AuthMe instance;
-	public static DataSource database;
+	private static AuthMe instance;
+	private static DataSource database;
 
 	public RecodedAPI(AuthMe instance, DataSource database) {
 		RecodedAPI.instance = instance;
@@ -34,10 +31,6 @@ public class RecodedAPI {
 		return (AuthMe) plugin;
 	}
 
-	public AuthMe getPlugin() {
-		return instance;
-	}
-
 	/**
 	 *
 	 * @param player
@@ -45,26 +38,6 @@ public class RecodedAPI {
 	 */
 	public static boolean isAuthenticated(Player player) {
 		return PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase());
-	}
-
-	/**
-	 *
-	 * @param player
-	 * @return true if player is a npc
-	 */
-	public boolean isNPC(Player player) {
-		if (instance.getCitizensCommunicator().isNPC(player, instance)) {
-			return true;
-		}
-		return CombatTagComunicator.isNPC(player);
-	}
-
-	public static void setPlayerInventory(Player player, ItemStack[] content, ItemStack[] armor) {
-		try {
-			player.getInventory().setContents(content);
-			player.getInventory().setArmorContents(armor);
-		} catch (NullPointerException npe) {
-		}
 	}
 
 	/**
