@@ -289,23 +289,6 @@ public class AdminCommand implements CommandExecutor {
 			sender.sendMessage("unregistered");
 			ConsoleLogger.info(args[1] + " unregistered");
 			return true;
-		} else if (args[0].equalsIgnoreCase("switchantibot")) {
-			if (args.length != 2) {
-				sender.sendMessage("Usage : /authme switchantibot on/off");
-				return true;
-			}
-			if (args[1].equalsIgnoreCase("on")) {
-				plugin.switchAntiBotMod(true);
-				sender.sendMessage("[AuthMe] AntiBotMod enabled");
-				return true;
-			}
-			if (args[1].equalsIgnoreCase("off")) {
-				plugin.switchAntiBotMod(false);
-				sender.sendMessage("[AuthMe] AntiBotMod disabled");
-				return true;
-			}
-			sender.sendMessage("Usage : /authme switchantibot on/off");
-			return true;
 		} else {
 			sender.sendMessage("Usage: /authme reload|register playername password|changepassword playername password|unregister playername");
 		}

@@ -24,7 +24,6 @@ public final class Settings extends YamlConfiguration {
 	public static List<String> getJoinPermissions = null;
 	public static List<String> getUnrestrictedName = null;
 	private static List<String> getRestrictedIp;
-	public static List<String> countries = null;
 	public final Plugin plugin;
 	private final File file;
 	public static HashAlgorithm getPasswordHash;
@@ -39,18 +38,15 @@ public final class Settings extends YamlConfiguration {
 	enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
 	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
 	disableSocialSpy, useEssentialsMotd,
-	supportOldPassword,
-	enableProtection, enableAntiBot;
+	supportOldPassword;
 
 	public static String getNickRegex,
 	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
-	rakamakUsers, rakamakUsersIp, getMySQLColumnId,
-	defaultWorld;
+	rakamakUsers, rakamakUsersIp;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
 	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
-	passwordMaxLength, maxLoginTry, captchaLength,
-	antiBotSensibility, antiBotDuration;
+	passwordMaxLength, maxLoginTry, captchaLength;
 
 	protected static YamlConfiguration configFile;
 
@@ -128,7 +124,6 @@ public final class Settings extends YamlConfiguration {
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
-		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
@@ -139,13 +134,7 @@ public final class Settings extends YamlConfiguration {
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
 		useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
-		defaultWorld = configFile.getString("Purge.defaultWorld", "world");
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
-		enableProtection = configFile.getBoolean("Protection.enableProtection", false);
-		countries = (List<String>) configFile.getList("Protection.countries");
-		enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
-		antiBotSensibility = configFile.getInt("Protection.antiBotSensibility", 5);
-		antiBotDuration = configFile.getInt("Protection.antiBotDuration", 10);
 
 		saveDefaults();
 	}
@@ -210,7 +199,6 @@ public final class Settings extends YamlConfiguration {
 		rakamakHash = getRakamakHash();
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
 		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
-		getMySQLColumnId = configFile.getString("DataSource.mySQLColumnId", "id");
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
@@ -221,13 +209,7 @@ public final class Settings extends YamlConfiguration {
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
 		useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
-		defaultWorld = configFile.getString("Purge.defaultWorld", "world");
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
-		enableProtection = configFile.getBoolean("Protection.enableProtection", false);
-		countries = (List<String>) configFile.getList("Protection.countries");
-		enableAntiBot = configFile.getBoolean("Protection.enableAntiBot", false);
-		antiBotSensibility = configFile.getInt("Protection.antiBotSensibility", 5);
-		antiBotDuration = configFile.getInt("Protection.antiBotDuration", 10);
 	}
 
 	private static HashAlgorithm getPasswordHash() {
@@ -383,14 +365,6 @@ public final class Settings extends YamlConfiguration {
 		}
 		ConsoleLogger.info("Set Default Language: En ");
 		return "en";
-	}
-
-	public static void switchAntiBotMod(boolean mode) {
-		if (mode) {
-			isKickNonRegisteredEnabled = true;
-		} else {
-			isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
-		}
 	}
 
 	public enum messagesLang {

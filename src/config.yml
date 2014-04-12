@@ -98,36 +98,7 @@ settings:
         # It is CaseSensitive!
         UnrestrictedName: []
     # Message language, available : en, de, br, cz, pl, fr, ru, hu, sk, es, zhtw, fi, zhcn, lt, it, ko, pt
-    messagesLanguage: en
-ExternalBoardOptions:
-    # MySQL column for the salt , needed for some forum/cms support
-    mySQLColumnSalt: ''
-    # MySQL column for the group, needed for some forum/cms support
-    mySQLColumnGroup: ''
-    # -1 mean disabled. If u want that only
-    # activated player can login in your server
-    # u can put in this options the group number
-    # of unactivated user, needed for some forum/cms support
-    nonActivedUserGroup: -1
-    # Other MySQL columns where we need to put the Username
-    mySQLOtherUsernameColumns: []
-    # How much Log to Round needed in BCrypt(do not change it if you do not know what's your doing)
-    bCryptLog2Round: 10
-    # phpBB prefix defined during phpbb installation process
-    phpbbTablePrefix: 'phpbb_'
-    # phpBB activated group id , 2 is default registered group defined by phpbb
-    phpbbActivatedGroupId: 2
-    # WordPress prefix defined during WordPress installation process
-    wordpressTablePrefix: 'wp_'
-BackupSystem:
-   # Enable or Disable Automatic Backup
-    ActivateBackup: false
-   # set Backup at every start of Server
-    OnServerStart: false
-   # set Backup at every stop of Server
-    OnServerStop: true
-   # Windows only mysql installation Path
-    MysqlWindowsPath: 'C:\\Program Files\\MySQL\\MySQL Server 5.1\\'
+    messagesLanguage: ru
 Passpartu:
     # Enable or Disable Passpartu Feature,
     # this feature let Admin Login with all registered 
@@ -177,16 +148,3 @@ Hooks:
     disableSocialSpy: true
     # Do we need to force /motd Essentials command on join ?
     useEssentialsMotd: false
-Protection:
-    # Enable some servers protection ( country based login, antibot )
-    enableProtection: false
-    # Countries allowed to join the server and register, see http://dev.maxmind.com/geoip/legacy/codes/iso3166/ for countries' codes
-    countries:
-    - US
-    - GB
-    # Do we need to enable automatic antibot system?
-    enableAntiBot: false
-    # Max number of player allowed to login in 5 secs before enable AntiBot system automatically
-    antiBotSensibility: 5
-    # Duration in minutes of the antibot automatic system
-    antiBotDuration: 10

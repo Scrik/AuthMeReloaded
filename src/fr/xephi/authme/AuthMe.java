@@ -1,15 +1,6 @@
 package fr.xephi.authme;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
-import java.util.zip.GZIPInputStream;
-
 import me.muizers.Notifications.Notifications;
 import net.citizensnpcs.Citizens;
 
@@ -23,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
-import com.maxmind.geoip.LookupService;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import fr.xephi.authme.api.API;
@@ -71,7 +61,6 @@ public class AuthMe extends JavaPlugin {
 	public HashMap<String, String> cap = new HashMap<String, String>();
 	public MultiverseCore multiverse = null;
 	public Location essentialsSpawn;
-	public LookupService ls = null;
 	public boolean antibotMod = false;
 	public boolean delayedAntiBot = true;
 
@@ -83,15 +72,6 @@ public class AuthMe extends JavaPlugin {
 
 		settings = new Settings(this);
 		settings.loadConfigOptions();
-
-		if (Settings.enableAntiBot) {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-				@Override
-				public void run() {
-					delayedAntiBot = false;
-				}
-			}, 2400);
-		}
 
 		setMessages(Messages.getInstance());
 
@@ -160,9 +140,6 @@ public class AuthMe extends JavaPlugin {
 
 		if(!Settings.isForceSingleSessionEnabled) {
 			ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
-		}
-		if (Settings.enableProtection) {
-			enableProtection();
 		}
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " enabled");
 	}
@@ -360,48 +337,4 @@ public class AuthMe extends JavaPlugin {
 		return spawnLoc;
 	}
 
-	private void enableProtection() {
-		ConsoleLogger.info(" This product includes GeoLite data created by MaxMind, available from http://www.maxmind.com");
-		File file = new File(getDataFolder(), "GeoIP.dat");
-		if (!file.exists()) {
-			try {
-				String url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz";
-				URL downloadUrl = new URL(url);
-				URLConnection conn = downloadUrl.openConnection();
-				conn.setConnectTimeout(10000);
-				conn.connect();
-				InputStream input = conn.getInputStream();
-				if (url.endsWith(".gz")) {
-					input = new GZIPInputStream(input);
-				}
-				OutputStream output = new FileOutputStream(file);
-				byte[] buffer = new byte[2048];
-				int length = input.read(buffer);
-				while (length >= 0) {
-					output.write(buffer, 0, length);
-					length = input.read(buffer);
-				}
-				output.close();
-				input.close();
-			} catch (Exception e) {}
-		}
-	}
-
-	public String getCountryCode(InetAddress ip) {
-		try {
-			if (ls == null) {
-				ls = new LookupService(new File(getDataFolder(), "GeoIP.dat"));
-			}
-			String code = ls.getCountry(ip).getCode();
-			if (code != null && !code.isEmpty()) {
-				return code;
-			}
-		} catch (Exception e) {}
-		return null;
-	}
-
-	public void switchAntiBotMod(boolean mode) {
-		this.antibotMod = mode;
-		Settings.switchAntiBotMod(mode);
-	}
 }

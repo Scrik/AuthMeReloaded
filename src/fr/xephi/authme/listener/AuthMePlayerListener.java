@@ -1,9 +1,7 @@
 package fr.xephi.authme.listener;
 
-import java.util.HashMap;
 import java.util.regex.PatternSyntaxException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -51,7 +49,6 @@ public class AuthMePlayerListener implements Listener {
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
-	private HashMap<String, PlayerLoginEvent> antibot = new HashMap<String, PlayerLoginEvent>();
 
 	public AuthMePlayerListener(AuthMe plugin, DataSource data) {
 		this.plugin = plugin;
@@ -193,21 +190,9 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (Settings.enableProtection && !Settings.countries.isEmpty()) {
-			String code = plugin.getCountryCode(event.getAddress());
-			if ((code == null)
-					|| (!Settings.countries.contains(code) && !API
-							.isRegistered(name))) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-						"Your country is banned from this server");
-				return;
-			}
-		}
-
 		if (Settings.isKickNonRegisteredEnabled) {
 			if (!data.isAuthAvailable(name)) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-						m._("reg_only"));
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("reg_only"));
 				return;
 			}
 		}
@@ -229,65 +214,25 @@ public class AuthMePlayerListener implements Listener {
 		try {
 			if (!player.getName().matches(regex) || name.equals("Player")) {
 				try {
-					event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-							m._("regex").replaceAll("REG_EX", regex));
+					event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
 				} catch (StringIndexOutOfBoundsException exc) {
-					event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-							"allowed char : " + regex);
+					event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 				}
 				return;
 			}
 		} catch (PatternSyntaxException pse) {
 			if (regex == null || regex.isEmpty()) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-						"Your nickname do not match");
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your nickname do not match");
 				return;
 			}
 			try {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("regex")
-						.replaceAll("REG_EX", regex));
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
 			} catch (StringIndexOutOfBoundsException exc) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER,
-						"allowed char : " + regex);
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 			}
 			return;
 		}
 
-		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
-			checkAntiBotMod(event);
-			return;
-		}
-	}
-
-	private void checkAntiBotMod(final PlayerLoginEvent event) {
-		if (plugin.delayedAntiBot || plugin.antibotMod) {
-			return;
-		}
-		if (antibot.keySet().size() > Settings.antiBotSensibility) {
-			plugin.switchAntiBotMod(true);
-			Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically enabled due to massive connections! ");
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
-					new Runnable() {
-				@Override
-				public void run() {
-					if (plugin.antibotMod) {
-						plugin.switchAntiBotMod(false);
-						antibot.clear();
-						Bukkit.broadcastMessage("[AuthMe] AntiBotMod automatically disabled after "
-								+ Settings.antiBotDuration
-								+ " Minutes, hope invasion stopped ");
-					}
-				}
-			}, Settings.antiBotDuration * 1200);
-			return;
-		}
-		antibot.put(event.getPlayer().getName().toLowerCase(), event);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-			@Override
-			public void run() {
-				antibot.remove(event.getPlayer().getName().toLowerCase());
-			}
-		}, 300);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
