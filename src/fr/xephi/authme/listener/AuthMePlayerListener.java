@@ -30,6 +30,7 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.api.API;
+import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
@@ -184,21 +185,7 @@ public class AuthMePlayerListener implements Listener {
 		final Player player = event.getPlayer();
 		final String name = player.getName().toLowerCase();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)) {
-			return;
-		}
-
-		if (Settings.isKickNonRegisteredEnabled) {
-			if (!data.isAuthAvailable(name)) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("reg_only"));
-				return;
-			}
-		}
-
-		if (player.isOnline() && Settings.isForceSingleSessionEnabled) {
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -231,6 +218,27 @@ public class AuthMePlayerListener implements Listener {
 				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 			}
 			return;
+		}
+
+		if (Settings.isKickNonRegisteredEnabled) {
+			if (!data.isAuthAvailable(name)) {
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("reg_only"));
+				return;
+			}
+		}
+
+		if (player.isOnline() && Settings.isForceSingleSessionEnabled) {
+			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
+			return;
+		}
+
+		if (data.isAuthAvailable(name)) {
+			PlayerAuth auth = data.getAuth(name);
+			String realnickname = auth.getRealNickname();
+			if (!realnickname.isEmpty() && !player.getName().equals(realnickname)) {
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальный ник: " + realnickname);
+				return;
+			}
 		}
 
 	}
