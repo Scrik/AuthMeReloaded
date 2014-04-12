@@ -18,9 +18,10 @@ public class FileDataBackend implements DataBackend {
 
 	/* file layout:
 	 *
-	 * DBVER$1:PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
+	 * DBVER$1:PLAYERNAME:REALPLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
 	 *
 	 * Old but compatible:
+	 * DBVER$1:PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
 	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
 	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ
 	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
@@ -30,7 +31,7 @@ public class FileDataBackend implements DataBackend {
 	 */
 	private File source;
 
-	private int dbvers = 1;
+	private int dbvers = 2;
 
 	public FileDataBackend() throws IOException {
 		source = new File(Settings.AUTH_FILE);
@@ -154,7 +155,7 @@ public class FileDataBackend implements DataBackend {
 
 	private PlayerAuth convertDBStringToAuth(String dbstring) {
 		String[] args = dbstring.split(":");
-		return new PlayerAuth(args[1], args[2], args[3], Long.parseLong(args[4]));
+		return new PlayerAuth(args[1], args[3], args[4], Long.parseLong(args[5]));
 	}
 
 	@Override
@@ -188,18 +189,24 @@ public class FileDataBackend implements DataBackend {
 	private PlayerAuth parseOldAuth(String line) {
 		PlayerAuth auth = null;
 		String[] args = line.split(":");
-		switch (args.length) {
-			case 9: case 8: case 7: case 4: {
-				auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]));
-				break;
+		if (line.startsWith("DBVER$")) {
+			if (args[0].equalsIgnoreCase("DBVER$1")) {
+				auth =  new PlayerAuth(args[1], args[2], args[3], Long.parseLong(args[4]));
 			}
-			case 3: {
-				auth = new PlayerAuth(args[0], args[1], args[2], 0);
-				break;
-			}
-			case 2: {
-				auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0);
-				break;
+		} else {
+			switch (args.length) {
+				case 9: case 8: case 7: case 4: {
+					auth = new PlayerAuth(args[0], args[1], args[2], Long.parseLong(args[3]));
+					break;
+				}
+				case 3: {
+					auth = new PlayerAuth(args[0], args[1], args[2], 0);
+					break;
+				}
+				case 2: {
+					auth = new PlayerAuth(args[0], args[1], "198.18.0.1", 0);
+					break;
+				}
 			}
 		}
 		return auth;
