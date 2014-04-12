@@ -4,7 +4,7 @@ authors:
 - _Shevchik_
 description: AuthMe prevents people, which aren't logged in, from doing stuff like placing blocks, moving, typing commands or seeing the inventory of the current player.
 main: fr.xephi.authme.AuthMe
-version: 1.0
+version: 2.0
 softdepend: [ChestShop, Multiverse-Core, Notifications, Citizens, CombatTag, Essentials, EssentialsSpawn]
 commands:
     register:
