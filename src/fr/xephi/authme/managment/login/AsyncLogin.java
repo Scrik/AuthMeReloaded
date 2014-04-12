@@ -23,6 +23,7 @@ public class AsyncLogin extends Thread {
 	private DataSource database;
 
 	private Player player;
+	private String realname;
 	private String name;
 	private String password;
 	private boolean forceLogin;
@@ -35,6 +36,7 @@ public class AsyncLogin extends Thread {
 		this.database = datasource;
 		this.player = player;
 		this.password = password;
+		this.realname = player.getName();
 		this.name = player.getName().toLowerCase();
 		this.forceLogin = forceLogin;
 	}
@@ -107,7 +109,7 @@ public class AsyncLogin extends Thread {
 			}
 		}
 		if (passwordVerified && player.isOnline()) {
-			PlayerAuth auth = new PlayerAuth(name, hash, getIP(), new Date().getTime());
+			PlayerAuth auth = new PlayerAuth(name, realname, hash, getIP(), new Date().getTime());
 			database.updateSession(auth);
 
 			if (Settings.useCaptcha) {

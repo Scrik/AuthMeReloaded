@@ -204,7 +204,7 @@ public class AdminCommand implements CommandExecutor {
 					return true;
 				}
 				String hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[2], name);
-				PlayerAuth auth = new PlayerAuth(name, hash, "198.18.0.1", System.currentTimeMillis());
+				PlayerAuth auth = new PlayerAuth(name, args[1], hash, "198.18.0.1", System.currentTimeMillis());
 				if (!database.saveAuth(auth)) {
 					sender.sendMessage(m._("error"));
 					return true;

@@ -3,12 +3,14 @@ package fr.xephi.authme.cache.auth;
 public class PlayerAuth {
 
 	private String nickname = "";
+	private String realnickname = "";
 	private String hash = "";
 	private String ip = "198.18.0.1";
 	private long lastLogin = 0;
 
-	public PlayerAuth(String nickname, String hash, String ip, long lastLogin) {
+	public PlayerAuth(String nickname, String realnickname, String hash, String ip, long lastLogin) {
 		this.nickname = nickname;
+		this.realnickname = realnickname;
 		this.hash = hash;
 		this.ip = ip;
 		this.lastLogin = lastLogin;
@@ -20,6 +22,10 @@ public class PlayerAuth {
 
 	public String getNickname() {
 		return nickname;
+	}
+	
+	public String getRealNickname() {
+		return realnickname;
 	}
 
 	public String getHash() {

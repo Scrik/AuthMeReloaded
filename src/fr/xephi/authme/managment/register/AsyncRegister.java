@@ -25,6 +25,7 @@ public class AsyncRegister extends Thread {
 	private DataSource database;
 
 	private Player player;
+	private String realname;
 	private String name;
 	private String password;
 
@@ -35,6 +36,7 @@ public class AsyncRegister extends Thread {
 		this.database = datasource;
 		this.player = player;
 		this.password = password;
+		this.realname = player.getName();
 		this.name = player.getName().toLowerCase();
 	}
 
@@ -74,7 +76,7 @@ public class AsyncRegister extends Thread {
 			player.sendMessage(m._("error"));
 			return;
 		}
-		PlayerAuth auth = new PlayerAuth(name, hash, player.getAddress().getAddress().getHostAddress(), new Date().getTime());
+		PlayerAuth auth = new PlayerAuth(name, realname, hash, player.getAddress().getAddress().getHostAddress(), new Date().getTime());
 		if (!database.saveAuth(auth)) {
 			player.sendMessage(m._("error"));
 			return;
