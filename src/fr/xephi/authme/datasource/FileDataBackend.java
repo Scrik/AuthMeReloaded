@@ -61,7 +61,7 @@ public class FileDataBackend implements DataBackend {
 			while ((line = br.readLine()) != null) {
 				PlayerAuth oldauth = convertDBStringToAuth(line);
 				if (oldauth.getNickname().equals(auth.getNickname())) {
-					newAuth = new PlayerAuth(oldauth.getNickname(), auth.getRealNickname(), auth.getHash(), oldauth.getIp(), oldauth.getLastLogin());
+					newAuth = new PlayerAuth(oldauth.getNickname(), oldauth.getRealNickname(), auth.getHash(), oldauth.getIp(), oldauth.getLastLogin());
 				}
 			}
 			br.close();
@@ -83,7 +83,7 @@ public class FileDataBackend implements DataBackend {
 			while ((line = br.readLine()) != null) {
 				PlayerAuth oldauth = convertDBStringToAuth(line);
 				if (oldauth.getNickname().equals(auth.getNickname())) {
-					newAuth = new PlayerAuth(oldauth.getNickname(), oldauth.getRealNickname(), oldauth.getHash(), auth.getIp(), auth.getLastLogin());
+					newAuth = new PlayerAuth(oldauth.getNickname(), auth.getRealNickname(), oldauth.getHash(), auth.getIp(), auth.getLastLogin());
 				}
 			}
 			br.close();
