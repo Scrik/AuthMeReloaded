@@ -144,6 +144,8 @@ public class FileDataBackend implements DataBackend {
 		sb.append(":");
 		sb.append(auth.getNickname());
 		sb.append(":");
+		sb.append(auth.getRealNickname());
+		sb.append(":");
 		sb.append(auth.getHash());
 		sb.append(":");
 		sb.append(auth.getIp());
