@@ -77,10 +77,7 @@ public class AsyncRegister extends Thread {
 			return;
 		}
 		PlayerAuth auth = new PlayerAuth(name, realname, hash, player.getAddress().getAddress().getHostAddress(), new Date().getTime());
-		if (!database.saveAuth(auth)) {
-			player.sendMessage(m._("error"));
-			return;
-		}
+		database.saveAuth(auth);
 
 		player.sendMessage(m._("registered"));
 

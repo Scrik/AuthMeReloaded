@@ -80,9 +80,7 @@ public class RecodedAPI {
 				return false;
 			}
 			PlayerAuth auth = new PlayerAuth(name, playerName, hash, "198.18.0.1", 0);
-			if (!database.saveAuth(auth)) {
-				return false;
-			}
+			database.saveAuth(auth);
 			return true;
 		} catch (NoSuchAlgorithmException ex) {
 			return false;

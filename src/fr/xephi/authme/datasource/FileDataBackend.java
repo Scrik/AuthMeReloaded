@@ -7,9 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
@@ -37,88 +37,6 @@ public class FileDataBackend implements DataBackend {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
 		convertDatabase();
-	}
-
-	@Override
-	public boolean saveAuth(PlayerAuth auth) {
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(source, true));
-			bw.write(convertAuthToDBString(auth));
-			bw.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean updatePassword(PlayerAuth auth) {
-		PlayerAuth newAuth = null;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth oldauth = convertDBStringToAuth(line);
-				if (oldauth.getNickname().equals(auth.getNickname())) {
-					newAuth = new PlayerAuth(oldauth.getNickname(), oldauth.getRealNickname(), auth.getHash(), oldauth.getIp(), oldauth.getLastLogin());
-				}
-			}
-			br.close();
-		} catch (Exception ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		}
-		removeAuth(auth.getNickname());
-		saveAuth(newAuth);
-		return true;
-	}
-
-	@Override
-	public boolean updateSession(PlayerAuth auth) {
-		PlayerAuth newAuth = null;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth oldauth = convertDBStringToAuth(line);
-				if (oldauth.getNickname().equals(auth.getNickname())) {
-					newAuth = new PlayerAuth(oldauth.getNickname(), auth.getRealNickname(), oldauth.getHash(), auth.getIp(), auth.getLastLogin());
-				}
-			}
-			br.close();
-		} catch (Exception ex) {
-			ConsoleLogger.showError(ex.getMessage());
-			return false;
-		}
-		removeAuth(auth.getNickname());
-		saveAuth(newAuth);
-		return true;
-	}
-
-	@Override
-	public boolean removeAuth(String user) {
-		ArrayList<String> lines = new ArrayList<String>();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(source));
-			String line;
-			while ((line = br.readLine()) != null) {
-				PlayerAuth auth = convertDBStringToAuth(line);
-				if (!auth.getNickname().equals(user)) {
-					lines.add(line);
-				}
-			}
-			BufferedWriter bw = new BufferedWriter(new FileWriter(source));
-			for (String l : lines) {
-				bw.write(l + "\n");
-			}
-			br.close();
-			bw.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -160,8 +78,7 @@ public class FileDataBackend implements DataBackend {
 		return new PlayerAuth(args[1], args[2], args[3], args[4], Long.parseLong(args[5]));
 	}
 
-	@Override
-	public void convertDatabase() {
+	private void convertDatabase() {
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
@@ -212,6 +129,22 @@ public class FileDataBackend implements DataBackend {
 			}
 		}
 		return auth;
+	}
+
+	@Override
+	public synchronized void dumpAuths(Collection<PlayerAuth> auths) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(source, false));
+			for (PlayerAuth auth : auths) {
+				try {
+					writer.write(convertAuthToDBString(auth));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			writer.close();
+		} catch (IOException e1) {
+		}
 	}
 
 }

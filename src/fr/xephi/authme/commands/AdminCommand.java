@@ -205,10 +205,7 @@ public class AdminCommand implements CommandExecutor {
 				}
 				String hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[2], name);
 				PlayerAuth auth = new PlayerAuth(name, args[1], hash, "198.18.0.1", System.currentTimeMillis());
-				if (!database.saveAuth(auth)) {
-					sender.sendMessage(m._("error"));
-					return true;
-				}
+				database.saveAuth(auth);
 				sender.sendMessage(m._("registered"));
 				ConsoleLogger.info(args[1] + " registered");
 			} catch (NoSuchAlgorithmException ex) {
@@ -264,10 +261,7 @@ public class AdminCommand implements CommandExecutor {
 					return true;
 				}
 				auth.setHash(hash);
-				if (!database.updatePassword(auth)) {
-					sender.sendMessage(m._("error"));
-					return true;
-				}
+				database.updatePassword(auth);
 				sender.sendMessage("pwd_changed");
 				ConsoleLogger.info(args[1] + "'s password changed");
 			} catch (NoSuchAlgorithmException ex) {
@@ -281,10 +275,7 @@ public class AdminCommand implements CommandExecutor {
 				return true;
 			}
 			String name = args[1].toLowerCase();
-			if (!database.removeAuth(name)) {
-				sender.sendMessage(m._("error"));
-				return true;
-			}
+			database.removeAuth(name);
 			PlayerCache.getInstance().removePlayer(name);
 			sender.sendMessage("unregistered");
 			ConsoleLogger.info(args[1] + " unregistered");

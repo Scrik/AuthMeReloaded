@@ -59,10 +59,7 @@ public class ChangePasswordCommand implements CommandExecutor {
 			if (PasswordSecurity.comparePasswordWithHash(args[0], PlayerCache.getInstance().getAuth(name).getHash(), name)) {
 				PlayerAuth auth = PlayerCache.getInstance().getAuth(name);
 				auth.setHash(hashnew);
-				if (!database.updatePassword(auth)) {
-					player.sendMessage(m._("error"));
-					return true;
-				}
+				database.updatePassword(auth);
 				PlayerCache.getInstance().updatePlayer(auth);
 				player.sendMessage(m._("pwd_changed"));
 				ConsoleLogger.info(player.getName() + " changed his password");

@@ -62,10 +62,7 @@ public class UnregisterCommand implements CommandExecutor {
 		}
 		try {
 			if (PasswordSecurity.comparePasswordWithHash(args[0], PlayerCache.getInstance().getAuth(name).getHash(), name)) {
-				if (!database.removeAuth(name)) {
-					player.sendMessage("error");
-					return true;
-				}
+				database.removeAuth(name);
 				if(Settings.isForcedRegistrationEnabled) {
 					player.getInventory().setArmorContents(new ItemStack[4]);
 					player.getInventory().setContents(new ItemStack[36]);

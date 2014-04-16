@@ -20,6 +20,10 @@ public class DataSource {
 		cacheAllAuths();
 	}
 
+	public synchronized void saveDatabase() {
+		source.dumpAuths(authCache.values());
+	}
+
 
 	public synchronized boolean isAuthAvailable(String user) {
 		return authCache.containsKey(user);
@@ -29,37 +33,21 @@ public class DataSource {
 		return authCache.get(user);
 	}
 
-	public synchronized boolean saveAuth(PlayerAuth auth) {
-		if (source.saveAuth(auth)) {
-			cacheAuth(auth);
-			return true;
-		}
-		return false;
+	public synchronized void saveAuth(PlayerAuth auth) {
+		cacheAuth(auth);
 	}
 
-	public synchronized boolean removeAuth(String user) {
-		if (source.removeAuth(user)) {
-			clearAuth(user);
-			return true;
-		}
-		return false;
+	public synchronized void removeAuth(String user) {
+		clearAuth(user);
 	}
 
-	public synchronized boolean updatePassword(PlayerAuth auth) {
-		if (source.updatePassword(auth)) {
-			authCache.get(auth.getNickname()).setHash(auth.getHash());
-			return true;
-		}
-		return false;
+	public synchronized void updatePassword(PlayerAuth auth) {
+		authCache.get(auth.getNickname()).setHash(auth.getHash());
 	}
 
-	public synchronized boolean updateSession(PlayerAuth auth) {
-		if (source.updateSession(auth)) {
-			authCache.get(auth.getNickname()).setIp(auth.getIp());
-			authCache.get(auth.getNickname()).setLastLogin(auth.getLastLogin());
-			return true;
-		}
-		return false;
+	public synchronized void updateSession(PlayerAuth auth) {
+		authCache.get(auth.getNickname()).setIp(auth.getIp());
+		authCache.get(auth.getNickname()).setLastLogin(auth.getLastLogin());
 	}
 
 	public synchronized List<String> getAllAuthsByIp(String ip) {
@@ -72,10 +60,9 @@ public class DataSource {
 
 	public synchronized int purgeDatabase(long until) {
 		int cleared = 0;
-		List<PlayerAuth> list = new ArrayList<PlayerAuth>(authCache.values());
-		for (PlayerAuth auth : list) {
+		for (PlayerAuth auth : new ArrayList<PlayerAuth>(authCache.values())) {
 			if (auth.getLastLogin() < until) {
-				removeAuth(auth.getNickname());
+				clearAuth(auth.getNickname());
 				cleared++;
 			}
 		}
@@ -83,7 +70,6 @@ public class DataSource {
 	}
 
 	public synchronized void reload() {
-		source.convertDatabase();
 		authCache.clear();
 		ipCache.clear();
 		cacheAllAuths();
