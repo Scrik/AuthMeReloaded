@@ -14,7 +14,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -124,8 +123,7 @@ public class AdminCommand implements CommandExecutor {
 					}
 				}
 			}
-			YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(newConfigFile);
-			Settings.reloadConfigOptions(newConfig);
+			Settings.reloadConfigOptions();
 			m.reLoad();
 			sender.sendMessage(m._("reload"));
 		} else if (args[0].equalsIgnoreCase("lastlogin")) {

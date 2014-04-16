@@ -1,3 +1,9 @@
+database:
+    autosave:
+        # Enable database autosave
+        enabled: true
+        # Interval in seconds between saves
+        interval: 600
 settings:
     restrictions:
         # Can unregistered players chat, care , that block all commands except followers
@@ -124,19 +130,6 @@ Security:
         maxLoginTry: 5
         # Captcha length
         captchaLength: 5
-Converter:
-    Rakamak:
-        # Rakamak file name
-        fileName: users.rak
-        # Rakamak use ip ?
-        useIP: false
-        # IP file name for rakamak
-        ipFileName: UsersIp.rak
-        # possible values: MD5, SHA1, SHA256, WHIRLPOOL, XAUTH, MD5VB, PHPBB,
-        # PLAINTEXT ( unhashed password),
-        # MYBB, IPB3, PHPFUSION, SMF, XENFORO, SALTED2MD5, JOOMLA, BCRYPT, WBB3, SHA512,
-        # DOUBLEMD5, PBKDF2, WORDPRESS, CUSTOM(for developpers only)
-        newPasswordHash: SHA256
 Hooks:
     # Do we need to hook with multiverse for spawn checking?
     multiverse: true

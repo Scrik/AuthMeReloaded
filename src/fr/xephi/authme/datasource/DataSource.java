@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitTask;
+
+import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
+import fr.xephi.authme.settings.Settings;
 
 
 public class DataSource {
@@ -15,9 +20,12 @@ public class DataSource {
 	private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
 	private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
 
+	private BukkitTask autosavetask = null;
+
 	public DataSource(DataBackend databackend) {
 		this.source = databackend;
 		cacheAllAuths();
+		scheduleAutoSaveTask();
 	}
 
 	public synchronized void saveDatabase() {
@@ -70,6 +78,10 @@ public class DataSource {
 	}
 
 	public synchronized void reload() {
+		if (autosavetask != null) {
+			autosavetask.cancel();
+		}
+		scheduleAutoSaveTask();
 		authCache.clear();
 		ipCache.clear();
 		cacheAllAuths();
@@ -97,6 +109,21 @@ public class DataSource {
 		authCache.remove(nick);
 		for (List<String> ipauths : ipCache.values()) {
 			ipauths.remove(nick);
+		}
+	}
+
+	private void scheduleAutoSaveTask() {
+		if (Settings.databaseAutoSaveEnabled) {
+			autosavetask = Bukkit.getScheduler().runTaskTimerAsynchronously(
+				AuthMe.getInstance(), 
+				new Runnable() {
+					public void run() {
+						saveDatabase();
+					}
+				},
+				20 * Settings.databaseAutoSaveInterval, 
+				20 * Settings.databaseAutoSaveInterval
+			);
 		}
 	}
 
