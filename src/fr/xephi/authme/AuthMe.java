@@ -60,8 +60,6 @@ public class AuthMe extends JavaPlugin {
 	public HashMap<String, String> cap = new HashMap<String, String>();
 	public MultiverseCore multiverse = null;
 	public Location essentialsSpawn;
-	public boolean antibotMod = false;
-	public boolean delayedAntiBot = true;
 
 	@Override
 	public void onEnable() {
