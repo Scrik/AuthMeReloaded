@@ -35,11 +35,6 @@ public class RegisterCommand implements CommandExecutor {
 			return true;
 		}
 
-		if (!Settings.isRegistrationEnabled) {
-			sender.sendMessage(m._("reg_disabled"));
-			return true;
-		}
-
 		if (args.length == 0 || (Settings.getEnablePasswordVerifier && args.length < 2)) {
 			sender.sendMessage(m._("usage_reg"));
 			return true;

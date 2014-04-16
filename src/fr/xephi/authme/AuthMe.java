@@ -27,7 +27,6 @@ import fr.xephi.authme.commands.ChangePasswordCommand;
 import fr.xephi.authme.commands.LoginCommand;
 import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
-import fr.xephi.authme.commands.UnregisterCommand;
 import fr.xephi.authme.datasource.DataBackend;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.datasource.FileDataBackend;
@@ -122,9 +121,9 @@ public class AuthMe extends JavaPlugin {
 		management = new Management(database, this);
 
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new AuthMePlayerListener(this,database),this);
-		pm.registerEvents(new AuthMeBlockListener(database, this),this);
-		pm.registerEvents(new AuthMeEntityListener(database, this),this);
+		pm.registerEvents(new AuthMePlayerListener(this, database), this);
+		pm.registerEvents(new AuthMeBlockListener(this), this);
+		pm.registerEvents(new AuthMeEntityListener(this), this);
 		if (ChestShop != 0) {
 			pm.registerEvents(new AuthMeChestShopListener(database, this), this);
 			ConsoleLogger.info("Successfully hook with ChestShop!");
@@ -134,7 +133,6 @@ public class AuthMe extends JavaPlugin {
 		this.getCommand("register").setExecutor(new RegisterCommand(database, this));
 		this.getCommand("login").setExecutor(new LoginCommand(this));
 		this.getCommand("changepassword").setExecutor(new ChangePasswordCommand(database, this));
-		this.getCommand("unregister").setExecutor(new UnregisterCommand(this, database));
 		this.getCommand("passpartu").setExecutor(new PasspartuCommand(this));
 		this.getCommand("captcha").setExecutor(new CaptchaCommand(this));
 

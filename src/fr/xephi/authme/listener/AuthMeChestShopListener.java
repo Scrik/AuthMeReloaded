@@ -12,7 +12,6 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.settings.Settings;
 
 
 public class AuthMeChestShopListener implements Listener {
@@ -42,11 +41,6 @@ public class AuthMeChestShopListener implements Listener {
 			return;
 		}
 
-		if (!database.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(TransactionOutcome.OTHER);
 	}
 }

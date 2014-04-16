@@ -10,17 +10,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.datasource.DataSource;
-import fr.xephi.authme.settings.Settings;
 
 
 public class AuthMeBlockListener implements Listener {
 
-	private DataSource data;
 	public AuthMe instance;
 
-	public AuthMeBlockListener(DataSource data, AuthMe instance) {
-		this.data = data;
+	public AuthMeBlockListener(AuthMe instance) {
 		this.instance = instance;
 	}
 
@@ -38,11 +34,6 @@ public class AuthMeBlockListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 
@@ -50,7 +41,6 @@ public class AuthMeBlockListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if(Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -60,11 +50,6 @@ public class AuthMeBlockListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 

@@ -17,13 +17,7 @@ commands:
         aliases: l
     changepassword:
         description: Change password of a account
-        usage: /changepassword oldPassword newPassword
-    logout:
-        description: Logout
-        usage: /logout
-    unregister:
-        description: unregister your account
-        usage: /unregister password    
+        usage: /changepassword oldPassword newPassword  
     passpartu:
         description: compare passpartu token
         usage: /passpartu token          

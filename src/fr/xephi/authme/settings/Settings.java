@@ -30,8 +30,7 @@ public final class Settings extends YamlConfiguration {
 	public static HashAlgorithm rakamakHash;
 	public static Boolean useLogging = false;
 
-	public static boolean isRegistrationEnabled, isForcedRegistrationEnabled,
-	isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
+	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
 	isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
 	isKickOnWrongPasswordEnabled,
 	getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
@@ -68,8 +67,6 @@ public final class Settings extends YamlConfiguration {
 		plugin.getLogger().info("Loading Configuration File...");
 
 		messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
-		isForcedRegistrationEnabled  = configFile.getBoolean("settings.registration.force", true);
-		isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
 		isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
 		getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval",5);
 		getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout",30);
@@ -144,8 +141,6 @@ public final class Settings extends YamlConfiguration {
 		configFile = newConfig;
 
 		messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
-		isForcedRegistrationEnabled = configFile.getBoolean("settings.registration.force", true);
-		isRegistrationEnabled = configFile.getBoolean("settings.registration.enabled", true);
 		isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
 		getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval",5);
 		getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout",30);

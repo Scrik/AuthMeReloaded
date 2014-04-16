@@ -13,18 +13,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
-import fr.xephi.authme.settings.Settings;
 
 
 public class AuthMeEntityListener implements Listener{
 
-	private DataSource data;
 	public AuthMe instance;
 
-	public AuthMeEntityListener(DataSource data, AuthMe instance) {
-		this.data = data;
+	public AuthMeEntityListener(AuthMe instance) {
 		this.instance = instance;
 	}
 
@@ -55,11 +51,6 @@ public class AuthMeEntityListener implements Listener{
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		player.setFireTicks(0);
 		event.setCancelled(true);
 	}
@@ -81,12 +72,6 @@ public class AuthMeEntityListener implements Listener{
 
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			return;
-		}
-
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
 		}
 
 		event.setCancelled(true);
@@ -112,12 +97,6 @@ public class AuthMeEntityListener implements Listener{
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-
 		event.setCancelled(true);
 	}
 
@@ -125,7 +104,6 @@ public class AuthMeEntityListener implements Listener{
 	public void onEntityInteract(PlayerInteractEntityEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
@@ -139,11 +117,6 @@ public class AuthMeEntityListener implements Listener{
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 

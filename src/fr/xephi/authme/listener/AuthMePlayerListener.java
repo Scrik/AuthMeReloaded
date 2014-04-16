@@ -70,12 +70,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-
 		String msg = event.getMessage();
 		// WorldEdit GUI Shit
 		if (msg.equalsIgnoreCase("/worldedit cui")) {
@@ -124,9 +118,6 @@ public class AuthMePlayerListener implements Listener {
 		if (data.isAuthAvailable(name)) {
 			player.sendMessage(m._("login_msg"));
 		} else {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
 			player.sendMessage(m._("reg_msg"));
 			return;
 		}
@@ -150,10 +141,6 @@ public class AuthMePlayerListener implements Listener {
 		}
 
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-
-		if (!Settings.isForcedRegistrationEnabled) {
 			return;
 		}
 
@@ -290,10 +277,6 @@ public class AuthMePlayerListener implements Listener {
 					API.setPlayerInventory(player, ev.getEmptyInventory(), ev.getEmptyArmor());
 				}
 			}
-		} else {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
 		}
 		String msg = data.isAuthAvailable(name) ? m._("login_msg") : m._("reg_msg");
 		int time = Settings.getRegistrationTimeout * 20;
@@ -368,7 +351,6 @@ public class AuthMePlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -380,12 +362,6 @@ public class AuthMePlayerListener implements Listener {
 
 		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
 			return;
-		}
-
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
 		}
 
 		event.setCancelled(true);
@@ -395,7 +371,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -410,12 +385,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-
 		event.setCancelled(true);
 	}
 
@@ -423,7 +392,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
 
 		Player player = (Player) event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -437,11 +405,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 
@@ -449,7 +412,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerInventoryClick(InventoryClickEvent event) {
 
 		Player player = (Player) event.getWhoClicked();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -464,12 +426,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
-		event.setResult(org.bukkit.event.Event.Result.DENY);
 		event.setCancelled(true);
 	}
 
@@ -477,7 +433,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
 				|| Utils.getInstance().isUnrestricted(player)
@@ -485,16 +440,10 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
+		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 
@@ -502,7 +451,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)
 				|| CombatTagComunicator.isNPC(player)) {
@@ -518,11 +466,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 
@@ -530,7 +473,6 @@ public class AuthMePlayerListener implements Listener {
 	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
 
 		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
 
 		if (Utils.getInstance().isUnrestricted(player)) {
 			return;
@@ -541,11 +483,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
-		}
 		event.setCancelled(true);
 	}
 
@@ -559,11 +496,6 @@ public class AuthMePlayerListener implements Listener {
 		}
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			return;
-		}
-		if (!data.isAuthAvailable(name)) {
-			if (!Settings.isForcedRegistrationEnabled) {
-				return;
-			}
 		}
 		event.setCancelled(true);
 	}
