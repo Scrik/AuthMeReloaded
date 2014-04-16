@@ -28,21 +28,18 @@ public final class Settings extends YamlConfiguration {
 	private final File file;
 	public static HashAlgorithm getPasswordHash;
 	public static Boolean useLogging = false;
-	
+
 	public static boolean databaseAutoSaveEnabled = true;
 	public static int databaseAutoSaveInterval = 10 * 60;
 
 	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
 	isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
-	isKickOnWrongPasswordEnabled,
-	getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
+	isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
 	enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
 	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
-	disableSocialSpy, useEssentialsMotd,
-	supportOldPassword;
+	disableSocialSpy, useEssentialsMotd, supportOldPassword;
 
-	public static String getNickRegex,
-	getcUnrestrictedName, messagesLanguage, getMySQLlastlocX, getMySQLlastlocY, getMySQLlastlocZ,
+	public static String getNickRegex, getcUnrestrictedName, messagesLanguage,
 	rakamakUsers, rakamakUsersIp;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
