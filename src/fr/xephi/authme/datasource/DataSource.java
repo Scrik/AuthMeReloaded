@@ -15,14 +15,14 @@ import fr.xephi.authme.settings.Settings;
 
 public class DataSource {
 
-	private DataBackend source;
+	private FileDataBackend source;
 
 	private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
 	private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
 
 	private BukkitTask autosavetask = null;
 
-	public DataSource(DataBackend databackend) {
+	public DataSource(FileDataBackend databackend) {
 		this.source = databackend;
 		cacheAllAuths();
 		scheduleAutoSaveTask();

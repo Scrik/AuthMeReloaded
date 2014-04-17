@@ -14,7 +14,7 @@ import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
 
-public class FileDataBackend implements DataBackend {
+public class FileDataBackend {
 
 	/* file layout:
 	 *
@@ -39,7 +39,6 @@ public class FileDataBackend implements DataBackend {
 		convertDatabase();
 	}
 
-	@Override
 	public List<PlayerAuth> getAllAuths() {
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
 		try {
@@ -53,6 +52,18 @@ public class FileDataBackend implements DataBackend {
 			e.printStackTrace();
 		}
 		return auths;
+	}
+
+	public synchronized void dumpAuths(Collection<PlayerAuth> auths) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(source, false));
+			for (PlayerAuth auth : auths) {
+				writer.write(convertAuthToDBString(auth));
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private String convertAuthToDBString(PlayerAuth auth) {
@@ -129,22 +140,6 @@ public class FileDataBackend implements DataBackend {
 			}
 		}
 		return auth;
-	}
-
-	@Override
-	public synchronized void dumpAuths(Collection<PlayerAuth> auths) {
-		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(source, false));
-			for (PlayerAuth auth : auths) {
-				try {
-					writer.write(convertAuthToDBString(auth));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			writer.close();
-		} catch (IOException e1) {
-		}
 	}
 
 }

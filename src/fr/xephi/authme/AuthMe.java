@@ -1,6 +1,8 @@
 package fr.xephi.authme;
 
+import java.io.IOException;
 import java.util.HashMap;
+
 import me.muizers.Notifications.Notifications;
 import net.citizensnpcs.Citizens;
 
@@ -27,7 +29,6 @@ import fr.xephi.authme.commands.ChangePasswordCommand;
 import fr.xephi.authme.commands.LoginCommand;
 import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
-import fr.xephi.authme.datasource.DataBackend;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.datasource.FileDataBackend;
 import fr.xephi.authme.listener.AuthMeBlockListener;
@@ -93,11 +94,11 @@ public class AuthMe extends JavaPlugin {
 		checkEssentials();
 
 		//Backend
-		DataBackend databackend = null;
+		FileDataBackend databackend;
 		try {
 			databackend = new FileDataBackend();
-		} catch (Exception ex) {
-			ConsoleLogger.showError(ex.getMessage());
+		} catch (IOException e) {
+			ConsoleLogger.showError(e.getMessage());
 			if (Settings.isStopEnabled) {
 				ConsoleLogger.showError("Can't use FLAT FILE... SHUTDOWN...");
 				server.shutdown();
