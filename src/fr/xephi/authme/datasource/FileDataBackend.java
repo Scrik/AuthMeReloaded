@@ -54,7 +54,7 @@ public class FileDataBackend {
 		return auths;
 	}
 
-	public synchronized void dumpAuths(Collection<PlayerAuth> auths) {
+	public void dumpAuths(Collection<PlayerAuth> auths) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(source, false));
 			for (PlayerAuth auth : auths) {
