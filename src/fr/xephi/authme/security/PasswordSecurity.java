@@ -48,8 +48,6 @@ public class PasswordSecurity {
 		case XAUTH:
 			salt = createSalt(12);
 			break;
-		case SMF:
-			return method.getHash(password, playerName.toLowerCase());
 		case MD5:
 		case SHA1:
 		case WHIRLPOOL:
