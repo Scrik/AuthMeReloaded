@@ -23,7 +23,7 @@ public class PlayerAuth {
 	public String getNickname() {
 		return nickname;
 	}
-	
+
 	public String getRealNickname() {
 		return realnickname;
 	}

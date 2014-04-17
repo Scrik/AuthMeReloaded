@@ -28,11 +28,6 @@ public class DataSource {
 		scheduleAutoSaveTask();
 	}
 
-	public synchronized void saveDatabase() {
-		source.dumpAuths(authCache.values());
-	}
-
-
 	public synchronized boolean isAuthAvailable(String user) {
 		return authCache.containsKey(user);
 	}
@@ -77,6 +72,10 @@ public class DataSource {
 		return cleared;
 	}
 
+	public synchronized void saveDatabase() {
+		source.dumpAuths(authCache.values());
+	}
+
 	public synchronized void reload() {
 		if (autosavetask != null) {
 			autosavetask.cancel();
@@ -87,7 +86,7 @@ public class DataSource {
 		cacheAllAuths();
 	}
 
-	public void cacheAllAuths() {
+	private void cacheAllAuths() {
 		List<PlayerAuth> auths = source.getAllAuths();
 		for (PlayerAuth auth : auths) {
 			cacheAuth(auth);
@@ -115,13 +114,14 @@ public class DataSource {
 	private void scheduleAutoSaveTask() {
 		if (Settings.databaseAutoSaveEnabled) {
 			autosavetask = Bukkit.getScheduler().runTaskTimerAsynchronously(
-				AuthMe.getInstance(), 
+				AuthMe.getInstance(),
 				new Runnable() {
+					@Override
 					public void run() {
 						saveDatabase();
 					}
 				},
-				20 * Settings.databaseAutoSaveInterval, 
+				20 * Settings.databaseAutoSaveInterval,
 				20 * Settings.databaseAutoSaveInterval
 			);
 		}
