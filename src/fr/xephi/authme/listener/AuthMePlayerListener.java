@@ -207,13 +207,6 @@ public class AuthMePlayerListener implements Listener {
 			return;
 		}
 
-		if (Settings.isKickNonRegisteredEnabled) {
-			if (!data.isAuthAvailable(name)) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("reg_only"));
-				return;
-			}
-		}
-
 		if (player.isOnline() && Settings.isForceSingleSessionEnabled) {
 			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
 			return;

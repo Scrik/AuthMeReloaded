@@ -33,14 +33,13 @@ public final class Settings extends YamlConfiguration {
 	public static int databaseAutoSaveInterval = 10 * 60;
 
 	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
-	isMovementAllowed, isKickNonRegisteredEnabled, isForceSingleSessionEnabled,
+	isMovementAllowed, isForceSingleSessionEnabled,
 	isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
-	enablePasspartu, isStopEnabled, rakamakUseIp, noConsoleSpam, displayOtherAccounts,
+	enablePasspartu, isStopEnabled, noConsoleSpam, displayOtherAccounts,
 	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
 	disableSocialSpy, useEssentialsMotd, supportOldPassword;
 
-	public static String getNickRegex, getcUnrestrictedName, messagesLanguage,
-	rakamakUsers, rakamakUsersIp;
+	public static String getNickRegex, getcUnrestrictedName, messagesLanguage;
 
 	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
 	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
@@ -84,7 +83,6 @@ public final class Settings extends YamlConfiguration {
 		getMovementRadius = configFile.getInt("settings.restrictions.allowedMovementRadius",100);
 		getJoinPermissions = configFile.getStringList("GroupOptions.Permissions.PermissionsOnJoin");
 		isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
-		isKickNonRegisteredEnabled = configFile.getBoolean("settings.restrictions.kickNonRegistered",false);
 		isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
 		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
 		String key = "settings.security.passwordHash";
