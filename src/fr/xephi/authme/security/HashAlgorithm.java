@@ -9,8 +9,6 @@ public enum HashAlgorithm {
 	SHA256(fr.xephi.authme.security.crypts.SHA256.class),
 	WHIRLPOOL(fr.xephi.authme.security.crypts.WHIRLPOOL.class),
 	XAUTH(fr.xephi.authme.security.crypts.XAUTH.class),
-	MD5VB(fr.xephi.authme.security.crypts.MD5VB.class),
-	PLAINTEXT(fr.xephi.authme.security.crypts.PLAINTEXT.class),
 	SMF(fr.xephi.authme.security.crypts.SMF.class),
 	SHA512(fr.xephi.authme.security.crypts.SHA512.class),
 	DOUBLEMD5(fr.xephi.authme.security.crypts.DOUBLEMD5.class),

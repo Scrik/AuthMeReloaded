@@ -45,9 +45,6 @@ public class PasswordSecurity {
 		case SHA256:
 			salt = createSalt(16);
 			break;
-		case MD5VB:
-			salt = createSalt(16);
-			break;
 		case XAUTH:
 			salt = createSalt(12);
 			break;
@@ -56,7 +53,6 @@ public class PasswordSecurity {
 		case MD5:
 		case SHA1:
 		case WHIRLPOOL:
-		case PLAINTEXT:
 		case SHA512:
 		case DOUBLEMD5:
 		case CUSTOM:
