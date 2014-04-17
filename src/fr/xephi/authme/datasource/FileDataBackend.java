@@ -36,10 +36,10 @@ public class FileDataBackend {
 	public FileDataBackend() throws IOException {
 		source = new File(Settings.AUTH_FILE);
 		source.createNewFile();
-		convertDatabase();
 	}
 
 	public List<PlayerAuth> getAllAuths() {
+		convertDatabase();
 		List<PlayerAuth> auths = new ArrayList<PlayerAuth>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(source));
