@@ -2,8 +2,6 @@ package fr.xephi.authme.managment.login;
 
 import java.util.Date;
 
-import me.muizers.Notifications.Notification;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -126,10 +124,6 @@ public class AsyncLogin extends Thread {
 
 			if (!Settings.noConsoleSpam) {
 				ConsoleLogger.info(player.getName() + " logged in!");
-			}
-
-			if (plugin.notifications != null) {
-				plugin.notifications.showNotification(new Notification("[AuthMe] " + player.getName() + " logged in!"));
 			}
 
 			// makes player isLoggedin via API

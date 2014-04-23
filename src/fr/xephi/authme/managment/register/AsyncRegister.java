@@ -3,8 +3,6 @@ package fr.xephi.authme.managment.register;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
-import me.muizers.Notifications.Notification;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -84,9 +82,6 @@ public class AsyncRegister extends Thread {
 
 		if (!Settings.noConsoleSpam) {
 			ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
-		}
-		if (plugin.notifications != null) {
-			plugin.notifications.showNotification(new Notification("[AuthMe] " + player.getName() + " has registered!"));
 		}
 
 		PlayerCache.getInstance().addPlayer(auth);

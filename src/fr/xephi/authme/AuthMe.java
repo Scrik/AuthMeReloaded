@@ -3,7 +3,6 @@ package fr.xephi.authme;
 import java.io.IOException;
 import java.util.HashMap;
 
-import me.muizers.Notifications.Notifications;
 import net.citizensnpcs.Citizens;
 
 import org.bukkit.Bukkit;
@@ -51,7 +50,6 @@ public class AuthMe extends JavaPlugin {
 	public int CombatTag = 0;
 	public double ChestShop = 0;
 	public Essentials ess;
-	public Notifications notifications;
 	public Management management;
 	public HashMap<String, Integer> captcha = new HashMap<String, Integer>();
 	public HashMap<String, String> cap = new HashMap<String, String>();
@@ -74,9 +72,6 @@ public class AuthMe extends JavaPlugin {
 
 		//Check Combat Tag Version
 		combatTag();
-
-		//Check Notifications
-		checkNotifications();
 
 		//Check Multiverse
 		checkMultiverse();
@@ -197,19 +192,6 @@ public class AuthMe extends JavaPlugin {
 		if (this.getServer().getPluginManager().getPlugin("EssentialsSpawn") != null && this.getServer().getPluginManager().getPlugin("EssentialsSpawn").isEnabled()) {
 			this.essentialsSpawn = new EssSpawn().getLocation();
 			ConsoleLogger.info("Hook with EssentialsSpawn plugin");
-		}
-	}
-
-	private void checkNotifications() {
-		if (!Settings.notifications) {
-			this.notifications = null;
-			return;
-		}
-		if (this.getServer().getPluginManager().getPlugin("Notifications") != null && this.getServer().getPluginManager().getPlugin("Notifications").isEnabled()) {
-			this.notifications = (Notifications) this.getServer().getPluginManager().getPlugin("Notifications");
-			ConsoleLogger.info("Successfully hook with Notifications");
-		} else {
-			this.notifications = null;
 		}
 	}
 

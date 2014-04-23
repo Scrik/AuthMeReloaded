@@ -2,8 +2,6 @@ package fr.xephi.authme.commands;
 
 import java.security.NoSuchAlgorithmException;
 
-import me.muizers.Notifications.Notification;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -63,9 +61,6 @@ public class ChangePasswordCommand implements CommandExecutor {
 				PlayerCache.getInstance().updatePlayer(auth);
 				player.sendMessage(m._("pwd_changed"));
 				ConsoleLogger.info(player.getName() + " changed his password");
-				if(plugin.notifications != null) {
-					plugin.notifications.showNotification(new Notification("[AuthMe] " + player.getName() + " change his password!"));
-				}
 			} else {
 				player.sendMessage(m._("wrong_pwd"));
 			}
