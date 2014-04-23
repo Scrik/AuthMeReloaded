@@ -31,10 +31,8 @@ import fr.xephi.authme.commands.PasspartuCommand;
 import fr.xephi.authme.commands.RegisterCommand;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.datasource.FileDataBackend;
-import fr.xephi.authme.listener.AuthMeBlockListener;
-import fr.xephi.authme.listener.AuthMeChestShopListener;
-import fr.xephi.authme.listener.AuthMeEntityListener;
-import fr.xephi.authme.listener.AuthMePlayerListener;
+import fr.xephi.authme.listener.AuthMeRestrictListener;
+import fr.xephi.authme.listener.AuthMeAuthListener;
 import fr.xephi.authme.managment.Management;
 import fr.xephi.authme.plugin.manager.CitizensCommunicator;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
@@ -120,13 +118,8 @@ public class AuthMe extends JavaPlugin {
 		management = new Management(database, this);
 
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new AuthMePlayerListener(this, database), this);
-		pm.registerEvents(new AuthMeBlockListener(this), this);
-		pm.registerEvents(new AuthMeEntityListener(this), this);
-		if (ChestShop != 0) {
-			pm.registerEvents(new AuthMeChestShopListener(database, this), this);
-			ConsoleLogger.info("Successfully hook with ChestShop!");
-		}
+		pm.registerEvents(new AuthMeAuthListener(this, database), this);
+		pm.registerEvents(new AuthMeRestrictListener(this), this);
 
 		this.getCommand("authme").setExecutor(new AdminCommand(this, database));
 		this.getCommand("register").setExecutor(new RegisterCommand(database, this));

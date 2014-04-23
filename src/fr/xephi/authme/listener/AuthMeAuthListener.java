@@ -8,19 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -44,127 +33,15 @@ import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.task.MessageTask;
 import fr.xephi.authme.task.TimeoutTask;
 
-public class AuthMePlayerListener implements Listener {
+public class AuthMeAuthListener implements Listener {
 
 	private Messages m = Messages.getInstance();
 	public AuthMe plugin;
 	private DataSource data;
 
-	public AuthMePlayerListener(AuthMe plugin, DataSource data) {
+	public AuthMeAuthListener(AuthMe plugin, DataSource data) {
 		this.plugin = plugin;
 		this.data = data;
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-
-		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-
-		String msg = event.getMessage();
-		// WorldEdit GUI Shit
-		if (msg.equalsIgnoreCase("/worldedit cui")) {
-			return;
-		}
-
-		String cmd = msg.split(" ")[0];
-		if (
-				cmd.equalsIgnoreCase("/login")
-				|| cmd.equalsIgnoreCase("/register")
-				|| cmd.equalsIgnoreCase("/passpartu")
-				|| cmd.equalsIgnoreCase("/l")
-				|| cmd.equalsIgnoreCase("/reg")
-				|| cmd.equalsIgnoreCase("/email")
-				|| cmd.equalsIgnoreCase("/captcha")
-				) {
-			return;
-		}
-		if (Settings.useEssentialsMotd && cmd.equalsIgnoreCase("/motd")) {
-			return;
-		}
-		if (Settings.allowCommands.contains(cmd)) {
-			return;
-		}
-
-		event.setMessage("/notloggedin");
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
-
-		final Player player = event.getPlayer();
-		final String name = player.getName().toLowerCase();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-
-		String cmd = event.getMessage().split(" ")[0];
-
-		if (data.isAuthAvailable(name)) {
-			player.sendMessage(m._("login_msg"));
-		} else {
-			player.sendMessage(m._("reg_msg"));
-			return;
-		}
-
-		if (!Settings.isChatAllowed && !(Settings.allowCommands.contains(cmd))) {
-			event.setCancelled(true);
-			return;
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerMove(PlayerMoveEvent event) {
-
-		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
-
-		if (
-			plugin.getCitizensCommunicator().isNPC(player, plugin)
-			|| Utils.getInstance().isUnrestricted(player)
-			|| CombatTagComunicator.isNPC(player)
-		) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-
-		if (!Settings.isMovementAllowed) {
-			event.setTo(event.getFrom());
-			return;
-		}
-
-		if (Settings.getMovementRadius == 0) {
-			return;
-		}
-
-		int radius = Settings.getMovementRadius;
-		Location spawn = plugin.getSpawnLocation(player.getWorld());
-
-		if (!event.getPlayer().getWorld().equals(spawn.getWorld())) {
-			event.getPlayer().teleport(spawn);
-			return;
-		}
-		if ((spawn.distance(player.getLocation()) > radius)) {
-			event.getPlayer().teleport(spawn);
-			return;
-		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
@@ -328,158 +205,6 @@ public class AuthMePlayerListener implements Listener {
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
 		PlayerCache.getInstance().removePlayer(name);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
-	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		Player player = event.getPlayer();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
-	public void onPlayerInteract(PlayerInteractEvent event) {
-
-		Player player = event.getPlayer();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
-
-		Player player = (Player) event.getPlayer();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
-	public void onPlayerInventoryClick(InventoryClickEvent event) {
-
-		Player player = (Player) event.getWhoClicked();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-
-		Player player = event.getPlayer();
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
-
-		Player player = event.getPlayer();
-
-		if (Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)) {
-			return;
-		}
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
-	public void onPlayerBedEnter(PlayerBedEnterEvent event) {
-
-		Player player = event.getPlayer();
-
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(
-				player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
-	public void onSignChange(SignChangeEvent event) {
-
-		Player player = event.getPlayer();
-		String name = player.getName().toLowerCase();
-		if (Utils.getInstance().isUnrestricted(player)) {
-			return;
-		}
-		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			return;
-		}
-		event.setCancelled(true);
 	}
 
 }
