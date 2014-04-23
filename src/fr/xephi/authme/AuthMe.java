@@ -8,7 +8,6 @@ import net.citizensnpcs.Citizens;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,7 +45,6 @@ public class AuthMe extends JavaPlugin {
 	public DataSource database = null;
 	private Settings settings;
 	private Messages m;
-	public static Server server;
 	private static AuthMe instance;
 	public CitizensCommunicator citizens;
 	public int CitizensVersion = 0;
@@ -70,8 +68,6 @@ public class AuthMe extends JavaPlugin {
 		settings.loadConfigOptions();
 
 		setMessages(Messages.getInstance());
-
-		server = getServer();
 
 		//Check Citizens Version
 		citizensVersion();
@@ -99,7 +95,7 @@ public class AuthMe extends JavaPlugin {
 			ConsoleLogger.showError(e.getMessage());
 			if (Settings.isStopEnabled) {
 				ConsoleLogger.showError("Can't use FLAT FILE... SHUTDOWN...");
-				server.shutdown();
+				Bukkit.shutdown();
 			}
 			if (!Settings.isStopEnabled) {
 				this.getServer().getPluginManager().disablePlugin(this);
