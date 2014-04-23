@@ -15,6 +15,7 @@ import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.datasource.DataSource;
+import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
@@ -96,6 +97,14 @@ public class AsyncRegister extends Thread {
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());
 		}
+		
+		// Schedule login event call
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			@Override
+			public void run() {
+				Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
+			}
+		});
 	}
 
 }

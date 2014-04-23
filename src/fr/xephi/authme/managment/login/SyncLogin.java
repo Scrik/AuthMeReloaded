@@ -8,6 +8,7 @@ import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.events.AuthMeTeleportEvent;
+import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
 import fr.xephi.authme.settings.Settings;
 
@@ -58,6 +59,8 @@ public class SyncLogin implements Runnable {
 			// Cleanup no longer used temporary data
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
+		// Call login event
+		Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
 	}
 
 }
