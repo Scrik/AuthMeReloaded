@@ -19,6 +19,8 @@ settings:
         - /captcha
         # Maximum Registraion per IP default: 1
         maxRegPerIp: 1
+        # min allowed nick length 
+        minNicknameLength: 3
         # max allowed nick length (Warning when you use
         # mysql and choose a value >20 you have to 
         # increase the size of the nickname column in your
@@ -41,16 +43,14 @@ settings:
         # he will not be allowed to join the server
         AllowedRestrictedUser:
         - playername;127.0.0.1
-        # Should unregistered players be kicked immediatly?
-        kickNonRegistered: false
+        # Ban ip when the ip is not the ip registered in database
+        banUnsafedIP: false
         # Should fail password players be kicked immediatly?
         kickOnWrongPassword: false
         # should not loged in players be teleported to spawn?
         # On login they will be teleported back to their normal
         # position
         teleportUnAuthedToSpawn: false
-        # min allowed nick length 
-        minNicknameLength: 3
         # Can unregistered players walk around?
         allowMovement: false
         # After what time players who fail to login or register
@@ -67,33 +67,19 @@ settings:
         enablePasswordVerifier: true
         # Should we protect the player inventory before logging in?
         ProtectInventoryBeforeLogIn: true
-        # Should we display all other accounts from a player when he joins?
-        # permission: /authme.admin.accounts
-        displayOtherAccounts: true
-        # WorldNames where we need to force the spawn location for ForceSpawnLocOnJoinEnabled
-        # Ban ip when the ip is not the ip registered in database
-        banUnsafedIP: false
     security:
         # minimum Length of password
         minPasswordLength: 4
-        # possible values: MD5, SHA1, SHA256, WHIRLPOOL, XAUTH, MD5VB, PHPBB,
-        # PLAINTEXT ( unhashed password),
-        # SMF, SHA512,
-        # DOUBLEMD5, PBKDF2, CUSTOM(for developers only)
+        # possible values: MD5, SHA1, SHA256, WHIRLPOOL, XAUTH, SHA512, DOUBLEMD5, PBKDF2, CUSTOM
         passwordHash: SHA256
         # If password checking return false , do we need to check with all
         # other password algorithm to check an old password ?
         # AuthMe will update the password to the new passwordHash !
         supportOldPasswordHash: false
     registration:
-        # enable registration on the server?
-        enabled: true
         # Send every X seconds a message to a player to
         # remind him that he has to login/register
         messageInterval: 5
-        # Only registered and logged in players can play.
-        # See restrictions for exceptions
-        force: true
     unrestrictions:
         # below you can list all your account name, that
         # AuthMe will ignore for registration or login, configure it
@@ -137,7 +123,5 @@ Hooks:
     chestshop: true
     # Do we need to hook with Notifications for Notifs sending ?
     notifications: true
-    # Do we need to disable Essentials SocialSpy on join ?
-    disableSocialSpy: true
     # Do we need to force /motd Essentials command on join ?
     useEssentialsMotd: false
