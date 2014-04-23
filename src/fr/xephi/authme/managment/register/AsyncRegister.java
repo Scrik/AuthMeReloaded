@@ -96,9 +96,6 @@ public class AsyncRegister extends Thread {
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());
 		}
-
-		SyncRegister syncreg = new SyncRegister(player);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, syncreg);
 	}
 
 }

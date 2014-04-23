@@ -1,7 +1,6 @@
 package fr.xephi.authme.managment.login;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -9,7 +8,6 @@ import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.limbo.LimboCache;
 import fr.xephi.authme.cache.limbo.LimboPlayer;
 import fr.xephi.authme.events.AuthMeTeleportEvent;
-import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
 import fr.xephi.authme.settings.Settings;
 
@@ -26,14 +24,6 @@ public class SyncLogin implements Runnable {
 
 	public LimboPlayer getLimbo() {
 		return limbo;
-	}
-
-	protected void restoreOpState() {
-		player.setOp(limbo.getOperator());
-		if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
-			player.setAllowFlight(limbo.isFlying());
-			player.setFlying(limbo.isFlying());
-		}
 	}
 
 	protected void teleportBackFromSpawn() {
@@ -57,8 +47,6 @@ public class SyncLogin implements Runnable {
 	public void run() {
 		// Limbo contains the State of the Player before /login
 		if (limbo != null) {
-			// Op & Flying
-			restoreOpState();
 			// Restore inventory
 			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
 				restoreInventory();
@@ -70,8 +58,6 @@ public class SyncLogin implements Runnable {
 			// Cleanup no longer used temporary data
 			LimboCache.getInstance().deleteLimboPlayer(name);
 		}
-		// The Loginevent now fires (as intended) after everything is processed
-		Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));
 	}
 
 }

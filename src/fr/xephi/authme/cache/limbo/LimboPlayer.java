@@ -11,23 +11,17 @@ public class LimboPlayer {
 	private Location loc = null;
 	private int timeoutTaskId = -1;
 	private int messageTaskId = -1;
-	private boolean operator = false;
-	private boolean flying = false;
 
-	public LimboPlayer(String name, Location loc, ItemStack[] inventory, ItemStack[] armour, boolean operator, boolean flying) {
+	public LimboPlayer(String name, Location loc, ItemStack[] inventory, ItemStack[] armour) {
 		this.name = name;
 		this.loc = loc;
 		this.inventory = inventory;
 		this.armour = armour;
-		this.operator = operator;
-		this.flying = flying;
 	}
 
 	public LimboPlayer(String name, Location loc, boolean operator, boolean flying) {
 		this.name = name;
 		this.loc = loc;
-		this.operator = operator;
-		this.flying = flying;
 	}
 
 	public LimboPlayer(String name) {
@@ -58,10 +52,6 @@ public class LimboPlayer {
 		this.inventory = inventory;
 	}
 
-	public boolean getOperator() {
-		return operator;
-	}
-
 	public void setTimeoutTaskId(int i) {
 		this.timeoutTaskId = i;
 	}
@@ -76,10 +66,6 @@ public class LimboPlayer {
 
 	public int getMessageTaskId() {
 		return messageTaskId;
-	}
-
-	public boolean isFlying() {
-		return flying;
 	}
 
 }

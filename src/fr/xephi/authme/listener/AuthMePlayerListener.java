@@ -2,7 +2,6 @@ package fr.xephi.authme.listener;
 
 import java.util.regex.PatternSyntaxException;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -134,9 +133,11 @@ public class AuthMePlayerListener implements Listener {
 		Player player = event.getPlayer();
 		String name = player.getName().toLowerCase();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)) {
+		if (
+			plugin.getCitizensCommunicator().isNPC(player, plugin)
+			|| Utils.getInstance().isUnrestricted(player)
+			|| CombatTagComunicator.isNPC(player)
+		) {
 			return;
 		}
 
@@ -284,13 +285,6 @@ public class AuthMePlayerListener implements Listener {
 		if (!LimboCache.getInstance().hasLimboPlayer(name)) {
 			LimboCache.getInstance().addLimboPlayer(player);
 		}
-		if (player.isOp()) {
-			player.setOp(false);
-		}
-		if (!Settings.isMovementAllowed) {
-			player.setAllowFlight(true);
-			player.setFlying(true);
-		}
 		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, name, msg, msgInterval));
 		LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(msgT.getTaskId());
 		player.setNoDamageTicks(Settings.getRegistrationTimeout * 20);
@@ -329,11 +323,6 @@ public class AuthMePlayerListener implements Listener {
 						player.teleport(fLoc);
 					}
 				}
-			}
-			player.setOp(limbo.getOperator());
-			if (player.getGameMode() != GameMode.CREATIVE && !Settings.isMovementAllowed) {
-				player.setAllowFlight(limbo.isFlying());
-				player.setFlying(limbo.isFlying());
 			}
 			this.plugin.getServer().getScheduler().cancelTask(limbo.getTimeoutTaskId());
 			LimboCache.getInstance().deleteLimboPlayer(name);

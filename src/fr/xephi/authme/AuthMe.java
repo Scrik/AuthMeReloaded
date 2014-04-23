@@ -280,7 +280,6 @@ public class AuthMe extends JavaPlugin {
 					player.getInventory().setContents(limbo.getInventory());
 				}
 				player.teleport(limbo.getLoc());
-				player.setOp(limbo.getOperator());
 				Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
 				LimboCache.getInstance().deleteLimboPlayer(name);
 			}
