@@ -14,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
-import com.onarandombox.MultiverseCore.MultiverseCore;
 
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.api.RecodedAPI;
@@ -33,7 +32,6 @@ import fr.xephi.authme.listener.AuthMeRestrictListener;
 import fr.xephi.authme.listener.AuthMeAuthListener;
 import fr.xephi.authme.managment.Management;
 import fr.xephi.authme.plugin.manager.CitizensCommunicator;
-import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.plugin.manager.EssSpawn;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
@@ -53,7 +51,6 @@ public class AuthMe extends JavaPlugin {
 	public Management management;
 	public HashMap<String, Integer> captcha = new HashMap<String, Integer>();
 	public HashMap<String, String> cap = new HashMap<String, String>();
-	public MultiverseCore multiverse = null;
 	public Location essentialsSpawn;
 
 	@Override
@@ -72,9 +69,6 @@ public class AuthMe extends JavaPlugin {
 
 		//Check Combat Tag Version
 		combatTag();
-
-		//Check Multiverse
-		checkMultiverse();
 
 		//Check ChestShop
 		checkChestShop();
@@ -157,25 +151,6 @@ public class AuthMe extends JavaPlugin {
 		}
 	}
 
-	private void checkMultiverse() {
-		if(!Settings.multiverse) {
-			multiverse = null;
-			return;
-		}
-		if (this.getServer().getPluginManager().getPlugin("Multiverse-Core") != null && this.getServer().getPluginManager().getPlugin("Multiverse-Core").isEnabled()) {
-			try {
-				multiverse  = (MultiverseCore) this.getServer().getPluginManager().getPlugin("Multiverse-Core");
-				ConsoleLogger.info("Hook with Multiverse-Core for SpawnLocations");
-			} catch (NullPointerException npe) {
-				multiverse = null;
-			} catch (ClassCastException cce) {
-				multiverse = null;
-			} catch (NoClassDefFoundError ncdfe) {
-				multiverse = null;
-			}
-		}
-	}
-
 	private void checkEssentials() {
 		if (this.getServer().getPluginManager().getPlugin("Essentials") != null && this.getServer().getPluginManager().getPlugin("Essentials").isEnabled()) {
 			try {
@@ -235,27 +210,20 @@ public class AuthMe extends JavaPlugin {
 		return instance;
 	}
 
-	public void savePlayer(Player player) throws IllegalStateException, NullPointerException {
-		try {
-			if ((citizens.isNPC(player, this)) || (Utils.getInstance().isUnrestricted(player)) || (CombatTagComunicator.isNPC(player))) {
-				return;
+	public void savePlayer(Player player) {
+		String name = player.getName().toLowerCase();
+		if (LimboCache.getInstance().hasLimboPlayer(name)) {
+			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
+			if (Settings.protectInventoryBeforeLogInEnabled) {
+				player.getInventory().setArmorContents(limbo.getArmour());
+				player.getInventory().setContents(limbo.getInventory());
 			}
-		} catch (Exception e) { }
-		try {
-			String name = player.getName().toLowerCase();
-			if (LimboCache.getInstance().hasLimboPlayer(name))
-			{
-				LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
-				if (Settings.protectInventoryBeforeLogInEnabled) {
-					player.getInventory().setArmorContents(limbo.getArmour());
-					player.getInventory().setContents(limbo.getInventory());
-				}
-				player.teleport(limbo.getLoc());
-				Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
-				LimboCache.getInstance().deleteLimboPlayer(name);
-			}
+			player.teleport(limbo.getLoc());
+			Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
+			LimboCache.getInstance().deleteLimboPlayer(name);
+		}
+		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			PlayerCache.getInstance().removePlayer(name);
-		} catch (Exception ex) {
 		}
 	}
 
@@ -288,14 +256,6 @@ public class AuthMe extends JavaPlugin {
 
 	public Location getSpawnLocation(World world) {
 		Location spawnLoc = world.getSpawnLocation();
-		if (multiverse != null && Settings.multiverse) {
-			try {
-				spawnLoc = multiverse.getMVWorldManager().getMVWorld(world).getSpawnLocation();
-			} catch (NullPointerException npe) {
-			} catch (ClassCastException cce) {
-			} catch (NoClassDefFoundError ncdfe) {
-			}
-		}
 		if (essentialsSpawn != null) {
 			spawnLoc = essentialsSpawn;
 		}
