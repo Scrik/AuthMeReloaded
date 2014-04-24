@@ -15,7 +15,7 @@ import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
-public class AsyncLogin extends Thread {
+public class AsyncLogin implements Runnable {
 
 	private AuthMe plugin;
 	private DataSource database;

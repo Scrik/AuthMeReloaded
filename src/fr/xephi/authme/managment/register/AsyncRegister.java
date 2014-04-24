@@ -18,7 +18,7 @@ import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
-public class AsyncRegister extends Thread {
+public class AsyncRegister implements Runnable {
 
 	private AuthMe plugin;
 	private DataSource database;
