@@ -19,11 +19,6 @@ public class LimboPlayer {
 		this.armour = armour;
 	}
 
-	public LimboPlayer(String name, Location loc, boolean operator, boolean flying) {
-		this.name = name;
-		this.loc = loc;
-	}
-
 	public LimboPlayer(String name) {
 		this.name = name;
 	}
