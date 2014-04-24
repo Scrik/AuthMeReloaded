@@ -94,7 +94,7 @@ public class AuthMeAuthListener implements Listener {
 			PlayerAuth auth = data.getAuth(name);
 			String realnickname = auth.getRealNickname();
 			if (!realnickname.isEmpty() && !player.getName().equals(realnickname)) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальный ник: " + realnickname);
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Залогинтесь используя правильный регистр ника: " + realnickname);
 				return;
 			}
 		}
