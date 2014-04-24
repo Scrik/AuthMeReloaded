@@ -2,9 +2,7 @@ package fr.xephi.authme.api;
 
 import java.security.NoSuchAlgorithmException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerAuth;
@@ -21,14 +19,6 @@ public class RecodedAPI {
 	public RecodedAPI(AuthMe instance, DataSource database) {
 		RecodedAPI.instance = instance;
 		RecodedAPI.database = database;
-	}
-	/**
-	 * Hook into AuthMe
-	 * @return AuthMe instance
-	 */
-	public static AuthMe hookAuthMe() {
-		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("AuthMe");
-		return (AuthMe) plugin;
 	}
 
 	/**
