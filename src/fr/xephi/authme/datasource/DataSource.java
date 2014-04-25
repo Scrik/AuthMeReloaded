@@ -2,6 +2,7 @@ package fr.xephi.authme.datasource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ public class DataSource {
 	private FileDataBackend source;
 
 	private HashMap<String, PlayerAuth> authCache = new HashMap<String, PlayerAuth>();
-	private HashMap<String, List<String>> ipCache = new HashMap<String, List<String>>();
+	private HashMap<String, HashSet<String>> ipCache = new HashMap<String, HashSet<String>>();
 
 	private BukkitTask autosavetask = null;
 
@@ -55,7 +56,7 @@ public class DataSource {
 
 	public synchronized List<String> getAllAuthsByIp(String ip) {
 		if (ipCache.containsKey(ip)) {
-			return ipCache.get(ip);
+			return new ArrayList<String>(ipCache.get(ip));
 		} else {
 			return new ArrayList<String>();
 		}
@@ -99,7 +100,7 @@ public class DataSource {
 		authCache.put(nick, auth);
 		String ip = auth.getIp();
 		if (!ipCache.containsKey(ip)) {
-			ipCache.put(ip, new ArrayList<String>());
+			ipCache.put(ip, new HashSet<String>());
 		}
 		ipCache.get(ip).add(nick);
 	}
