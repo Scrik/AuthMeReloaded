@@ -116,12 +116,3 @@ Security:
         maxLoginTry: 5
         # Captcha length
         captchaLength: 5
-Hooks:
-    # Do we need to hook with multiverse for spawn checking?
-    multiverse: true
-    # Do we need to hook with ChestShop for prevent buy or selling ?
-    chestshop: true
-    # Do we need to hook with Notifications for Notifs sending ?
-    notifications: true
-    # Do we need to force /motd Essentials command on join ?
-    useEssentialsMotd: false

@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.earth2me.essentials.Essentials;
@@ -46,7 +45,6 @@ public class AuthMe extends JavaPlugin {
 	public CitizensCommunicator citizens;
 	public int CitizensVersion = 0;
 	public int CombatTag = 0;
-	public double ChestShop = 0;
 	public Essentials ess;
 	public Management management;
 	public HashMap<String, Integer> captcha = new HashMap<String, Integer>();
@@ -69,9 +67,6 @@ public class AuthMe extends JavaPlugin {
 
 		//Check Combat Tag Version
 		combatTag();
-
-		//Check ChestShop
-		checkChestShop();
 
 		//Check Essentials
 		checkEssentials();
@@ -102,10 +97,11 @@ public class AuthMe extends JavaPlugin {
 		// Setup Management
 		management = new Management(database, this);
 
-		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new AuthMeAuthListener(this, database), this);
-		pm.registerEvents(new AuthMeRestrictListener(this), this);
+		// Setup Listener
+		getServer().getPluginManager().registerEvents(new AuthMeRestrictListener(this), this);
+		getServer().getPluginManager().registerEvents(new AuthMeAuthListener(this, database), this);
 
+		// Setup commands
 		this.getCommand("authme").setExecutor(new AdminCommand(this, database));
 		this.getCommand("register").setExecutor(new RegisterCommand(database, this));
 		this.getCommand("login").setExecutor(new LoginCommand(this));
@@ -117,38 +113,6 @@ public class AuthMe extends JavaPlugin {
 			ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
 		}
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " enabled");
-	}
-
-	private void checkChestShop() {
-		if (!Settings.chestshop) {
-			this.ChestShop = 0;
-			return;
-		}
-		if (this.getServer().getPluginManager().isPluginEnabled("ChestShop")) {
-			try {
-				String ver = com.Acrobot.ChestShop.ChestShop.getVersion();
-				try {
-					double version = Double.valueOf(ver.split(" ")[0]);
-					if (version >= 3.50) {
-						this.ChestShop = version;
-					} else {
-						ConsoleLogger.showError("Please Update your ChestShop version!");
-					}
-				} catch (NumberFormatException nfe) {
-					try {
-						double version = Double.valueOf(ver.split("t")[0]);
-						if (version >= 3.50) {
-							this.ChestShop = version;
-						} else {
-							ConsoleLogger.showError("Please Update your ChestShop version!");
-						}
-					} catch (NumberFormatException nfee) {
-					}
-				}
-			} catch (NullPointerException npe) {}
-			catch (NoClassDefFoundError ncdfe) {}
-			catch (ClassCastException cce) {}
-		}
 	}
 
 	private void checkEssentials() {

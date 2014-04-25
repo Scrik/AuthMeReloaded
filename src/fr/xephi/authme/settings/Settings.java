@@ -35,9 +35,7 @@ public final class Settings extends YamlConfiguration {
 	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
 	isMovementAllowed, isForceSingleSessionEnabled,
 	isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
-	enablePasspartu, isStopEnabled, noConsoleSpam, displayOtherAccounts,
-	useCaptcha, multiverse, notifications, chestshop, banUnsafeIp,
-	disableSocialSpy, useEssentialsMotd, supportOldPassword;
+	enablePasspartu, isStopEnabled, noConsoleSpam, useCaptcha, banUnsafeIp, supportOldPassword;
 
 	public static String getNickRegex, getcUnrestrictedName, messagesLanguage;
 
@@ -120,17 +118,11 @@ public final class Settings extends YamlConfiguration {
 			}
 		}
 		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
-		displayOtherAccounts = configFile.getBoolean("settings.restrictions.displayOtherAccounts", true);
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		multiverse = configFile.getBoolean("Hooks.multiverse", true);
-		chestshop = configFile.getBoolean("Hooks.chestshop", true);
-		notifications = configFile.getBoolean("Hooks.notifications", true);
 		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
-		disableSocialSpy = configFile.getBoolean("Hooks.disableSocialSpy", true);
-		useEssentialsMotd = configFile.getBoolean("Hooks.useEssentialsMotd", false);
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
 		saveDefaults();
 	}

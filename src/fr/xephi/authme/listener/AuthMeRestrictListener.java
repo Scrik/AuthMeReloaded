@@ -19,9 +19,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
-import com.Acrobot.ChestShop.Events.PreTransactionEvent;
-import com.Acrobot.ChestShop.Events.PreTransactionEvent.TransactionOutcome;
-
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
@@ -29,7 +26,7 @@ import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.settings.Settings;
 
 
-public class AuthMeRestrictListener implements Listener{
+public class AuthMeRestrictListener implements Listener {
 
 	public AuthMe plugin;
 
@@ -37,7 +34,7 @@ public class AuthMeRestrictListener implements Listener{
 		this.plugin = instance;
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 
@@ -55,7 +52,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 
@@ -73,29 +70,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPreTransaction(PreTransactionEvent event) {
-		if (event.getClient() == null) {
-			return;
-		}
-
-		Player player = event.getClient();
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
-			return;
-		}
-
-		if (PlayerCache.getInstance().isAuthenticated(player.getName().toLowerCase())) {
-			return;
-		}
-
-		event.setCancelled(TransactionOutcome.OTHER);
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST,ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
 
@@ -113,7 +88,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 
@@ -131,7 +106,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
 
@@ -149,7 +124,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 
@@ -167,7 +142,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event) {
 		Entity entity = event.getEntity();
 
@@ -192,7 +167,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onFoodLevelChange(FoodLevelChangeEvent event) {
 		Entity entity = event.getEntity();
 		if (!(entity instanceof Player)) {
@@ -215,7 +190,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void EntityRegainHealthEvent(EntityRegainHealthEvent event) {
 
 		Entity entity = event.getEntity();
@@ -240,7 +215,7 @@ public class AuthMeRestrictListener implements Listener{
 	}
 
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 
@@ -273,9 +248,6 @@ public class AuthMeRestrictListener implements Listener{
 		) {
 			return;
 		}
-		if (Settings.useEssentialsMotd && cmd.equalsIgnoreCase("/motd")) {
-			return;
-		}
 		if (Settings.allowCommands.contains(cmd)) {
 			return;
 		}
@@ -284,7 +256,7 @@ public class AuthMeRestrictListener implements Listener{
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		final Player player = event.getPlayer();
 
@@ -308,7 +280,7 @@ public class AuthMeRestrictListener implements Listener{
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 

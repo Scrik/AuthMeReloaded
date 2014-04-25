@@ -165,9 +165,6 @@ public class AuthMeAuthListener implements Listener {
 		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, name, msg, msgInterval));
 		LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(msgT.getTaskId());
 		player.setNoDamageTicks(Settings.getRegistrationTimeout * 20);
-		if (Settings.useEssentialsMotd) {
-			player.performCommand("motd");
-		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
