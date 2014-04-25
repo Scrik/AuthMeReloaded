@@ -105,9 +105,13 @@ public class DataSource {
 	}
 
 	private void clearAuth(String nick) {
+		PlayerAuth auth = authCache.get(nick);
+		if (auth == null) {
+			return;
+		}
 		authCache.remove(nick);
-		for (List<String> ipauths : ipCache.values()) {
-			ipauths.remove(nick);
+		if (ipCache.containsKey(auth.getIp())) {
+			ipCache.get(auth.getIp()).remove(nick);
 		}
 	}
 
