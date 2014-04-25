@@ -111,8 +111,12 @@ public class DataSource {
 			return;
 		}
 		authCache.remove(nick);
-		if (ipCache.containsKey(auth.getIp())) {
-			ipCache.get(auth.getIp()).remove(nick);
+		String ip = auth.getIp();
+		if (ipCache.containsKey(ip)) {
+			ipCache.get(ip).remove(nick);
+			if (ipCache.get(ip).isEmpty()) {
+				ipCache.remove(ip);
+			}
 		}
 	}
 
