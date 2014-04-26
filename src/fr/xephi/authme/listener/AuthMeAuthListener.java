@@ -85,9 +85,13 @@ public class AuthMeAuthListener implements Listener {
 			return;
 		}
 
-		if (player.isOnline() && Settings.isForceSingleSessionEnabled) {
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
-			return;
+		if (Settings.isForceSingleSessionEnabled) {
+			if (player.isOnline()) {
+				if (!player.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
+					event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
+					return;
+				}
+			}
 		}
 
 		if (data.isAuthAvailable(name)) {
