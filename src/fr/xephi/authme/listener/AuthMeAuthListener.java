@@ -2,6 +2,7 @@ package fr.xephi.authme.listener;
 
 import java.util.regex.PatternSyntaxException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class AuthMeAuthListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 
-		final Player player = event.getPlayer();
+		Player player = event.getPlayer();
 		final String name = player.getName().toLowerCase();
 
 		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
@@ -85,18 +86,19 @@ public class AuthMeAuthListener implements Listener {
 			return;
 		}
 
-		if (Settings.isForceSingleSessionEnabled && player.isOnline()) {
-			if (PlayerCache.getInstance().isAuthenticated(name) || !player.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
-				return;
-			}
-		}
-
 		if (data.isAuthAvailable(name)) {
 			PlayerAuth auth = data.getAuth(name);
 			String realnickname = auth.getRealNickname();
 			if (!realnickname.isEmpty() && !player.getName().equals(realnickname)) {
 				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Залогинтесь используя правильный регистр ника: " + realnickname);
+				return;
+			}
+		}
+
+		Player oplayer = Bukkit.getPlayerExact(player.getName());
+		if (Settings.isForceSingleSessionEnabled && oplayer != null) {
+			if (PlayerCache.getInstance().isAuthenticated(name) || !oplayer.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
+				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
 				return;
 			}
 		}
