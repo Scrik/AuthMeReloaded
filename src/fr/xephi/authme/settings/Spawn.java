@@ -16,7 +16,7 @@ public class Spawn extends CustomConfiguration {
 	private static Spawn spawn;
 	private static List<String> emptyList = new ArrayList<String>();
 
-	public Spawn() {
+	private Spawn() {
 		super(new File("./plugins/AuthMe/spawn.yml"));
 		spawn = this;
 		load();

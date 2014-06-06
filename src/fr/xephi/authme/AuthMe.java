@@ -91,8 +91,8 @@ public class AuthMe extends JavaPlugin {
 		database = new DataSource(databackend);
 
 		// Setup API
-		new API(this, database);
-		new RecodedAPI(this, database);
+		API.setupAPI(this, database);
+		RecodedAPI.setupRecodedAPI(this, database);
 
 		// Setup Management
 		management = new Management(database, this);
@@ -129,7 +129,7 @@ public class AuthMe extends JavaPlugin {
 			}
 		}
 		if (this.getServer().getPluginManager().getPlugin("EssentialsSpawn") != null && this.getServer().getPluginManager().getPlugin("EssentialsSpawn").isEnabled()) {
-			this.essentialsSpawn = new EssSpawn().getLocation();
+			this.essentialsSpawn = EssSpawn.getInstance().getLocation();
 			ConsoleLogger.info("Hook with EssentialsSpawn plugin");
 		}
 	}

@@ -16,7 +16,7 @@ public class RecodedAPI {
 	private static AuthMe instance;
 	private static DataSource database;
 
-	public RecodedAPI(AuthMe instance, DataSource database) {
+	public static void setupRecodedAPI(AuthMe instance, DataSource database) {
 		RecodedAPI.instance = instance;
 		RecodedAPI.database = database;
 	}

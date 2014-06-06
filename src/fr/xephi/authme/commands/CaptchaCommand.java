@@ -16,7 +16,7 @@ public class CaptchaCommand implements CommandExecutor {
 
 	public AuthMe plugin;
 	private Messages m = Messages.getInstance();
-	public static RandomString rdm = new RandomString(Settings.captchaLength);
+	private RandomString rdm = new RandomString(Settings.captchaLength);
 
 	public CaptchaCommand(AuthMe plugin) {
 		this.plugin = plugin;

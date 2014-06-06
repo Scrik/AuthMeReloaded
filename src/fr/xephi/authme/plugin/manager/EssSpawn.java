@@ -11,7 +11,7 @@ public class EssSpawn extends CustomConfiguration {
 
 	private static EssSpawn spawn;
 
-	public EssSpawn() {
+	private EssSpawn() {
 		super(new File("./plugins/Essentials/spawn.yml"));
 		spawn = this;
 		load();

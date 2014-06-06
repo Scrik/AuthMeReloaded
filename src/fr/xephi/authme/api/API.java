@@ -24,7 +24,7 @@ public class API {
 	public static AuthMe instance;
 	public static DataSource database;
 
-	public API(AuthMe instance, DataSource database) {
+	public static void setupAPI(AuthMe instance, DataSource database) {
 		API.instance = instance;
 		API.database = database;
 	}

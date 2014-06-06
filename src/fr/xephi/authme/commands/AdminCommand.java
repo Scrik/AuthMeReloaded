@@ -87,7 +87,7 @@ public class AdminCommand implements CommandExecutor {
 			}
 			try {
 				long days = Long.parseLong(args[1]) * 86400000;
-				long until = new Date().getTime() - days;
+				long until = System.currentTimeMillis() - days;
 				int cleared = database.purgeDatabase(until);
 				sender.sendMessage("Deleted " + cleared + " user accounts");
 				return true;

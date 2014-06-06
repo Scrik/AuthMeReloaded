@@ -3,6 +3,7 @@ package fr.xephi.authme.datasource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -64,7 +65,7 @@ public class DataSource {
 
 	public synchronized int purgeDatabase(long until) {
 		int cleared = 0;
-		for (PlayerAuth auth : new ArrayList<PlayerAuth>(authCache.values())) {
+		for (PlayerAuth auth : new LinkedList<PlayerAuth>(authCache.values())) {
 			if (auth.getLastLogin() < until) {
 				clearAuth(auth.getNickname());
 				cleared++;

@@ -1,7 +1,5 @@
 package fr.xephi.authme.managment.login;
 
-import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -107,7 +105,7 @@ public class AsyncLogin implements Runnable {
 			}
 		}
 		if (passwordVerified && player.isOnline()) {
-			PlayerAuth auth = new PlayerAuth(name, realname, hash, getIP(), new Date().getTime());
+			PlayerAuth auth = new PlayerAuth(name, realname, hash, getIP(), System.currentTimeMillis());
 			database.updateSession(auth);
 
 			if (Settings.useCaptcha) {
