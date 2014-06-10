@@ -157,7 +157,7 @@ public class AuthMeAuthListener implements Listener {
 		int time = Settings.getRegistrationTimeout * 20;
 		int msgInterval = Settings.getWarnMessageInterval;
 		if (time != 0) {
-			BukkitTask id = sched.runTaskLater(plugin, new TimeoutTask(plugin, name), time);
+			BukkitTask id = sched.runTaskLater(plugin, new TimeoutTask(player), time);
 			if (!LimboCache.getInstance().hasLimboPlayer(name)) {
 				LimboCache.getInstance().addLimboPlayer(player);
 			}
@@ -166,7 +166,7 @@ public class AuthMeAuthListener implements Listener {
 		if (!LimboCache.getInstance().hasLimboPlayer(name)) {
 			LimboCache.getInstance().addLimboPlayer(player);
 		}
-		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, name, msg, msgInterval));
+		BukkitTask msgT = sched.runTask(plugin, new MessageTask(plugin, player, msg, msgInterval));
 		LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(msgT.getTaskId());
 		player.setNoDamageTicks(Settings.getRegistrationTimeout * 20);
 	}

@@ -12,13 +12,15 @@ import fr.xephi.authme.cache.limbo.LimboCache;
 public class MessageTask implements Runnable {
 
 	private AuthMe plugin;
+	private Player player;
 	private String name;
 	private String msg;
 	private int interval;
 
-	public MessageTask(AuthMe plugin, String name, String msg, int interval) {
+	public MessageTask(AuthMe plugin, Player player, String msg, int interval) {
 		this.plugin = plugin;
-		this.name = name;
+		this.player = player;
+		this.name = player.getName().toLowerCase();
 		this.msg = msg;
 		this.interval = interval;
 	}
@@ -29,15 +31,11 @@ public class MessageTask implements Runnable {
 			return;
 		}
 
-		for (Player player : plugin.getServer().getOnlinePlayers()) {
-			if (player.getName().toLowerCase().equals(name)) {
-				player.sendMessage(msg);
-				BukkitScheduler sched = plugin.getServer().getScheduler();
-				BukkitTask late = sched.runTaskLater(plugin, this, interval * 20);
-				if(LimboCache.getInstance().hasLimboPlayer(name)) {
-					LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(late.getTaskId());
-				}
-			}
+		player.sendMessage(msg);
+		BukkitScheduler sched = plugin.getServer().getScheduler();
+		BukkitTask late = sched.runTaskLater(plugin, this, interval * 20);
+		if(LimboCache.getInstance().hasLimboPlayer(name)) {
+			LimboCache.getInstance().getLimboPlayer(name).setMessageTaskId(late.getTaskId());
 		}
 	}
 }
