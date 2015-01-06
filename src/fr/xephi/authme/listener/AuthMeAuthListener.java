@@ -63,7 +63,7 @@ public class AuthMeAuthListener implements Listener {
 		try {
 			if (!name.matches(regex) || name.equals("Player")) {
 				try {
-					event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("regex").replaceAll("REG_EX", regex));
+					event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("regex").replace("REG_EX", regex));
 				} catch (StringIndexOutOfBoundsException exc) {
 					event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 				}
@@ -75,7 +75,7 @@ public class AuthMeAuthListener implements Listener {
 				return;
 			}
 			try {
-				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("regex").replaceAll("REG_EX", regex));
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("regex").replace("REG_EX", regex));
 			} catch (StringIndexOutOfBoundsException exc) {
 				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 			}
@@ -87,7 +87,7 @@ public class AuthMeAuthListener implements Listener {
 			PlayerAuth auth = data.getAuth(lcname);
 			String realnickname = auth.getRealNickname();
 			if (!realnickname.isEmpty() && !name.equals(realnickname)) {
-				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Залогинтесь используя правильный регистр ника: " + realnickname);
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("invalid_case").replace("REALNAME", realnickname));
 				return;
 			}
 		}
@@ -97,7 +97,7 @@ public class AuthMeAuthListener implements Listener {
 		try {
 			oplayer = Bukkit.getPlayerExact(name);
 		} catch (Throwable t) {
-			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Произошла ошибка при логине, попробуйте зайти ещё раз");
+			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Error while logging in, please try again");
 		}
 		if (Settings.isForceSingleSessionEnabled && oplayer != null) {
 			if (PlayerCache.getInstance().isAuthenticated(lcname) || !oplayer.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
