@@ -75,7 +75,7 @@ public class Messages extends CustomConfiguration {
 		this.save();
 	}
 
-	public String _(String msg) {
+	public String getMessage(String msg) {
 		String loc = (String) this.get(msg, this.getDefault(msg));
 		if (loc != null) {
 			return loc.replace("&", "\u00a7");

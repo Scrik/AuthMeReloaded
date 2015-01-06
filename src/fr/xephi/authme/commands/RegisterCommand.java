@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.settings.Messages;
@@ -14,10 +13,9 @@ import fr.xephi.authme.settings.Settings;
 
 public class RegisterCommand implements CommandExecutor {
 
-	private Messages m = Messages.getInstance();
+	private Messages messages = Messages.getInstance();
 	private DataSource database;
-	public PlayerAuth auth;
-	public AuthMe plugin;
+	private AuthMe plugin;
 
 	public RegisterCommand(DataSource database, AuthMe plugin) {
 		this.database = database;
@@ -31,23 +29,23 @@ public class RegisterCommand implements CommandExecutor {
 		}
 
 		if (!plugin.authmePermissible(sender, "authme." + label.toLowerCase())) {
-			sender.sendMessage(m._("no_perm"));
+			sender.sendMessage(messages.getMessage("no_perm"));
 			return true;
 		}
 
 		if (args.length == 0 || (Settings.getEnablePasswordVerifier && args.length < 2)) {
-			sender.sendMessage(m._("usage_reg"));
+			sender.sendMessage(messages.getMessage("usage_reg"));
 			return true;
 		}
 
 		if (args[0].length() < Settings.getPasswordMinLen || args[0].length() > Settings.passwordMaxLength) {
-			sender.sendMessage(m._("pass_len"));
+			sender.sendMessage(messages.getMessage("pass_len"));
 			return true;
 		}
 
 		if (Settings.getEnablePasswordVerifier) {
 			if (!args[0].equals(args[1])) {
-				sender.sendMessage(m._("password_error"));
+				sender.sendMessage(messages.getMessage("password_error"));
 				return true;
 			}
 		}
@@ -58,18 +56,18 @@ public class RegisterCommand implements CommandExecutor {
 		final String ip = player.getAddress().getAddress().getHostAddress();
 
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			player.sendMessage(m._("logged_in"));
+			player.sendMessage(messages.getMessage("logged_in"));
 			return true;
 		}
 
 		if (database.isAuthAvailable(name)) {
-			player.sendMessage(m._("user_regged"));
+			player.sendMessage(messages.getMessage("user_regged"));
 			return true;
 		}
 
 		if (Settings.getmaxRegPerIp > 0) {
 			if (!plugin.authmePermissible(sender, "authme.allow2accounts") && database.getAllAuthsByIp(ip).size() >= Settings.getmaxRegPerIp) {
-				player.sendMessage(m._("max_reg"));
+				player.sendMessage(messages.getMessage("max_reg"));
 				return true;
 			}
 		}

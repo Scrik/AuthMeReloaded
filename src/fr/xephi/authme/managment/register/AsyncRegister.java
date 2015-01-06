@@ -10,8 +10,8 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.limbo.LimboCache;
-import fr.xephi.authme.cache.limbo.LimboPlayer;
+import fr.xephi.authme.cache.login.LoginCache;
+import fr.xephi.authme.cache.login.LoginPlayer;
 import fr.xephi.authme.datasource.DataSource;
 import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.security.PasswordSecurity;
@@ -41,19 +41,19 @@ public class AsyncRegister implements Runnable {
 
 	public boolean preRegister() {
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			player.sendMessage(m._("logged_in"));
+			player.sendMessage(m.getMessage("logged_in"));
 			return false;
 		}
 
 		if (database.isAuthAvailable(player.getName().toLowerCase())) {
-			player.sendMessage(m._("user_regged"));
+			player.sendMessage(m.getMessage("user_regged"));
 			return false;
 		}
 
 		final String ip = player.getAddress().getAddress().getHostAddress();
 		if (Settings.getmaxRegPerIp > 0) {
 			if (!plugin.authmePermissible(player, "authme.allow2accounts") && database.getAllAuthsByIp(ip).size() >= Settings.getmaxRegPerIp) {
-				player.sendMessage(m._("max_reg"));
+				player.sendMessage(m.getMessage("max_reg"));
 				return false;
 			}
 		}
@@ -72,25 +72,21 @@ public class AsyncRegister implements Runnable {
 			hash = PasswordSecurity.getHash(Settings.getPasswordHash, password, name);
 		} catch (NoSuchAlgorithmException e) {
 			ConsoleLogger.showError(e.getMessage());
-			player.sendMessage(m._("error"));
+			player.sendMessage(m.getMessage("error"));
 			return;
 		}
 		PlayerAuth auth = new PlayerAuth(name, realname, hash, player.getAddress().getAddress().getHostAddress(), new Date().getTime());
 		database.saveAuth(auth);
 
-		player.sendMessage(m._("registered"));
-
-		if (!Settings.noConsoleSpam) {
-			ConsoleLogger.info(player.getName() + " registered " + player.getAddress().getAddress().getHostAddress());
-		}
+		player.sendMessage(m.getMessage("registered"));
 
 		PlayerCache.getInstance().addPlayer(auth);
 
-		LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(auth.getNickname());
+		LoginPlayer limbo = LoginCache.getInstance().getPlayer(auth.getNickname());
 		if (limbo != null) {
 			Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
-			LimboCache.getInstance().deleteLimboPlayer(auth.getNickname());
+			LoginCache.getInstance().deletePlayer(auth.getNickname());
 		}
 		
 		// Schedule login event call

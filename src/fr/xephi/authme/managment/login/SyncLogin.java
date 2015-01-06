@@ -5,8 +5,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import fr.xephi.authme.api.API;
-import fr.xephi.authme.cache.limbo.LimboCache;
-import fr.xephi.authme.cache.limbo.LimboPlayer;
+import fr.xephi.authme.cache.login.LoginCache;
+import fr.xephi.authme.cache.login.LoginPlayer;
 import fr.xephi.authme.events.AuthMeTeleportEvent;
 import fr.xephi.authme.events.LoginEvent;
 import fr.xephi.authme.events.RestoreInventoryEvent;
@@ -14,21 +14,21 @@ import fr.xephi.authme.settings.Settings;
 
 public class SyncLogin implements Runnable {
 
-	private LimboPlayer limbo;
+	private LoginPlayer loginPlayer;
 	private Player player;
 	private String name;
 	public SyncLogin(Player player) {
 		this.player = player;
 		this.name = player.getName().toLowerCase();
-		this.limbo = LimboCache.getInstance().getLimboPlayer(name);
+		this.loginPlayer = LoginCache.getInstance().getPlayer(name);
 	}
 
-	public LimboPlayer getLimbo() {
-		return limbo;
+	public LoginPlayer getLoginPlayer() {
+		return loginPlayer;
 	}
 
 	protected void teleportBackFromSpawn() {
-		AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, limbo.getLoc());
+		AuthMeTeleportEvent tpEvent = new AuthMeTeleportEvent(player, loginPlayer.getLoc());
 		Bukkit.getPluginManager().callEvent(tpEvent);
 		if (!tpEvent.isCancelled()) {
 			Location fLoc = tpEvent.getTo();
@@ -37,7 +37,7 @@ public class SyncLogin implements Runnable {
 	}
 
 	protected void restoreInventory() {
-		RestoreInventoryEvent event = new RestoreInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
+		RestoreInventoryEvent event = new RestoreInventoryEvent(player, loginPlayer.getInventory(), loginPlayer.getArmour());
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		if (!event.isCancelled()) {
 			API.setPlayerInventory(player, event.getInventory(), event.getArmor());
@@ -47,7 +47,7 @@ public class SyncLogin implements Runnable {
 	@Override
 	public void run() {
 		// Limbo contains the State of the Player before /login
-		if (limbo != null) {
+		if (loginPlayer != null) {
 			// Restore inventory
 			if (Settings.protectInventoryBeforeLogInEnabled && player.hasPlayedBefore()) {
 				restoreInventory();
@@ -57,7 +57,7 @@ public class SyncLogin implements Runnable {
 				teleportBackFromSpawn();
 			}
 			// Cleanup no longer used temporary data
-			LimboCache.getInstance().deleteLimboPlayer(name);
+			LoginCache.getInstance().deletePlayer(name);
 		}
 		// Call login event
 		Bukkit.getServer().getPluginManager().callEvent(new LoginEvent(player, true));

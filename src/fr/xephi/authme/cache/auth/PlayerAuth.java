@@ -67,9 +67,7 @@ public class PlayerAuth {
 
 	@Override
 	public String toString() {
-		String s = "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! Hash : " + hash;
-		return s;
-
+		return "Player : " + nickname + " ! IP : " + ip + " ! LastLogin : " + lastLogin + " ! Hash : " + hash;
 	}
 
 }

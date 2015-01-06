@@ -17,8 +17,8 @@ import com.earth2me.essentials.Essentials;
 import fr.xephi.authme.api.API;
 import fr.xephi.authme.api.RecodedAPI;
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.limbo.LimboCache;
-import fr.xephi.authme.cache.limbo.LimboPlayer;
+import fr.xephi.authme.cache.login.LoginCache;
+import fr.xephi.authme.cache.login.LoginPlayer;
 import fr.xephi.authme.commands.AdminCommand;
 import fr.xephi.authme.commands.CaptchaCommand;
 import fr.xephi.authme.commands.ChangePasswordCommand;
@@ -176,15 +176,15 @@ public class AuthMe extends JavaPlugin {
 
 	public void savePlayer(Player player) {
 		String name = player.getName().toLowerCase();
-		if (LimboCache.getInstance().hasLimboPlayer(name)) {
-			LimboPlayer limbo = LimboCache.getInstance().getLimboPlayer(name);
+		if (LoginCache.getInstance().hasPlayer(name)) {
+			LoginPlayer limbo = LoginCache.getInstance().getPlayer(name);
 			if (Settings.protectInventoryBeforeLogInEnabled) {
 				player.getInventory().setArmorContents(limbo.getArmour());
 				player.getInventory().setContents(limbo.getInventory());
 			}
 			player.teleport(limbo.getLoc());
 			Bukkit.getScheduler().cancelTask(limbo.getTimeoutTaskId());
-			LimboCache.getInstance().deleteLimboPlayer(name);
+			LoginCache.getInstance().deletePlayer(name);
 		}
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
 			PlayerCache.getInstance().removePlayer(name);

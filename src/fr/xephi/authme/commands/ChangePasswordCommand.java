@@ -19,9 +19,9 @@ import fr.xephi.authme.settings.Settings;
 
 public class ChangePasswordCommand implements CommandExecutor {
 
-	private Messages m = Messages.getInstance();
+	private Messages messages = Messages.getInstance();
 	private DataSource database;
-	public AuthMe plugin;
+	private AuthMe plugin;
 
 	public ChangePasswordCommand(DataSource database, AuthMe plugin) {
 		this.database = database;
@@ -35,19 +35,19 @@ public class ChangePasswordCommand implements CommandExecutor {
 		}
 
 		if (!plugin.authmePermissible(sender, "authme." + label.toLowerCase())) {
-			sender.sendMessage(m._("no_perm"));
+			sender.sendMessage(messages.getMessage("no_perm"));
 			return true;
 		}
 
 		Player player = (Player) sender;
 		String name = player.getName().toLowerCase();
 		if (!PlayerCache.getInstance().isAuthenticated(name)) {
-			player.sendMessage(m._("not_logged_in"));
+			player.sendMessage(messages.getMessage("not_logged_in"));
 			return true;
 		}
 
 		if (args.length != 2) {
-			player.sendMessage(m._("usage_changepassword"));
+			player.sendMessage(messages.getMessage("usage_changepassword"));
 			return true;
 		}
 
@@ -59,14 +59,14 @@ public class ChangePasswordCommand implements CommandExecutor {
 				auth.setHash(hashnew);
 				database.updatePassword(auth);
 				PlayerCache.getInstance().updatePlayer(auth);
-				player.sendMessage(m._("pwd_changed"));
+				player.sendMessage(messages.getMessage("pwd_changed"));
 				ConsoleLogger.info(player.getName() + " changed his password");
 			} else {
-				player.sendMessage(m._("wrong_pwd"));
+				player.sendMessage(messages.getMessage("wrong_pwd"));
 			}
 		} catch (NoSuchAlgorithmException ex) {
 			ConsoleLogger.showError(ex.getMessage());
-			sender.sendMessage(m._("error"));
+			sender.sendMessage(messages.getMessage("error"));
 		}
 		return true;
 	}

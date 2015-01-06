@@ -14,17 +14,16 @@ import fr.xephi.authme.settings.Settings;
 
 public class CaptchaCommand implements CommandExecutor {
 
-	public AuthMe plugin;
 	private Messages m = Messages.getInstance();
 	private RandomString rdm = new RandomString(Settings.captchaLength);
+	private AuthMe plugin;
 
 	public CaptchaCommand(AuthMe plugin) {
 		this.plugin = plugin;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmnd,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmnd, String label, String[] args) {
 
 		if (!(sender instanceof Player)) {
 			return true;
@@ -34,34 +33,34 @@ public class CaptchaCommand implements CommandExecutor {
 		String name = player.getName().toLowerCase();
 
 		if (args.length == 0) {
-			player.sendMessage(m._("usage_captcha"));
+			player.sendMessage(m.getMessage("usage_captcha"));
 			return true;
 		}
 
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			player.sendMessage(m._("logged_in"));
+			player.sendMessage(m.getMessage("logged_in"));
 			return true;
 		}
 
 		if (!plugin.authmePermissible(player, "authme." + label.toLowerCase())) {
-			player.sendMessage(m._("no_perm"));
+			player.sendMessage(m.getMessage("no_perm"));
 			return true;
 		}
 
 		if (!Settings.useCaptcha) {
-			player.sendMessage(m._("usage_log"));
+			player.sendMessage(m.getMessage("usage_log"));
 			return true;
 		}
 
 		if(!plugin.cap.containsKey(name)) {
-			player.sendMessage(m._("usage_log"));
+			player.sendMessage(m.getMessage("usage_log"));
 			return true;
 		}
 
 		if(Settings.useCaptcha && !args[0].equals(plugin.cap.get(name))) {
 			plugin.cap.remove(name);
 			plugin.cap.put(name, rdm.nextString());
-			player.sendMessage(m._("wrong_captcha").replaceAll("THE_CAPTCHA", plugin.cap.get(name)));
+			player.sendMessage(m.getMessage("wrong_captcha").replaceAll("THE_CAPTCHA", plugin.cap.get(name)));
 			return true;
 		}
 		try {
@@ -69,8 +68,8 @@ public class CaptchaCommand implements CommandExecutor {
 			plugin.cap.remove(name);
 		} catch (NullPointerException npe) {
 		}
-		player.sendMessage(m._("valid_captcha"));
-		player.sendMessage(m._("login_msg"));
+		player.sendMessage(m.getMessage("valid_captcha"));
+		player.sendMessage(m.getMessage("login_msg"));
 		return true;
 	}
 

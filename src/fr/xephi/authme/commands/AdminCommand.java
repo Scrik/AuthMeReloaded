@@ -31,9 +31,9 @@ import fr.xephi.authme.settings.Spawn;
 
 public class AdminCommand implements CommandExecutor {
 
-	public AuthMe plugin;
 	private Messages m = Messages.getInstance();
-	public DataSource database;
+	private AuthMe plugin;
+	private DataSource database;
 
 	public AdminCommand(AuthMe plugin, DataSource database) {
 		this.database = database;
@@ -48,12 +48,9 @@ public class AdminCommand implements CommandExecutor {
 			sender.sendMessage("/authme changepassword <playername> <password> - Change player password");
 			sender.sendMessage("/authme unregister <playername> - Unregister a player");
 			sender.sendMessage("/authme purge <days> - Purge Database");
-			sender.sendMessage("/authme version - Get AuthMe version infos");
-			sender.sendMessage("/authme lastlogin <playername> - Display Date about the Player's LastLogin");
 			sender.sendMessage("/authme accounts <playername> - Display all player's accounts");
 			sender.sendMessage("/authme setSpawn - Set AuthMe spawn to your current pos");
 			sender.sendMessage("/authme spawn - Teleport you to the AuthMe SpawnPoint");
-			sender.sendMessage("/authme switchantibot on/off - Enable/Disable antibot method");
 			return true;
 		}
 
@@ -71,12 +68,7 @@ public class AdminCommand implements CommandExecutor {
 		}
 
 		if (!plugin.authmePermissible(sender, "authme.admin." + args[0].toLowerCase())) {
-			sender.sendMessage(m._("no_perm"));
-			return true;
-		}
-
-		if (args[0].equalsIgnoreCase("version")) {
-			sender.sendMessage("AuthMe Version: "+AuthMe.getInstance().getDescription().getVersion());
+			sender.sendMessage(m.getMessage("no_perm"));
 			return true;
 		}
 
@@ -125,7 +117,7 @@ public class AdminCommand implements CommandExecutor {
 			}
 			Settings.reloadConfigOptions();
 			m.reLoad();
-			sender.sendMessage(m._("reload"));
+			sender.sendMessage(m.getMessage("reload"));
 		} else if (args[0].equalsIgnoreCase("lastlogin")) {
 			if (args.length != 2) {
 				sender.sendMessage("Usage: /authme lastlogin <playername>");
@@ -198,17 +190,17 @@ public class AdminCommand implements CommandExecutor {
 			try {
 				String name = args[1].toLowerCase();
 				if (database.isAuthAvailable(name)) {
-					sender.sendMessage(m._("user_regged"));
+					sender.sendMessage(m.getMessage("user_regged"));
 					return true;
 				}
 				String hash = PasswordSecurity.getHash(Settings.getPasswordHash, args[2], name);
 				PlayerAuth auth = new PlayerAuth(name, args[1], hash, "198.18.0.1", System.currentTimeMillis());
 				database.saveAuth(auth);
-				sender.sendMessage(m._("registered"));
+				sender.sendMessage(m.getMessage("registered"));
 				ConsoleLogger.info(args[1] + " registered");
 			} catch (NoSuchAlgorithmException ex) {
 				ConsoleLogger.showError(ex.getMessage());
-				sender.sendMessage(m._("error"));
+				sender.sendMessage(m.getMessage("error"));
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("setspawn")) {
@@ -255,7 +247,7 @@ public class AdminCommand implements CommandExecutor {
 				} else if (database.isAuthAvailable(name)) {
 					auth = database.getAuth(name);
 				} else {
-					sender.sendMessage(m._("unknown_user"));
+					sender.sendMessage(m.getMessage("unknown_user"));
 					return true;
 				}
 				auth.setHash(hash);
@@ -264,7 +256,7 @@ public class AdminCommand implements CommandExecutor {
 				ConsoleLogger.info(args[1] + "'s password changed");
 			} catch (NoSuchAlgorithmException ex) {
 				ConsoleLogger.showError(ex.getMessage());
-				sender.sendMessage(m._("error"));
+				sender.sendMessage(m.getMessage("error"));
 			}
 			return true;
 		} else if (args[0].equalsIgnoreCase("unregister") || args[0].equalsIgnoreCase("unreg") || args[0].equalsIgnoreCase("del") ) {

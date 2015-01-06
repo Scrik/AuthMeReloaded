@@ -2,7 +2,6 @@ package fr.xephi.authme.settings;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.configuration.MemoryConfiguration;
@@ -24,7 +23,6 @@ public final class Settings extends YamlConfiguration {
 	public static List<String> allowCommands = null;
 	public static List<String> getJoinPermissions = null;
 	public static List<String> getUnrestrictedName = null;
-	private static List<String> getRestrictedIp;
 	private final File file;
 	public static HashAlgorithm getPasswordHash;
 	public static Boolean useLogging = false;
@@ -32,10 +30,10 @@ public final class Settings extends YamlConfiguration {
 	public static boolean databaseAutoSaveEnabled = true;
 	public static int databaseAutoSaveInterval = 10 * 60;
 
-	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isAllowRestrictedIp,
+	public static boolean isTeleportToSpawnEnabled, isChatAllowed,
 	isMovementAllowed, isForceSingleSessionEnabled,
 	isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
-	enablePasspartu, isStopEnabled, noConsoleSpam, useCaptcha, banUnsafeIp, supportOldPassword;
+	enablePasspartu, isStopEnabled, useCaptcha, supportOldPassword;
 
 	public static String getNickRegex, getcUnrestrictedName, messagesLanguage;
 
@@ -75,8 +73,6 @@ public final class Settings extends YamlConfiguration {
 		getMinNickLength = configFile.getInt("settings.restrictions.minNicknameLength",3);
 		getPasswordMinLen = configFile.getInt("settings.security.minPasswordLength",4);
 		getNickRegex = configFile.getString("settings.restrictions.allowedNicknameCharacters","[a-zA-Z0-9_?]*");
-		isAllowRestrictedIp = configFile.getBoolean("settings.restrictions.AllowRestrictedUser",false);
-		getRestrictedIp = configFile.getStringList("settings.restrictions.AllowedRestrictedUser");
 		isMovementAllowed = configFile.getBoolean("settings.restrictions.allowMovement",false);
 		getMovementRadius = configFile.getInt("settings.restrictions.allowedMovementRadius",100);
 		getJoinPermissions = configFile.getStringList("GroupOptions.Permissions.PermissionsOnJoin");
@@ -117,42 +113,12 @@ public final class Settings extends YamlConfiguration {
 				allowCommands.add("/captcha");
 			}
 		}
-		noConsoleSpam = configFile.getBoolean("Security.console.noConsoleSpam", false);
 		useCaptcha = configFile.getBoolean("Security.captcha.useCaptcha", false);
 		maxLoginTry = configFile.getInt("Security.captcha.maxLoginTry", 5);
 		captchaLength = configFile.getInt("Security.captcha.captchaLength", 5);
-		banUnsafeIp = configFile.getBoolean("settings.restrictions.banUnsafedIP", false);
 		useLogging = configFile.getBoolean("Security.console.logConsole", false);
 		supportOldPassword = configFile.getBoolean("settings.security.supportOldPasswordHash", false);
 		saveDefaults();
-	}
-
-	/**
-	 * Config option for setting and check restricted user by
-	 * username;ip , return false if ip and name doesnt match with
-	 * player that join the server, so player has a restricted access
-	 */
-	public static Boolean getRestrictedIp(String name, String ip) {
-
-		Iterator<String> iter = getRestrictedIp.iterator();
-		Boolean trueonce = false;
-		Boolean namefound = false;
-		while (iter.hasNext()) {
-			String[] args =  iter.next().split(";");
-			String testname = args[0];
-			String testip = args[1];
-			if(testname.equalsIgnoreCase(name) ) {
-				namefound = true;
-				if(testip.equalsIgnoreCase(ip)) {
-					trueonce = true;
-				};
-			}
-		}
-		if (!namefound) {
-			return true;
-		} else {
-			return trueonce;
-		}
 	}
 
 	/**

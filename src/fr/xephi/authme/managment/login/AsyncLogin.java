@@ -53,7 +53,7 @@ public class AsyncLogin implements Runnable {
 			}
 			if (plugin.captcha.containsKey(name) && plugin.captcha.get(name) >= Settings.maxLoginTry) {
 				plugin.cap.put(name, rdm.nextString());
-				player.sendMessage(m._("need_captcha").replace("THE_CAPTCHA", plugin.cap.get(name)).replace("<theCaptcha>", plugin.cap.get(name)));
+				player.sendMessage(m.getMessage("need_captcha").replace("THE_CAPTCHA", plugin.cap.get(name)).replace("<theCaptcha>", plugin.cap.get(name)));
 				return true;
 			} else if (plugin.captcha.containsKey(name) && plugin.captcha.get(name) >= Settings.maxLoginTry) {
 				try {
@@ -71,16 +71,16 @@ public class AsyncLogin implements Runnable {
 	 */
 	protected PlayerAuth preAuth() {
 		if (PlayerCache.getInstance().isAuthenticated(name)) {
-			player.sendMessage(m._("logged_in"));
+			player.sendMessage(m.getMessage("logged_in"));
 			return null;
 		}
 		if (!database.isAuthAvailable(name)) {
-			player.sendMessage(m._("user_unknown"));
+			player.sendMessage(m.getMessage("user_unknown"));
 			return null;
 		}
 		PlayerAuth pAuth = database.getAuth(name);
 		if (pAuth == null) {
-			player.sendMessage(m._("user_unknown"));
+			player.sendMessage(m.getMessage("user_unknown"));
 			return null;
 		}
 		return pAuth;
@@ -100,7 +100,7 @@ public class AsyncLogin implements Runnable {
 				passwordVerified = PasswordSecurity.comparePasswordWithHash(password, hash, name);
 			} catch (Exception ex) {
 				ConsoleLogger.showError(ex.getMessage());
-				player.sendMessage(m._("error"));
+				player.sendMessage(m.getMessage("error"));
 				return;
 			}
 		}
@@ -118,11 +118,7 @@ public class AsyncLogin implements Runnable {
 			}
 
 			player.setNoDamageTicks(0);
-			player.sendMessage(m._("login"));
-
-			if (!Settings.noConsoleSpam) {
-				ConsoleLogger.info(player.getName() + " logged in!");
-			}
+			player.sendMessage(m.getMessage("login"));
 
 			// makes player isLoggedin via API
 			PlayerCache.getInstance().addPlayer(auth);
@@ -130,24 +126,21 @@ public class AsyncLogin implements Runnable {
 			// As the scheduling executes the Task most likely after the current task, we schedule it in the end
 			// so that we can be sure, and have not to care if it might be processed in other order.
 			SyncLogin syncronousPlayerLogin = new SyncLogin(player);
-			if (syncronousPlayerLogin.getLimbo() != null) {
-				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLimbo().getTimeoutTaskId());
-				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLimbo().getMessageTaskId());
+			if (syncronousPlayerLogin.getLoginPlayer() != null) {
+				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLoginPlayer().getTimeoutTaskId());
+				player.getServer().getScheduler().cancelTask(syncronousPlayerLogin.getLoginPlayer().getMessageTaskId());
 			}
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, syncronousPlayerLogin);
 		} else if (player.isOnline()) {
-			if (!Settings.noConsoleSpam) {
-				ConsoleLogger.info(player.getName() + " used the wrong password");
-			}
 			if (Settings.isKickOnWrongPasswordEnabled) {
 				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 					@Override
 					public void run() {
-						player.kickPlayer(m._("wrong_pwd"));
+						player.kickPlayer(m.getMessage("wrong_pwd"));
 					}
 				});
 			} else {
-				player.sendMessage(m._("wrong_pwd"));
+				player.sendMessage(m.getMessage("wrong_pwd"));
 				return;
 			}
 		} else {

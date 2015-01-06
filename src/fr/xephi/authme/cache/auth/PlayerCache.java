@@ -4,7 +4,12 @@ import java.util.HashMap;
 
 public class PlayerCache {
 
-	private static PlayerCache singleton = null;
+	private static PlayerCache singleton = new PlayerCache();
+
+	public static PlayerCache getInstance() {
+		return singleton;
+	}
+
 	private HashMap<String, PlayerAuth> cache;
 
 	private PlayerCache() {
@@ -30,13 +35,6 @@ public class PlayerCache {
 
 	public PlayerAuth getAuth(String user) {
 		return cache.get(user.toLowerCase());
-	}
-
-	public static PlayerCache getInstance() {
-		if (singleton == null) {
-			singleton = new PlayerCache();
-		}
-		return singleton;
 	}
 
 }

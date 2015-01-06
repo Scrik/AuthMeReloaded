@@ -12,7 +12,7 @@ import fr.xephi.authme.settings.Messages;
 public class LoginCommand implements CommandExecutor {
 
 	private AuthMe plugin;
-	private Messages m = Messages.getInstance();
+	private Messages messages = Messages.getInstance();
 
 	public LoginCommand(AuthMe plugin) {
 		this.plugin = plugin;
@@ -27,12 +27,12 @@ public class LoginCommand implements CommandExecutor {
 		final Player player = (Player) sender;
 
 		if (args.length == 0) {
-			player.sendMessage(m._("usage_log"));
+			player.sendMessage(messages.getMessage("usage_log"));
 			return true;
 		}
 
 		if (!plugin.authmePermissible(player, "authme." + label.toLowerCase())) {
-			player.sendMessage(m._("no_perm"));
+			player.sendMessage(messages.getMessage("no_perm"));
 			return true;
 		}
 

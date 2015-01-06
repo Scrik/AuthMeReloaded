@@ -16,9 +16,10 @@ import fr.xephi.authme.settings.Messages;
  * @author stefano
  */
 public class PasspartuCommand implements CommandExecutor {
+
+	private Messages m = Messages.getInstance();
 	private Utils utils = new Utils();
-	public AuthMe plugin;
-	private Messages m;
+	private AuthMe plugin;
 
 	public PasspartuCommand(AuthMe plugin) {
 		this.plugin = plugin;
@@ -28,7 +29,7 @@ public class PasspartuCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmnd, String label, String[] args) {
 
 		if (!plugin.authmePermissible(sender, "authme." + label.toLowerCase())) {
-			sender.sendMessage(m._("no_perm"));
+			sender.sendMessage(m.getMessage("no_perm"));
 			return true;
 		}
 
@@ -48,4 +49,5 @@ public class PasspartuCommand implements CommandExecutor {
 		sender.sendMessage("usage: /passpartu token");
 		return true;
 	}
+
 }

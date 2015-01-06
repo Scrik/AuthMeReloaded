@@ -31,18 +31,6 @@ settings:
         # Location", this options will prevent players that would exploit
         # your account when you are playing
         ForceSingleSession: true
-        # For activate Restricted user by ip u need
-        # to set True this option and configure the field
-        # AllowedRestrctedUser as show below
-        AllowRestrictedUser: false
-        # Restricted user will kick players that 
-        # is listed below and they dont
-        # meet the match of username;ip
-        # Example playername;127.0.0.1 , if playername 
-        # hasent 127.0.0.1 as ip address
-        # he will not be allowed to join the server
-        AllowedRestrictedUser:
-        - playername;127.0.0.1
         # Ban ip when the ip is not the ip registered in database
         banUnsafedIP: false
         # Should fail password players be kicked immediatly?
@@ -89,7 +77,7 @@ settings:
         # other mods.
         # It is CaseSensitive!
         UnrestrictedName: []
-    # Message language, available : en, de, br, cz, pl, fr, ru, hu, sk, es, zhtw, fi, zhcn, lt, it, ko, pt
+    # Message language, available : en, ru
     messagesLanguage: ru
 Passpartu:
     # Enable or Disable Passpartu Feature,
@@ -99,16 +87,6 @@ Passpartu:
     # Player password! More info on How TO
     enablePasspartu: false
 Security:
-    SQLProblem:
-        # Stop the server if we can't contact the sql database
-        # Take care with this, if you set that to false,
-        # AuthMe automatically disable and the server is not protected!
-        stopServer: true
-    console:
-        # Remove spam console
-        noConsoleSpam: false
-        # Replace passwords in the console when player type a command like /login
-        removePassword: true
     captcha:
         # Player need to put a captcha when he fails too lot the password
         useCaptcha: false

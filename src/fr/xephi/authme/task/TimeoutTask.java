@@ -3,8 +3,8 @@ package fr.xephi.authme.task;
 import org.bukkit.entity.Player;
 
 import fr.xephi.authme.cache.auth.PlayerCache;
-import fr.xephi.authme.cache.limbo.LimboCache;
-import fr.xephi.authme.cache.limbo.LimboPlayer;
+import fr.xephi.authme.cache.login.LoginCache;
+import fr.xephi.authme.cache.login.LoginPlayer;
 import fr.xephi.authme.settings.Messages;
 
 
@@ -30,11 +30,11 @@ public class TimeoutTask implements Runnable {
 			return;
 		}
 
-		if (LimboCache.getInstance().hasLimboPlayer(name)) {
-			LimboPlayer inv = LimboCache.getInstance().getLimboPlayer(name);
+		if (LoginCache.getInstance().hasPlayer(name)) {
+			LoginPlayer inv = LoginCache.getInstance().getPlayer(name);
 			player.getServer().getScheduler().cancelTask(inv.getMessageTaskId());
 			player.getServer().getScheduler().cancelTask(inv.getTimeoutTaskId());
 		}
-		player.kickPlayer(m._("timeout"));
+		player.kickPlayer(m.getMessage("timeout"));
 	}
 }
