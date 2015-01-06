@@ -12,7 +12,6 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.security.HashAlgorithm;
 
-
 public final class Settings extends YamlConfiguration {
 
 	public static final String PLUGIN_FOLDER = "./plugins/AuthMe";
@@ -30,24 +29,19 @@ public final class Settings extends YamlConfiguration {
 	public static boolean databaseAutoSaveEnabled = true;
 	public static int databaseAutoSaveInterval = 10 * 60;
 
-	public static boolean isTeleportToSpawnEnabled, isChatAllowed,
-	isMovementAllowed, isForceSingleSessionEnabled,
-	isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled,
-	enablePasspartu, isStopEnabled, useCaptcha, supportOldPassword;
+	public static boolean isTeleportToSpawnEnabled, isChatAllowed, isMovementAllowed, isForceSingleSessionEnabled, isKickOnWrongPasswordEnabled, getEnablePasswordVerifier, protectInventoryBeforeLogInEnabled, enablePasspartu, isStopEnabled, useCaptcha, supportOldPassword;
 
 	public static String getNickRegex, getcUnrestrictedName, messagesLanguage;
 
-	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength,
-	getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp,
-	passwordMaxLength, maxLoginTry, captchaLength;
+	public static int getWarnMessageInterval, getRegistrationTimeout, getMaxNickLength, getMinNickLength, getPasswordMinLen, getMovementRadius, getmaxRegPerIp, passwordMaxLength, maxLoginTry, captchaLength;
 
 	private static Settings instance;
+
 	public Settings(Plugin plugin) {
 		this.file = new File(plugin.getDataFolder(), "config.yml");
-		if(exists()) {
+		if (exists()) {
 			load();
-		}
-		else {
+		} else {
 			loadDefaults(file.getName());
 			load();
 		}
@@ -64,33 +58,33 @@ public final class Settings extends YamlConfiguration {
 		databaseAutoSaveEnabled = configFile.getBoolean("settings.autosave.enabled");
 		databaseAutoSaveInterval = configFile.getInt("settings.autosave.interval");
 
-		messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage","en"));
-		isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn",false);
-		getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval",5);
-		getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout",30);
-		isChatAllowed = configFile.getBoolean("settings.restrictions.allowChat",false);
-		getMaxNickLength = configFile.getInt("settings.restrictions.maxNicknameLength",20);
-		getMinNickLength = configFile.getInt("settings.restrictions.minNicknameLength",3);
-		getPasswordMinLen = configFile.getInt("settings.security.minPasswordLength",4);
-		getNickRegex = configFile.getString("settings.restrictions.allowedNicknameCharacters","[a-zA-Z0-9_?]*");
-		isMovementAllowed = configFile.getBoolean("settings.restrictions.allowMovement",false);
-		getMovementRadius = configFile.getInt("settings.restrictions.allowedMovementRadius",100);
+		messagesLanguage = checkLang(configFile.getString("settings.messagesLanguage", "en"));
+		isTeleportToSpawnEnabled = configFile.getBoolean("settings.restrictions.teleportUnAuthedToSpawn", false);
+		getWarnMessageInterval = configFile.getInt("settings.registration.messageInterval", 5);
+		getRegistrationTimeout = configFile.getInt("settings.restrictions.timeout", 30);
+		isChatAllowed = configFile.getBoolean("settings.restrictions.allowChat", false);
+		getMaxNickLength = configFile.getInt("settings.restrictions.maxNicknameLength", 20);
+		getMinNickLength = configFile.getInt("settings.restrictions.minNicknameLength", 3);
+		getPasswordMinLen = configFile.getInt("settings.security.minPasswordLength", 4);
+		getNickRegex = configFile.getString("settings.restrictions.allowedNicknameCharacters", "[a-zA-Z0-9_?]*");
+		isMovementAllowed = configFile.getBoolean("settings.restrictions.allowMovement", false);
+		getMovementRadius = configFile.getInt("settings.restrictions.allowedMovementRadius", 100);
 		getJoinPermissions = configFile.getStringList("GroupOptions.Permissions.PermissionsOnJoin");
-		isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword",false);
-		isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession",true);
-		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp",1);
+		isKickOnWrongPasswordEnabled = configFile.getBoolean("settings.restrictions.kickOnWrongPassword", false);
+		isForceSingleSessionEnabled = configFile.getBoolean("settings.restrictions.ForceSingleSession", true);
+		getmaxRegPerIp = configFile.getInt("settings.restrictions.maxRegPerIp", 1);
 		String key = "settings.security.passwordHash";
 		try {
-			getPasswordHash = HashAlgorithm.valueOf(configFile.getString(key,"SHA256").toUpperCase());
+			getPasswordHash = HashAlgorithm.valueOf(configFile.getString(key, "SHA256").toUpperCase());
 		} catch (IllegalArgumentException ex) {
 			ConsoleLogger.showError("Unknown Hash Algorithm; defaulting to SHA256");
 			getPasswordHash = HashAlgorithm.SHA256;
 		}
 		getUnrestrictedName = configFile.getStringList("settings.unrestrictions.UnrestrictedName");
-		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier" , true);
+		getEnablePasswordVerifier = configFile.getBoolean("settings.restrictions.enablePasswordVerifier", true);
 		protectInventoryBeforeLogInEnabled = configFile.getBoolean("settings.restrictions.ProtectInventoryBeforeLogIn", true);
 		passwordMaxLength = configFile.getInt("settings.security.passwordMaxLength", 20);
-		enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu",false);
+		enablePasspartu = configFile.getBoolean("Passpartu.enablePasspartu", false);
 		isStopEnabled = configFile.getBoolean("Security.SQLProblem.stopServer", true);
 		allowCommands = configFile.getStringList("settings.restrictions.allowCommands");
 		if (configFile.contains("allowCommands")) {
@@ -109,7 +103,7 @@ public final class Settings extends YamlConfiguration {
 			if (!allowCommands.contains("/passpartu")) {
 				allowCommands.add("/passpartu");
 			}
-			if(!allowCommands.contains("/captcha")) {
+			if (!allowCommands.contains("/captcha")) {
 				allowCommands.add("/captcha");
 			}
 		}
@@ -166,12 +160,13 @@ public final class Settings extends YamlConfiguration {
 	/**
 	 * Loads a file from the plugin jar and sets as default
 	 *
-	 * @param filename The filename to open
+	 * @param filename
+	 *            The filename to open
 	 */
 	@SuppressWarnings("deprecation")
 	public final void loadDefaults(String filename) {
 		InputStream stream = AuthMe.getInstance().getResource(filename);
-		if(stream == null) {
+		if (stream == null) {
 			return;
 		}
 		setDefaults(YamlConfiguration.loadConfiguration(stream));
@@ -213,9 +208,9 @@ public final class Settings extends YamlConfiguration {
 	}
 
 	public static String checkLang(String lang) {
-		for(messagesLang language: messagesLang.values()) {
-			if(lang.toLowerCase().contains(language.toString())) {
-				ConsoleLogger.info("Set Language: "+lang);
+		for (messagesLang language : messagesLang.values()) {
+			if (lang.toLowerCase().contains(language.toString())) {
+				ConsoleLogger.info("Set Language: " + lang);
 				return lang;
 			}
 		}

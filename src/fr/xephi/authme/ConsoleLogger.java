@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 
 import fr.xephi.authme.settings.Settings;
 
-
 public class ConsoleLogger {
 
 	private static final Logger log = Bukkit.getLogger();

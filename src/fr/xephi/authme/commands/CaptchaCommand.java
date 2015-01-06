@@ -11,7 +11,6 @@ import fr.xephi.authme.security.RandomString;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
-
 public class CaptchaCommand implements CommandExecutor {
 
 	private Messages m = Messages.getInstance();
@@ -52,12 +51,12 @@ public class CaptchaCommand implements CommandExecutor {
 			return true;
 		}
 
-		if(!plugin.cap.containsKey(name)) {
+		if (!plugin.cap.containsKey(name)) {
 			player.sendMessage(m.getMessage("usage_log"));
 			return true;
 		}
 
-		if(Settings.useCaptcha && !args[0].equals(plugin.cap.get(name))) {
+		if (Settings.useCaptcha && !args[0].equals(plugin.cap.get(name))) {
 			plugin.cap.remove(name);
 			plugin.cap.put(name, rdm.nextString());
 			player.sendMessage(m.getMessage("wrong_captcha").replaceAll("THE_CAPTCHA", plugin.cap.get(name)));

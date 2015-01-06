@@ -43,7 +43,7 @@ public class AuthMeAuthListener implements Listener {
 		this.data = data;
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
 
 		String name = event.getName();
@@ -53,13 +53,13 @@ public class AuthMeAuthListener implements Listener {
 		int max = Settings.getMaxNickLength;
 		String regex = Settings.getNickRegex;
 
-		//check length
+		// check length
 		if (lcname.length() > max || lcname.length() < min) {
 			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, messages.getMessage("name_len"));
 			return;
 		}
 
-		//check regex
+		// check regex
 		try {
 			if (!name.matches(regex) || name.equals("Player")) {
 				try {
@@ -82,7 +82,7 @@ public class AuthMeAuthListener implements Listener {
 			return;
 		}
 
-		//check name case
+		// check name case
 		if (data.isAuthAvailable(lcname)) {
 			PlayerAuth auth = data.getAuth(lcname);
 			String realnickname = auth.getRealNickname();
@@ -92,11 +92,11 @@ public class AuthMeAuthListener implements Listener {
 			}
 		}
 
-		//check other single session
+		// check other single session
 		Player oplayer = null;
 		try {
 			oplayer = Bukkit.getPlayerExact(name);
-		}  catch (Throwable t) {
+		} catch (Throwable t) {
 			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Произошла ошибка при логине, попробуйте зайти ещё раз");
 		}
 		if (Settings.isForceSingleSessionEnabled && oplayer != null) {
@@ -107,8 +107,7 @@ public class AuthMeAuthListener implements Listener {
 		}
 	}
 
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 
 		Player player = event.getPlayer();
@@ -118,10 +117,10 @@ public class AuthMeAuthListener implements Listener {
 			return;
 		}
 
-		//Add login cache
+		// Add login cache
 		LoginCache.getInstance().addPlayer(player);
 
-		//Teleport to spawn and protect inventory
+		// Teleport to spawn and protect inventory
 		if (data.isAuthAvailable(name)) {
 			LoginCache.getInstance().addPlayer(player);
 			if (Settings.isTeleportToSpawnEnabled) {
@@ -133,7 +132,7 @@ public class AuthMeAuthListener implements Listener {
 			}
 			if (Settings.protectInventoryBeforeLogInEnabled) {
 				LoginPlayer limbo = LoginCache.getInstance().getPlayer(player.getName().toLowerCase());
-				ProtectInventoryEvent ev = new ProtectInventoryEvent(player,limbo.getInventory(), limbo.getArmour());
+				ProtectInventoryEvent ev = new ProtectInventoryEvent(player, limbo.getInventory(), limbo.getArmour());
 				plugin.getServer().getPluginManager().callEvent(ev);
 				if (!ev.isCancelled()) {
 					API.setPlayerInventory(player, ev.getEmptyInventory(), ev.getEmptyArmor());
@@ -141,7 +140,7 @@ public class AuthMeAuthListener implements Listener {
 			}
 		}
 
-		//schedule timeout task
+		// schedule timeout task
 		String msg = data.isAuthAvailable(name) ? messages.getMessage("login_msg") : messages.getMessage("reg_msg");
 		int time = Settings.getRegistrationTimeout * 20;
 		if (time != 0) {
@@ -149,13 +148,13 @@ public class AuthMeAuthListener implements Listener {
 			LoginCache.getInstance().getPlayer(name).setTimeoutTaskId(id.getTaskId());
 		}
 
-		//schedule message task
+		// schedule message task
 		BukkitTask msgT = Bukkit.getScheduler().runTask(plugin, new MessageTask(plugin, player, msg, Settings.getWarnMessageInterval));
 		LoginCache.getInstance().getPlayer(name).setMessageTaskId(msgT.getTaskId());
 		player.setNoDamageTicks(Settings.getRegistrationTimeout * 20);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST,ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerQuit(PlayerQuitEvent event) {
 
 		Player player = event.getPlayer();
@@ -165,7 +164,7 @@ public class AuthMeAuthListener implements Listener {
 			return;
 		}
 
-		//restore player position and inventory if he didin't log in before quitting
+		// restore player position and inventory if he didin't log in before quitting
 		if (LoginCache.getInstance().hasPlayer(name)) {
 			LoginPlayer limbo = LoginCache.getInstance().getPlayer(name);
 			if (data.isAuthAvailable(name)) {
@@ -189,7 +188,7 @@ public class AuthMeAuthListener implements Listener {
 			LoginCache.getInstance().deletePlayer(name);
 		}
 
-		//remove from logged in
+		// remove from logged in
 		PlayerCache.getInstance().removePlayer(name);
 	}
 

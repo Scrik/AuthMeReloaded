@@ -41,7 +41,8 @@ public class RecodedAPI {
 	}
 
 	/**
-	 * @param String playerName, String passwordToCheck
+	 * @param String
+	 *            playerName, String passwordToCheck
 	 * @return true if the password is correct , false else
 	 */
 	public static boolean checkPassword(String playerName, String passwordToCheck) {
@@ -59,7 +60,9 @@ public class RecodedAPI {
 
 	/**
 	 * Register a player
-	 * @param String playerName, String password
+	 * 
+	 * @param String
+	 *            playerName, String password
 	 * @return true if the player is register correctly
 	 */
 	public static boolean registerPlayer(String playerName, String password) {
@@ -79,7 +82,9 @@ public class RecodedAPI {
 
 	/**
 	 * Force a player to login
-	 * @param Player player
+	 * 
+	 * @param Player
+	 *            player
 	 */
 	public static void forceLogin(Player player) {
 		instance.management.performLogin(player, "dontneed", true);
@@ -87,7 +92,9 @@ public class RecodedAPI {
 
 	/**
 	 * Check if can register from this ip
-	 * @param Player player
+	 * 
+	 * @param Player
+	 *            player
 	 */
 	public static boolean canRegister(Player player) {
 		String ip = player.getAddress().getAddress().getHostAddress();

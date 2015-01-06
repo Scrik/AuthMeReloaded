@@ -7,14 +7,12 @@ import java.security.NoSuchAlgorithmException;
 public class DOUBLEMD5 implements EncryptionMethod {
 
 	@Override
-	public String getHash(String password, String salt)
-			throws NoSuchAlgorithmException {
+	public String getHash(String password, String salt) throws NoSuchAlgorithmException {
 		return getMD5(getMD5(password));
 	}
 
 	@Override
-	public boolean comparePassword(String hash, String password,
-			String playerName) throws NoSuchAlgorithmException {
+	public boolean comparePassword(String hash, String password, String playerName) throws NoSuchAlgorithmException {
 		return hash.equals(getHash(password, ""));
 	}
 
@@ -23,7 +21,7 @@ public class DOUBLEMD5 implements EncryptionMethod {
 		md5.reset();
 		md5.update(message.getBytes());
 		byte[] digest = md5.digest();
-		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1, digest));
 	}
 
 }

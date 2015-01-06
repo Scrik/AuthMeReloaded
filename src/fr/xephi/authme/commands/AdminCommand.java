@@ -28,7 +28,6 @@ import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 import fr.xephi.authme.settings.Spawn;
 
-
 public class AdminCommand implements CommandExecutor {
 
 	private Messages m = Messages.getInstance();
@@ -54,12 +53,12 @@ public class AdminCommand implements CommandExecutor {
 			return true;
 		}
 
-		if((sender instanceof ConsoleCommandSender) && args[0].equalsIgnoreCase("passpartuToken")) {
-			if(args.length > 1) {
+		if ((sender instanceof ConsoleCommandSender) && args[0].equalsIgnoreCase("passpartuToken")) {
+			if (args.length > 1) {
 				System.out.println("[AuthMe] command usage: /authme passpartuToken");
 				return true;
 			}
-			if(Utils.getInstance().obtainToken()) {
+			if (Utils.getInstance().obtainToken()) {
 				System.out.println("[AuthMe] You have 30s for insert this token ingame with /passpartu [token]");
 			} else {
 				System.out.println("[AuthMe] Security error on passpartu token, redo it. ");
@@ -89,7 +88,7 @@ public class AdminCommand implements CommandExecutor {
 			}
 		} else if (args[0].equalsIgnoreCase("reload")) {
 			database.reload();
-			File newConfigFile = new File("plugins/AuthMe","config.yml");
+			File newConfigFile = new File("plugins/AuthMe", "config.yml");
 			if (!newConfigFile.exists()) {
 				InputStream fis = getClass().getResourceAsStream("/config.yml");
 				FileOutputStream fos = null;
@@ -129,7 +128,7 @@ public class AdminCommand implements CommandExecutor {
 					long lastLogin = player.getLastLogin();
 					Date d = new Date(lastLogin);
 					final long diff = System.currentTimeMillis() - lastLogin;
-					final String msg = (int)(diff / 86400000) + " days " + (int)(diff / 3600000 % 24) + " hours " + (int)(diff / 60000 % 60) + " mins " + (int)(diff / 1000 % 60) + " secs.";
+					final String msg = (int) (diff / 86400000) + " days " + (int) (diff / 3600000 % 24) + " hours " + (int) (diff / 60000 % 60) + " mins " + (int) (diff / 1000 % 60) + " secs.";
 					String lastIP = player.getIp();
 					sender.sendMessage("[AuthMe] " + args[1].toLowerCase() + " lastlogin : " + d.toString());
 					sender.sendMessage("[AuthMe] The player : " + player.getNickname() + " is unlogged since " + msg);
@@ -259,7 +258,7 @@ public class AdminCommand implements CommandExecutor {
 				sender.sendMessage(m.getMessage("error"));
 			}
 			return true;
-		} else if (args[0].equalsIgnoreCase("unregister") || args[0].equalsIgnoreCase("unreg") || args[0].equalsIgnoreCase("del") ) {
+		} else if (args[0].equalsIgnoreCase("unregister") || args[0].equalsIgnoreCase("unreg") || args[0].equalsIgnoreCase("del")) {
 			if (args.length != 2) {
 				sender.sendMessage("Usage: /authme unregister playername");
 				return true;

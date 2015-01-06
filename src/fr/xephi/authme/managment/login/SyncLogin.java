@@ -17,6 +17,7 @@ public class SyncLogin implements Runnable {
 	private LoginPlayer loginPlayer;
 	private Player player;
 	private String name;
+
 	public SyncLogin(Player player) {
 		this.player = player;
 		this.name = player.getName().toLowerCase();

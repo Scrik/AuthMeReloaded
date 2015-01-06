@@ -14,7 +14,6 @@ import fr.xephi.authme.ConsoleLogger;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
-
 public class DataSource {
 
 	private FileDataBackend source;
@@ -93,7 +92,7 @@ public class DataSource {
 		for (PlayerAuth auth : auths) {
 			cacheAuth(auth);
 		}
-		ConsoleLogger.info("Cached "+ auths.size()+ " player auths");
+		ConsoleLogger.info("Cached " + auths.size() + " player auths");
 	}
 
 	private void cacheAuth(PlayerAuth auth) {
@@ -123,17 +122,12 @@ public class DataSource {
 
 	private void scheduleAutoSaveTask() {
 		if (Settings.databaseAutoSaveEnabled) {
-			autosavetask = Bukkit.getScheduler().runTaskTimerAsynchronously(
-				AuthMe.getInstance(),
-				new Runnable() {
-					@Override
-					public void run() {
-						saveDatabase();
-					}
-				},
-				20 * Settings.databaseAutoSaveInterval,
-				20 * Settings.databaseAutoSaveInterval
-			);
+			autosavetask = Bukkit.getScheduler().runTaskTimerAsynchronously(AuthMe.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					saveDatabase();
+				}
+			}, 20 * Settings.databaseAutoSaveInterval, 20 * Settings.databaseAutoSaveInterval);
 		}
 	}
 

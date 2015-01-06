@@ -6,8 +6,7 @@ import java.util.Random;
  *
  * @author Xephi59
  */
-public class RandomString
-{
+public class RandomString {
 
 	private static final char[] chars = new char[36];
 
@@ -24,16 +23,14 @@ public class RandomString
 
 	private final char[] buf;
 
-	public RandomString(int length)
-	{
+	public RandomString(int length) {
 		if (length < 1) {
 			throw new IllegalArgumentException("length < 1: " + length);
 		}
 		buf = new char[length];
 	}
 
-	public String nextString()
-	{
+	public String nextString() {
 		for (int idx = 0; idx < buf.length; ++idx) {
 			buf[idx] = chars[random.nextInt(chars.length)];
 		}

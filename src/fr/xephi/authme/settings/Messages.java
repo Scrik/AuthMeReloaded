@@ -7,7 +7,7 @@ public class Messages extends CustomConfiguration {
 	private static Messages singleton = null;
 
 	public Messages() {
-		super(new File(Settings.MESSAGE_FILE+"_"+Settings.messagesLanguage+".yml"));
+		super(new File(Settings.MESSAGE_FILE + "_" + Settings.messagesLanguage + ".yml"));
 		loadDefaults();
 		loadFile();
 		singleton = this;
@@ -40,16 +40,16 @@ public class Messages extends CustomConfiguration {
 		this.set("reload", "&fConfiguration and database has been reloaded");
 		this.set("error", "&fAn error ocurred; Please contact the admin");
 		this.set("unknown_user", "&fUser is not in database");
-		this.set("unsafe_spawn","&fYour Quit location was unsafe, teleporting you to World Spawn");
-		this.set("unvalid_session","&fSession Dataes doesnt corrispond Plaese wait the end of session");
-		this.set("max_reg","&fYou have Exceded the max number of Registration for your Account");
-		this.set("password_error","&fPassword doesnt match");
-		this.set("pass_len","&fYour password dind''t reach the minimum length or exeded the max length");
-		this.set("vb_nonActiv","&fYour Account isent Activated yet check your Emails!");
+		this.set("unsafe_spawn", "&fYour Quit location was unsafe, teleporting you to World Spawn");
+		this.set("unvalid_session", "&fSession Dataes doesnt corrispond Plaese wait the end of session");
+		this.set("max_reg", "&fYou have Exceded the max number of Registration for your Account");
+		this.set("password_error", "&fPassword doesnt match");
+		this.set("pass_len", "&fYour password dind''t reach the minimum length or exeded the max length");
+		this.set("vb_nonActiv", "&fYour Account isent Activated yet check your Emails!");
 		this.set("usage_changepassword", "&fUsage: /changepassword oldPassword newPassword");
 		this.set("name_len", "&cYour nickname is too Short or too long");
 		this.set("regex", "&cYour nickname contains illegal characters. Allowed chars: REG_EX");
-		this.set("add_email","&cPlease add your email with : /email add yourEmail confirmEmail");
+		this.set("add_email", "&cPlease add your email with : /email add yourEmail confirmEmail");
 		this.set("bad_database_email", "[AuthMe] This /email command only available with MySQL and SQLite, contact an Admin");
 		this.set("recovery_email", "&cForgot your password? Please use /email recovery <yourEmail>");
 		this.set("usage_captcha", "&cUsage: /captcha <theCaptcha>");

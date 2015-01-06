@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.settings.Messages;
 
-
 public class LoginCommand implements CommandExecutor {
 
 	private AuthMe plugin;

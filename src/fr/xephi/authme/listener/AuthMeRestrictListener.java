@@ -25,7 +25,6 @@ import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.settings.Settings;
 
-
 public class AuthMeRestrictListener implements Listener {
 
 	public AuthMe plugin;
@@ -38,10 +37,7 @@ public class AuthMeRestrictListener implements Listener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -56,10 +52,7 @@ public class AuthMeRestrictListener implements Listener {
 	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -70,14 +63,11 @@ public class AuthMeRestrictListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -92,10 +82,7 @@ public class AuthMeRestrictListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -106,14 +93,11 @@ public class AuthMeRestrictListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -124,14 +108,11 @@ public class AuthMeRestrictListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -152,10 +133,7 @@ public class AuthMeRestrictListener implements Listener {
 
 		Player player = (Player) entity;
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -176,10 +154,7 @@ public class AuthMeRestrictListener implements Listener {
 
 		Player player = (Player) entity;
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -200,10 +175,7 @@ public class AuthMeRestrictListener implements Listener {
 
 		Player player = (Player) entity;
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -214,15 +186,11 @@ public class AuthMeRestrictListener implements Listener {
 		event.setCancelled(true);
 	}
 
-
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -237,15 +205,7 @@ public class AuthMeRestrictListener implements Listener {
 		}
 
 		String cmd = msg.split(" ")[0];
-		if (
-			cmd.equalsIgnoreCase("/login")
-			|| cmd.equalsIgnoreCase("/register")
-			|| cmd.equalsIgnoreCase("/passpartu")
-			|| cmd.equalsIgnoreCase("/l")
-			|| cmd.equalsIgnoreCase("/reg")
-			|| cmd.equalsIgnoreCase("/email")
-			|| cmd.equalsIgnoreCase("/captcha")
-		) {
+		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha")) {
 			return;
 		}
 		if (Settings.allowCommands.contains(cmd)) {
@@ -256,15 +216,11 @@ public class AuthMeRestrictListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		final Player player = event.getPlayer();
 
-		if (
-				plugin.getCitizensCommunicator().isNPC(player, plugin)
-				|| Utils.getInstance().isUnrestricted(player)
-				|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 
@@ -280,15 +236,11 @@ public class AuthMeRestrictListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 
-		if (
-			plugin.getCitizensCommunicator().isNPC(player, plugin)
-			|| Utils.getInstance().isUnrestricted(player)
-			|| CombatTagComunicator.isNPC(player)
-		) {
+		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
 			return;
 		}
 

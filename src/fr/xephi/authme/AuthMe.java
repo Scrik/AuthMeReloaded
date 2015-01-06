@@ -62,16 +62,16 @@ public class AuthMe extends JavaPlugin {
 
 		setMessages(Messages.getInstance());
 
-		//Check Citizens Version
+		// Check Citizens Version
 		citizensVersion();
 
-		//Check Combat Tag Version
+		// Check Combat Tag Version
 		combatTag();
 
-		//Check Essentials
+		// Check Essentials
 		checkEssentials();
 
-		//Backend
+		// Backend
 		FileDataBackend databackend;
 		try {
 			databackend = new FileDataBackend();
@@ -109,7 +109,7 @@ public class AuthMe extends JavaPlugin {
 		this.getCommand("passpartu").setExecutor(new PasspartuCommand(this));
 		this.getCommand("captcha").setExecutor(new CaptchaCommand(this));
 
-		if(!Settings.isForceSingleSessionEnabled) {
+		if (!Settings.isForceSingleSessionEnabled) {
 			ConsoleLogger.showError("ATTENTION by disabling ForceSingleSession, your server protection is set to low");
 		}
 		ConsoleLogger.info("Authme " + this.getDescription().getVersion() + " enabled");
@@ -118,7 +118,7 @@ public class AuthMe extends JavaPlugin {
 	private void checkEssentials() {
 		if (this.getServer().getPluginManager().getPlugin("Essentials") != null && this.getServer().getPluginManager().getPlugin("Essentials").isEnabled()) {
 			try {
-				ess  = (Essentials) this.getServer().getPluginManager().getPlugin("Essentials");
+				ess = (Essentials) this.getServer().getPluginManager().getPlugin("Essentials");
 				ConsoleLogger.info("Hook with Essentials plugin");
 			} catch (NullPointerException npe) {
 				ess = null;
@@ -157,12 +157,10 @@ public class AuthMe extends JavaPlugin {
 		}
 	}
 
-
-
 	@Override
 	public void onDisable() {
 		if (Bukkit.getOnlinePlayers() != null) {
-			for(Player player : Bukkit.getOnlinePlayers()) {
+			for (Player player : Bukkit.getOnlinePlayers()) {
 				this.savePlayer(player);
 			}
 		}
@@ -216,7 +214,6 @@ public class AuthMe extends JavaPlugin {
 		}
 		return false;
 	}
-
 
 	public Location getSpawnLocation(World world) {
 		Location spawnLoc = world.getSpawnLocation();

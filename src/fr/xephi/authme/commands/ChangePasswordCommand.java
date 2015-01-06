@@ -16,7 +16,6 @@ import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Messages;
 import fr.xephi.authme.settings.Settings;
 
-
 public class ChangePasswordCommand implements CommandExecutor {
 
 	private Messages messages = Messages.getInstance();

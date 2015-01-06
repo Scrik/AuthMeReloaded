@@ -12,19 +12,17 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CustomConfiguration extends YamlConfiguration{
+public class CustomConfiguration extends YamlConfiguration {
 
 	private File configFile;
 
-	public CustomConfiguration(File file)
-	{
+	public CustomConfiguration(File file) {
 		this.configFile = file;
 
 		load();
 	}
 
-	public void load()
-	{
+	public void load() {
 		try {
 			super.load(configFile);
 		} catch (FileNotFoundException e) {
@@ -39,8 +37,7 @@ public class CustomConfiguration extends YamlConfiguration{
 
 	public boolean reLoad() {
 		boolean out = true;
-		if (!configFile.exists())
-		{
+		if (!configFile.exists()) {
 			out = loadRessource(configFile);
 		}
 		if (out) {

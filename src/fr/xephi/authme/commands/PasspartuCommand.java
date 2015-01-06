@@ -10,7 +10,6 @@ import fr.xephi.authme.Utils;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.settings.Messages;
 
-
 /**
  *
  * @author stefano
@@ -38,8 +37,8 @@ public class PasspartuCommand implements CommandExecutor {
 		}
 
 		if ((sender instanceof Player) && args.length == 1) {
-			if(utils.readToken(args[0])) {
-				//bypass login!
+			if (utils.readToken(args[0])) {
+				// bypass login!
 				plugin.management.performLogin((Player) sender, "dontneed", true);
 				return true;
 			}

@@ -20,18 +20,23 @@ public class SpawnTeleportEvent extends CustomEvent {
 		this.to = to;
 		this.isAuthenticated = isAuthenticated;
 	}
+
 	public Player getPlayer() {
 		return player;
 	}
+
 	public void setTo(Location to) {
 		this.to = to;
 	}
+
 	public Location getTo() {
 		return to;
 	}
+
 	public Location getFrom() {
 		return from;
 	}
+
 	public boolean isAuthenticated() {
 		return isAuthenticated;
 	}

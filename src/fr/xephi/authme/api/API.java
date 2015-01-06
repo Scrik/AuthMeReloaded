@@ -17,7 +17,6 @@ import fr.xephi.authme.plugin.manager.CombatTagComunicator;
 import fr.xephi.authme.security.PasswordSecurity;
 import fr.xephi.authme.settings.Settings;
 
-
 public class API {
 
 	public static final String newline = System.getProperty("line.separator");
@@ -28,8 +27,10 @@ public class API {
 		API.instance = instance;
 		API.database = database;
 	}
+
 	/**
 	 * Hook into AuthMe
+	 * 
 	 * @return AuthMe instance
 	 */
 	public static AuthMe hookAuthMe() {
@@ -107,7 +108,8 @@ public class API {
 	}
 
 	/**
-	 * @param String playerName, String passwordToCheck
+	 * @param String
+	 *            playerName, String passwordToCheck
 	 * @return true if the password is correct , false else
 	 */
 	public static boolean checkPassword(String playerName, String passwordToCheck) {
@@ -125,7 +127,9 @@ public class API {
 
 	/**
 	 * Register a player
-	 * @param String playerName, String password
+	 * 
+	 * @param String
+	 *            playerName, String password
 	 * @return true if the player is register correctly
 	 */
 	public static boolean registerPlayer(String playerName, String password) {
@@ -145,7 +149,9 @@ public class API {
 
 	/**
 	 * Force a player to login
-	 * @param Player player
+	 * 
+	 * @param Player
+	 *            player
 	 */
 	public static void forceLogin(Player player) {
 		instance.management.performLogin(player, "dontneed", true);

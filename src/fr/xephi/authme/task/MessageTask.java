@@ -8,7 +8,6 @@ import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.cache.auth.PlayerCache;
 import fr.xephi.authme.cache.login.LoginCache;
 
-
 public class MessageTask implements Runnable {
 
 	private AuthMe plugin;
@@ -34,7 +33,7 @@ public class MessageTask implements Runnable {
 		player.sendMessage(msg);
 		BukkitScheduler sched = plugin.getServer().getScheduler();
 		BukkitTask late = sched.runTaskLater(plugin, this, interval * 20);
-		if(LoginCache.getInstance().hasPlayer(name)) {
+		if (LoginCache.getInstance().hasPlayer(name)) {
 			LoginCache.getInstance().getPlayer(name).setMessageTaskId(late.getTaskId());
 		}
 	}

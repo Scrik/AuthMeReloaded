@@ -88,7 +88,7 @@ public class AsyncRegister implements Runnable {
 			Bukkit.getScheduler().cancelTask(limbo.getMessageTaskId());
 			LoginCache.getInstance().deletePlayer(auth.getNickname());
 		}
-		
+
 		// Schedule login event call
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override

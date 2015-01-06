@@ -18,15 +18,19 @@ public class AuthMeTeleportEvent extends CustomEvent {
 		this.from = player.getLocation();
 		this.to = to;
 	}
+
 	public Player getPlayer() {
 		return player;
 	}
+
 	public void setTo(Location to) {
 		this.to = to;
 	}
+
 	public Location getTo() {
 		return to;
 	}
+
 	public Location getFrom() {
 		return from;
 	}

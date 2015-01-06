@@ -13,21 +13,14 @@ import java.util.List;
 import fr.xephi.authme.cache.auth.PlayerAuth;
 import fr.xephi.authme.settings.Settings;
 
-
 public class FileDataBackend {
 
-	/* file layout:
-	 *
+	/*
+	 * file layout:
+	 * 
 	 * DBVER$2:PLAYERNAME:REALPLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
-	 *
-	 * Old but compatible:
-	 * DBVER$1:PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ
-	 * PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS
-	 * PLAYERNAME:HASHSUM:IP
-	 * PLAYERNAME:HASHSUM
-	 *
+	 * 
+	 * Old but compatible: DBVER$1:PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ:LASTPOSWORLD PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS:LASTPOSX:LASTPOSY:LASTPOSZ PLAYERNAME:HASHSUM:IP:LOGININMILLIESECONDS PLAYERNAME:HASHSUM:IP PLAYERNAME:HASHSUM
 	 */
 	private File source;
 
@@ -95,7 +88,7 @@ public class FileDataBackend {
 			BufferedReader br = new BufferedReader(new FileReader(source));
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (!line.startsWith("DBVER$"+dbvers)) {
+				if (!line.startsWith("DBVER$" + dbvers)) {
 					auths.add(parseOldAuth(line));
 				} else {
 					auths.add(convertDBStringToAuth(line));
@@ -121,11 +114,14 @@ public class FileDataBackend {
 		String[] args = line.split(":");
 		if (line.startsWith("DBVER$")) {
 			if (args[0].equalsIgnoreCase("DBVER$1")) {
-				auth =  new PlayerAuth(args[1], "", args[2], args[3], Long.parseLong(args[4]));
+				auth = new PlayerAuth(args[1], "", args[2], args[3], Long.parseLong(args[4]));
 			}
 		} else {
 			switch (args.length) {
-				case 9: case 8: case 7: case 4: {
+				case 9:
+				case 8:
+				case 7:
+				case 4: {
 					auth = new PlayerAuth(args[0], "", args[1], args[2], Long.parseLong(args[3]));
 					break;
 				}

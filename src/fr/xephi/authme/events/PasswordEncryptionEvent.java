@@ -6,8 +6,9 @@ import org.bukkit.event.HandlerList;
 import fr.xephi.authme.security.crypts.EncryptionMethod;
 
 /**
- * <p>This event is called when we need to compare or get an hash password,
- * for set a custom EncryptionMethod</p>
+ * <p>
+ * This event is called when we need to compare or get an hash password, for set a custom EncryptionMethod
+ * </p>
  *
  * @see fr.xephi.authme.security.crypts.EncryptionMethod
  *

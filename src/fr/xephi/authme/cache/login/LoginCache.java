@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.events.StoreInventoryEvent;
 
-
 public class LoginCache {
 
 	private static LoginCache singleton = new LoginCache(AuthMe.getInstance());
@@ -36,8 +35,8 @@ public class LoginCache {
 		StoreInventoryEvent storeevent = new StoreInventoryEvent(player);
 		Bukkit.getServer().getPluginManager().callEvent(storeevent);
 		if (!storeevent.isCancelled()) {
-			inv =  storeevent.getInventory();
-			arm =  storeevent.getArmor();
+			inv = storeevent.getInventory();
+			arm = storeevent.getArmor();
 		}
 
 		if (player.isDead()) {

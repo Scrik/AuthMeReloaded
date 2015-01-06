@@ -13,7 +13,6 @@ import fr.xephi.authme.events.PasswordEncryptionEvent;
 import fr.xephi.authme.security.crypts.EncryptionMethod;
 import fr.xephi.authme.settings.Settings;
 
-
 public class PasswordSecurity {
 
 	private static SecureRandom rnd = new SecureRandom();
@@ -24,7 +23,7 @@ public class PasswordSecurity {
 		MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 		sha1.reset();
 		byte[] digest = sha1.digest(msg);
-		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest)).substring(0, length);
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1, digest)).substring(0, length);
 	}
 
 	public static String getHash(HashAlgorithm alg, String password, String playerName) throws NoSuchAlgorithmException {
@@ -42,21 +41,21 @@ public class PasswordSecurity {
 		}
 		String salt = "";
 		switch (alg) {
-		case SHA256:
-			salt = createSalt(16);
-			break;
-		case XAUTH:
-			salt = createSalt(12);
-			break;
-		case MD5:
-		case SHA1:
-		case WHIRLPOOL:
-		case SHA512:
-		case DOUBLEMD5:
-		case CUSTOM:
-			break;
-		default:
-			throw new NoSuchAlgorithmException("Unknown hash algorithm");
+			case SHA256:
+				salt = createSalt(16);
+				break;
+			case XAUTH:
+				salt = createSalt(12);
+				break;
+			case MD5:
+			case SHA1:
+			case WHIRLPOOL:
+			case SHA512:
+			case DOUBLEMD5:
+			case CUSTOM:
+				break;
+			default:
+				throw new NoSuchAlgorithmException("Unknown hash algorithm");
 		}
 		PasswordEncryptionEvent event = new PasswordEncryptionEvent(method, playerName);
 		Bukkit.getPluginManager().callEvent(event);
@@ -96,7 +95,8 @@ public class PasswordSecurity {
 				if (compareWithAllEncryptionMethod(password, hash, playerName)) {
 					return true;
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 		}
 		return false;
 	}
@@ -115,7 +115,8 @@ public class PasswordSecurity {
 						return true;
 					}
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 		}
 		return false;
 	}

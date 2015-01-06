@@ -7,8 +7,6 @@ import fr.xephi.authme.cache.login.LoginCache;
 import fr.xephi.authme.cache.login.LoginPlayer;
 import fr.xephi.authme.settings.Messages;
 
-
-
 public class TimeoutTask implements Runnable {
 
 	private Player player;

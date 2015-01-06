@@ -12,7 +12,7 @@ public class MD5 implements EncryptionMethod {
 		md5.reset();
 		md5.update(password.getBytes());
 		byte[] digest = md5.digest();
-		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1,digest));
+		return String.format("%0" + (digest.length << 1) + "x", new BigInteger(1, digest));
 	}
 
 	@Override
