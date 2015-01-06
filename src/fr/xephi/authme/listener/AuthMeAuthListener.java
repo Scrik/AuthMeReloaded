@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
@@ -46,63 +46,63 @@ public class AuthMeAuthListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
-	public void onPlayerLogin(PlayerLoginEvent event) {
+	public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
 
-		Player player = event.getPlayer();
-		final String name = player.getName().toLowerCase();
-
-		if (plugin.getCitizensCommunicator().isNPC(player, plugin) || Utils.getInstance().isUnrestricted(player) || CombatTagComunicator.isNPC(player)) {
-			return;
-		}
+		String name = event.getName();
+		String lcname = name.toLowerCase();
 
 		int min = Settings.getMinNickLength;
 		int max = Settings.getMaxNickLength;
 		String regex = Settings.getNickRegex;
 
-		if (name.length() > max || name.length() < min) {
-			event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("name_len"));
+		if (lcname.length() > max || lcname.length() < min) {
+			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, m._("name_len"));
 			return;
 		}
 
 		try {
-			if (!player.getName().matches(regex) || name.equals("Player")) {
+			if (!name.matches(regex) || name.equals("Player")) {
 				try {
-					event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
+					event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
 				} catch (StringIndexOutOfBoundsException exc) {
-					event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
+					event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 				}
 				return;
 			}
 		} catch (PatternSyntaxException pse) {
 			if (regex == null || regex.isEmpty()) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Your nickname do not match");
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Your nickname do not match");
 				return;
 			}
 			try {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, m._("regex").replaceAll("REG_EX", regex));
 			} catch (StringIndexOutOfBoundsException exc) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "allowed char : " + regex);
 			}
 			return;
 		}
 
-		if (data.isAuthAvailable(name)) {
-			PlayerAuth auth = data.getAuth(name);
+		if (data.isAuthAvailable(lcname)) {
+			PlayerAuth auth = data.getAuth(lcname);
 			String realnickname = auth.getRealNickname();
-			if (!realnickname.isEmpty() && !player.getName().equals(realnickname)) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Залогинтесь используя правильный регистр ника: " + realnickname);
+			if (!realnickname.isEmpty() && !name.equals(realnickname)) {
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Залогинтесь используя правильный регистр ника: " + realnickname);
 				return;
 			}
 		}
 
-		Player oplayer = Bukkit.getPlayerExact(player.getName());
+		Player oplayer = null;
+		try {
+			oplayer = Bukkit.getPlayerExact(name);
+		}  catch (Throwable t) {
+			event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "Произошла ошибка при логине, попробуйте зайти ещё раз");
+		}
 		if (Settings.isForceSingleSessionEnabled && oplayer != null) {
-			if (PlayerCache.getInstance().isAuthenticated(name) || !oplayer.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
-				event.disallow(PlayerLoginEvent.Result.KICK_OTHER, m._("same_nick"));
+			if (PlayerCache.getInstance().isAuthenticated(lcname) || !oplayer.getAddress().getAddress().getHostAddress().equals(event.getAddress().getHostAddress())) {
+				event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, m._("same_nick"));
 				return;
 			}
 		}
-
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
